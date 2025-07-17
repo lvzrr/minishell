@@ -1,3 +1,2 @@
-- [ ] funcion cleanup + errores
 - [ ] señales de terminacion
 - [ ] parser
