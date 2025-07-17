@@ -19,7 +19,7 @@ bool	isvalidident(char c)
 		|| c == '@' || c == '~'
 		|| c == '\\' || c == '*'
 		|| c == '\'' || c == '\"'
-		|| ft_isalnum(c));
+		|| c == '+' || ft_isalnum(c));
 }
 
 bool	isunsupported(char c)
