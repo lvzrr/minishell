@@ -16,13 +16,16 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_string	line;
 	t_vec		tokv;
+	char		*s;
 
 	(void)argc;
 	(void)argv;
 	(void)envp;
 	while (1)
 	{
-		line = ft_tstr_from_cstr(readline("$ "));
+		s = readline("$ ");
+		line = ft_tstr_from_cstr(s);
+		free(s);
 		ft_tstr_trim(&line, " \t\n\r");
 		add_history(line.data);
 		ft_printf("got '%s'\n", line.data);
