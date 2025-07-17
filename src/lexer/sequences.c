@@ -22,6 +22,11 @@ bool	isvalidident(char c)
 		|| ft_isalnum(c));
 }
 
+bool	isunsupported(char c)
+{
+	return (!isvalidident(c) && !isvalidop(c));
+}
+
 bool	isvalidop(char c)
 {
 	return (c == '&' || c == '|'

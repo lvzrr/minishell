@@ -31,6 +31,22 @@ void	clean_tokenstream(t_vec *v)
 	ft_vec_free(v);
 }
 
+static void	clean_err(char *str, t_vec *out)
+{
+	write(2, str, ft_strlen(str));
+	clean_tokenstream(out);
+}
+
+static void	manage_paren(t_tok *t, size_t *paren_l)
+{
+	if (!t || !t->s.data || !t->s.len)
+		return ;
+	if (t->type == TOK_LPAREN)
+		(*paren_l)++;
+	else if (t->type == TOK_RPAREN)
+		(*paren_l)--;
+}
+
 t_vec	lex(t_string *s)
 {
 	t_vec	out;
@@ -45,17 +61,16 @@ t_vec	lex(t_string *s)
 	while (offst < s->len)
 	{
 		offst = goto_next(s, offst);
+		if (offst == SIZE_MAX)
+			return (clean_tokenstream(&out), (t_vec){0});
 		if (!try_lexas_qs(s, &out, &offst))
 			return (clean_tokenstream(&out), (t_vec){0});
 		try_lexas_ident(s, &out, &offst);
 		try_lexas_op(s, &out, &offst);
-		if (((t_tok *)ft_vec_peek_last(&out))->type == TOK_LPAREN)
-			++paren_l;
-		else if (((t_tok *)ft_vec_peek_last(&out))->type == TOK_RPAREN)
-			--paren_l;
+		manage_paren((t_tok *)ft_vec_peek_last(&out), &paren_l);
 	}
 	if (paren_l != 0)
-		return (write(2, "unclosed parenthesis\n", 21),
-			clean_tokenstream(&out), (t_vec){0});
+		return (clean_err(ANSI_RED"error: "ANSI_RESET"unclosed paren\n", &out),
+			(t_vec){0});
 	return (out);
 }
