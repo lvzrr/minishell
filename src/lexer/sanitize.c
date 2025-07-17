@@ -14,8 +14,6 @@
 
 void	remove_scape(t_string *s, size_t offst)
 {
-	while (offst < s->len && s->data[offst] != '\\')
-		offst++;
 	ft_memmove(s->data + offst, s->data + offst + 1, s->len - offst);
 	s->data[--s->len] = 0;
 }
