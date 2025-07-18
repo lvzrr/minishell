@@ -76,4 +76,8 @@ bool		try_lexas_qs(t_string *s, t_vec *out,
 void		try_lexas_spc(t_string *s, t_vec *out,
 				size_t *offst);
 t_vec		lex(t_string *s);
+const char	*get_token_pretty(t_toktype t);
+const char	*get_token_pretty_1(t_toktype t);
+const char	*get_token_pretty_2(t_toktype t);
+const char	*get_token_pretty_3(t_toktype t);
 #endif
