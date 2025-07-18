@@ -27,10 +27,6 @@ static void	dump_tokenstream(t_vec *tokv)
 	}
 }
 
-// TODO: pasarle a core_loop un struct 
-// como puntero (estado global sin variables globales),
-// y actualizar el prompt
-// sobre la marcha con el path y demás
 static void	read_l(t_string *prompt, t_vec *tokv)
 {
 	char		*s;
@@ -52,10 +48,6 @@ void	core_loop(t_data *data)
 
 	while (1)
 	{
-		// TODO: evitar esto, no queremos un
-		// malloc cada vez, el prompt deberia
-		// de hacerlo una funcion solo cuando
-		// cambie de directorio/usuario, etc...
 		read_l(&data->prompt, &tokv);
 		if (data->debug)
 			dump_tokenstream(&tokv);
