@@ -22,7 +22,7 @@ size_t	goto_next(t_string *s, size_t offst)
 	if (!errmsg)
 	{
 		errmsg = ANSI_RED"syntax error: "ANSI_RESET" unsupported symbol\n"
-			"hint: Use utf-8 encoding and no arithmetics, as this project "
+			"hint: Use ascii encoding and no arithmetics, as this project "
 			"isn't supposed to support it\n";
 		errl = ft_strlen(errmsg);
 	}
