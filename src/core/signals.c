@@ -1,26 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 17:13:42 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/16 17:13:49 by jaicastr         ###   ########.fr       */
+/*   Created: 2025/07/18 16:01:19 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 16:01:20 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "core.h"
 
-int	main(int argc, char **argv, char **envp)
+void	signal_setup(void)
 {
-	t_data	data;
+	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, SIG_IGN);
+}
 
-	signal_setup();
-	data = getopts(argc, argv, envp);
-	if (!data.oneliner)
-		core_loop(&data);
-	else
-		handle_oneliner(&data);
-	clean_data(&data);
+void	ctrl_c(int signal)
+{
+	(void) signal;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }

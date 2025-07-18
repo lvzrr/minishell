@@ -12,6 +12,22 @@
 
 #include "core.h"
 
+void	handle_oneliner(t_data *data)
+{
+	t_vec		tokv;
+
+	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
+	tokv = lex(&data->oneliner_s);
+	if (data->debug)
+		dump_tokenstream("LEXER", &tokv);
+	join_seq(&tokv);
+	if (data->debug)
+		dump_tokenstream("PARSER", &tokv);
+	// TODO: aqui pasarle al constructor del AST
+	// tokv antes de limpiarla
+	clean_tokenstream(&tokv);
+}
+
 void	core_loop(t_data *data)
 {
 	t_vec		tokv;

@@ -18,6 +18,7 @@
 # include "mini_parser.h"
 # include "mini_lexer.h"
 # include <stdio.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -28,6 +29,8 @@ typedef struct s_data
 	t_string	prompt;
 	char		**envp;
 	bool		debug;
+	bool		oneliner;
+	t_string	oneliner_s;
 }	t_data;
 
 void	dump_tokenstream(char *s, t_vec *tokv);
@@ -35,5 +38,8 @@ void	read_l(t_string *prompt, t_vec *tokv);
 void	core_loop(t_data *data);
 bool	check_exit(t_vec *tokv);
 void	clean_data(t_data *data);
+void	handle_oneliner(t_data *data);
 t_data	getopts(int argc, char **argv, char **envp);
+void	signal_setup(void);
+void	ctrl_c(int s);
 #endif
