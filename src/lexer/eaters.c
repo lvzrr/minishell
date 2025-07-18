@@ -14,23 +14,11 @@
 
 size_t	goto_next(t_string *s, size_t offst)
 {
-	static char		*errmsg;
-	static size_t	errl;
-
 	if (!s || !s->data)
 		return (offst);
-	if (!errmsg)
-	{
-		errmsg = ANSI_RED"syntax error: "ANSI_RESET" unsupported symbol\n"
-			"hint: Use ascii encoding and no arithmetics, as this project "
-			"isn't supposed to support it\n";
-		errl = ft_strlen(errmsg);
-	}
 	while (offst < s->len
 		&& ft_isspace(s->data[offst]))
 		offst++;
-	if (isunsupported(s->data[offst]))
-		return ((void)write(2, errmsg, errl), SIZE_MAX);
 	if (s->data[offst] == '\\' && offst == s->len - 1)
 		offst++;
 	if (s->data[offst] == '\\' && offst + 1 < s->len
@@ -54,7 +42,8 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 	++offst;
 	while (offst < s->len - 1 && s->data[offst] != '\'')
 	{
-		if (s->data[offst] == '\\')
+		if (s->data[offst] == '\\' && offst + 1 < s->len
+			&& (s->data[offst + 1] == '\'' || s->data[offst + 1] == '\"'))
 		{
 			remove_scape(s, offst++);
 			continue ;
@@ -82,7 +71,8 @@ size_t	eat_string_dq(t_string *s, size_t offst)
 	++offst;
 	while (offst < s->len - 1 && s->data[offst] != '\"')
 	{
-		if (s->data[offst] == '\\')
+		if (s->data[offst] == '\\' && offst + 1 < s->len
+			&& (s->data[offst + 1] == '\'' || s->data[offst + 1] == '\"'))
 		{
 			remove_scape(s, offst++);
 			continue ;
@@ -99,7 +89,8 @@ size_t	eat_ident(t_string *s, size_t offst)
 {
 	if (!s || !s->data)
 		return (offst);
-	while (offst < s->len && isvalidident(s->data[offst]))
+	while (offst < s->len && (isvalidident(s->data[offst])
+			|| isunsupported(s->data[offst])))
 	{
 		if (s->data[offst] == '\\')
 		{

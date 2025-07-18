@@ -19,7 +19,7 @@ void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 
 	if (!s || !s->len)
 		return ;
-	if (isvalidident(s->data[*offst]))
+	if (isvalidident(s->data[*offst]) || isunsupported(s->data[*offst]))
 	{
 		offst2 = eat_ident(s, *offst);
 		tmp = (t_tok){.type = TOK_IDENT,

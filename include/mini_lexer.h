@@ -16,6 +16,7 @@
 # include <stdbool.h>
 # include "tstr.h"
 # include "macros.h"
+# include "io.h"
 # include "ctype.h"
 # include "vec.h"
 
