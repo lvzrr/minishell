@@ -12,53 +12,6 @@
 
 #include "minish.h"
 
-static void	dump_tokenstream(t_vec *tokv)
-{
-	size_t	i;
-	t_tok	*t;
-
-	i = 0;
-	while (i < tokv->size)
-	{
-		t = (t_tok *)ft_vec_get(tokv, i);
-		if (t && t->s.data && t->s.len)
-			ft_printf(ANSI_BLUE"token: "ANSI_RESET"%s "
-				ANSI_BLUE"(type %d)\n"ANSI_RESET, t->s.data, t->type);
-		i++;
-	}
-}
-
-static void	read_l(t_string *prompt, t_vec *tokv)
-{
-	char		*s;
-	t_string	line;
-
-	s = readline(prompt->data);
-	line = ft_tstr_from_cstr(s);
-	free(s);
-	ft_tstr_trim(&line, " \t\n\r");
-	add_history(line.data);
-	*tokv = lex(&line);
-	ft_tstr_free(&line);
-}
-
-static bool	check_exit(t_vec *tokv)
-{
-	const t_tok	*tok;
-	size_t		i;
-
-	i = 0;
-	while (i < tokv->size)
-	{
-		tok = ft_vec_get(tokv, i);
-		if (tok && tok->s.data && tok->s.len
-			&& !ft_strcmp(tok->s.data, "exit") && tok->type == TOK_IDENT)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
 void	core_loop(t_data *data)
 {
 	t_vec		tokv;
