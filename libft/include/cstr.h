@@ -17,6 +17,7 @@
 # include <sys/types.h>
 # include <stdint.h>
 # include "structs.h"
+# include "ctype.h"
 # include "alloc.h"
 # include "mem.h"
 
@@ -40,4 +41,5 @@ char			*ft_substr(const char *s, unsigned int start, size_t len);
 char			**ft_split(const char *str, char set);
 int				ft_strcmp(const char *a, const char *b);
 t_u8			ft_isnumeric(const char *__restrict__ s);
+bool			ft_s_isblob(char *s);
 #endif

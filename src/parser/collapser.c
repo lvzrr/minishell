@@ -30,33 +30,6 @@ void	collapse_at(t_vec *tokv, t_tok *t)
 	--tokv->size;
 }
 
-void	var_recon(t_vec *tokv)
-{
-	size_t		i;
-	t_tok		*t;
-
-	i = 0;
-	while (i + 1 < tokv->size)
-	{
-		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || !t->s.len)
-		{
-			i++;
-			continue ;
-		}
-		if (t->type == TOK_DOLLAR && ((t + 1)->type == TOK_STRING
-				|| (t + 1)->type == TOK_STRING_DQ
-				|| (t + 1)->type == TOK_STRING_SQ
-				|| (t + 1)->type == TOK_IDENT))
-		{
-			ft_memswap(t, t + 1, sizeof(t_tok));
-			t->type = TOK_VAR;
-			collapse_at(tokv, t + 1);
-		}
-		i++;
-	}
-}
-
 static void	clean_spaces(t_vec *tokv)
 {
 	size_t	i;
@@ -83,6 +56,8 @@ void	join_seq(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
+	var_recon(tokv);
+	var_recon_instr(tokv);
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
@@ -100,6 +75,5 @@ void	join_seq(t_vec *tokv)
 		}
 		i++;
 	}
-	var_recon(tokv);
 	clean_spaces(tokv);
 }
