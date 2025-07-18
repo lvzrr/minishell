@@ -37,7 +37,8 @@ void	read_l(t_string *prompt, t_vec *tokv)
 	line = ft_tstr_from_cstr(s);
 	free(s);
 	ft_tstr_trim(&line, " \t\n\r");
-	add_history(line.data);
+	if (*line.data)
+		add_history(line.data);
 	*tokv = lex(&line);
 	ft_tstr_free(&line);
 }
@@ -57,4 +58,30 @@ bool	check_exit(t_vec *tokv)
 		i++;
 	}
 	return (false);
+}
+
+t_data	getopts(int argc, char **argv, char **envp)
+{
+	int		i;
+	t_data	data;
+
+	data.envp = envp;
+	data.debug = false;
+	data.prompt = ft_tstr_from_cstr("ft_sh $ ");
+	i = 0;
+	while (i < argc)
+	{
+		if (!ft_strcmp(argv[i], "--debug"))
+			data.debug = true;
+		i++;
+	}
+	return (data);
+}
+
+void	clean_data(t_data *data)
+{
+	if (!data)
+		return ;
+	if (data->prompt.data)
+		ft_tstr_free(&data->prompt);
 }
