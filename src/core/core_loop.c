@@ -41,25 +41,37 @@ static void	read_l(t_string *prompt, t_vec *tokv)
 	ft_tstr_free(&line);
 }
 
+static bool	check_exit(t_vec *tokv)
+{
+	const t_tok	*tok;
+	size_t		i;
+
+	i = 0;
+	while (i < tokv->size)
+	{
+		tok = ft_vec_get(tokv, i);
+		if (tok && tok->s.data && tok->s.len
+			&& !ft_strcmp(tok->s.data, "exit") && tok->type == TOK_IDENT)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 void	core_loop(t_data *data)
 {
 	t_vec		tokv;
-	size_t		i;
 
 	while (1)
 	{
 		read_l(&data->prompt, &tokv);
 		if (data->debug)
 			dump_tokenstream(&tokv);
-		i = 0;
-		while (i < tokv.size)
+		if (check_exit(&tokv))
 		{
-			if (!ft_strcmp(((t_tok *)ft_vec_get(&tokv, i++))->s.data, "exit"))
-			{
-				clean_tokenstream(&tokv);
-				rl_clear_history();
-				return ;
-			}
+			clean_tokenstream(&tokv);
+			rl_clear_history();
+			return ;
 		}
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
