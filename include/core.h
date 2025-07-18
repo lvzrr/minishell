@@ -53,4 +53,6 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx);
 void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w);
 t_vec	check_heredoc(t_vec *tokv);
 bool	heredoc_routine(t_vec *tokv, t_data *data);
+void	hdoc_prompt(t_data *data);
+void	default_prompt(t_data *data);
 #endif

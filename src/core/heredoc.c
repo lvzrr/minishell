@@ -69,14 +69,14 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	while (1)
 	{
 		read_l(&data->prompt, &hdoc_ret);
+		if (!hdoc_ret.size)
+			return (clean_tokenstream(hdoc_exit),
+				default_prompt(data), true);
 		join_seq(&hdoc_ret);
 		if (check_vec_eq(&hdoc_ret, hdoc_exit))
-		{
-			ft_tstr_clear(&data->prompt);
-			ft_tstr_pushstr(&data->prompt, "ft_sh $ ");
 			return (clean_tokenstream(&hdoc_ret),
-				clean_tokenstream(hdoc_exit), true);
-		}
+				clean_tokenstream(hdoc_exit), default_prompt(data)
+				, true);
 		else
 		{
 			vec_push_tokens(tokv, &hdoc_ret, idx++);
@@ -101,8 +101,7 @@ bool	heredoc_routine(t_vec *tokv, t_data *data)
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)
 		return (true);
-	ft_tstr_clear(&data->prompt);
-	ft_tstr_pushstr(&data->prompt, "hdoc > ");
+	hdoc_prompt(data);
 	hdoc_loop(&hdoc_exit, idx, tokv, data);
 	if (data->debug)
 		dump_tokenstream("HDOC OUT", tokv);

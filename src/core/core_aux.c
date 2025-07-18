@@ -43,7 +43,8 @@ void	read_l(t_string *prompt, t_vec *tokv)
 	if (line.len <= 1 || !line.data)
 	{
 		ft_tstr_free(&line);
-		line = ft_tstr_from_cstr("");
+		*tokv = (t_vec){0};
+		return ;
 	}
 	if (*line.data)
 		add_history(line.data);
@@ -75,7 +76,7 @@ t_data	getopts(int argc, char **argv, char **envp)
 
 	ft_memset(&data, 0, sizeof(t_data));
 	data.envp = envp;
-	data.prompt = ft_tstr_from_cstr("ft_sh $ ");
+	data.prompt = ft_tstr_from_cstr("$ ");
 	i = 0;
 	while (i < argc)
 	{

@@ -35,6 +35,8 @@ void	core_loop(t_data *data)
 	while (1)
 	{
 		read_l(&data->prompt, &tokv);
+		if (!tokv.size)
+			continue ;
 		if (data->debug)
 			dump_tokenstream("LEXER", &tokv);
 		join_seq(&tokv);
