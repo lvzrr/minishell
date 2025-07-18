@@ -1,0 +1,1142 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 16:01:19 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 16:01:20 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+void	signal_setup(void)
+{
+	signal(SIGINT, ctrl_c);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	ctrl_c(int signal)
+{
+	(void) signal;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/19 00:31:37 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/19 00:32:57 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+void	default_prompt(t_data *data)
+{
+	ft_tstr_clear(&data->prompt);
+	ft_tstr_pushstr(&data->prompt, "$ ");
+}
+
+void	hdoc_prompt(t_data *data)
+{
+	ft_tstr_clear(&data->prompt);
+	ft_tstr_pushstr(&data->prompt, "hdoc > ");
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 19:50:08 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 19:50:46 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+size_t	look4hdoc(t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+
+	i = 0;
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			++i;
+			continue ;
+		}
+		if (t->type == TOK_HDOC)
+			return (i);
+		i++;
+	}
+	return (SIZE_MAX);
+}
+
+t_vec	check_heredoc(t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+	t_vec	tokenseq_end;
+
+	i = 0;
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			++i;
+			continue ;
+		}
+		if (t->type == TOK_HDOC)
+		{
+			tokenseq_end = ft_vec(tokv->size - i, sizeof(t_tok));
+			vec_push_tokens_from(&tokenseq_end, tokv, i + 1);
+			collapse_at(tokv, t);
+			collapse_at(tokv, t);
+			return (tokenseq_end);
+		}
+		i++;
+	}
+	return ((t_vec){0});
+}
+
+static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
+	t_vec *tokv, t_data *data)
+{
+	t_vec	hdoc_ret;
+
+	while (1)
+	{
+		read_l(&data->prompt, &hdoc_ret);
+		if (!hdoc_ret.size)
+			return (clean_tokenstream(hdoc_exit),
+				default_prompt(data), true);
+		join_seq(&hdoc_ret);
+		if (check_vec_eq(&hdoc_ret, hdoc_exit))
+			return (clean_tokenstream(&hdoc_ret),
+				clean_tokenstream(hdoc_exit), default_prompt(data)
+				, true);
+		else
+		{
+			vec_push_tokens(tokv, &hdoc_ret, idx++);
+			if (data->debug)
+				dump_tokenstream("HDOC STREAM", tokv);
+		}
+	}
+}
+
+bool	heredoc_routine(t_vec *tokv, t_data *data)
+{
+	size_t	idx;
+	t_vec	hdoc_exit;
+
+	if (!tokv || !tokv->size || !tokv->data)
+		return (true);
+	idx = look4hdoc(tokv);
+	hdoc_exit = check_heredoc(tokv);
+	if (!hdoc_exit.size
+		&& ((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
+		return (ft_fprintf(2, ANSI_RED"syntax error: "
+				ANSI_RESET"no hdoc terminator\n"), false);
+	else if (!hdoc_exit.size)
+		return (true);
+	hdoc_prompt(data);
+	hdoc_loop(&hdoc_exit, idx, tokv, data);
+	if (data->debug)
+		dump_tokenstream("HDOC OUT", tokv);
+	return (true);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core_aux.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 10:57:14 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 10:57:24 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+void	dump_tokenstream(char *mod, t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+
+	if (!tokv || !tokv->size || !tokv->data)
+		return ;
+	i = 0;
+	while (i < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (t && t->s.data && t->s.len)
+			ft_printf(ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
+				ANSI_BLUE"(%s)\n"ANSI_RESET, mod, t->s.data,
+				get_token_pretty(t->type));
+		i++;
+	}
+}
+
+void	read_l(t_string *prompt, t_vec *tokv)
+{
+	char		*s;
+	t_string	line;
+
+	s = readline(prompt->data);
+	line = ft_tstr_from_cstr(s);
+	free(s);
+	ft_tstr_trim(&line, " \t\n\r");
+	if (line.len <= 1 || !line.data)
+	{
+		ft_tstr_free(&line);
+		*tokv = (t_vec){0};
+		return ;
+	}
+	if (*line.data)
+		add_history(line.data);
+	*tokv = lex(&line);
+	ft_tstr_free(&line);
+}
+
+bool	check_exit(t_vec *tokv)
+{
+	const t_tok	*tok;
+	size_t		i;
+
+	i = 0;
+	while (i < tokv->size)
+	{
+		tok = ft_vec_get(tokv, i);
+		if (tok && tok->s.data && tok->s.len
+			&& !ft_strcmp(tok->s.data, "exit") && tok->type == TOK_IDENT)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+t_data	getopts(int argc, char **argv, char **envp)
+{
+	int		i;
+	t_data	data;
+
+	ft_memset(&data, 0, sizeof(t_data));
+	data.envp = envp;
+	data.prompt = ft_tstr_from_cstr("$ ");
+	i = 0;
+	while (i < argc)
+	{
+		if (!ft_strcmp(argv[i], "--debug"))
+			data.debug = true;
+		else if (!ft_strcmp(argv[i], "-c"))
+		{
+			data.oneliner = true;
+			if (i + 1 < argc)
+				data.oneliner_s = ft_tstr_from_cstr(argv[i + 1]);
+			else
+				ft_printf(ANSI_RED"error: "ANSI_RESET"no input\n");
+		}
+		i++;
+	}
+	return (data);
+}
+
+void	clean_data(t_data *data)
+{
+	if (!data)
+		return ;
+	if (data->prompt.data)
+		ft_tstr_free(&data->prompt);
+	if (data->oneliner_s.data)
+		ft_tstr_free(&data->oneliner_s);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core_loop.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 09:36:58 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 09:41:25 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+void	handle_oneliner(t_data *data)
+{
+	t_vec		tokv;
+
+	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
+	if (!data->oneliner_s.len || !data->oneliner_s.data
+		|| !*data->oneliner_s.data)	
+		return ;
+	tokv = lex(&data->oneliner_s);
+	if (data->debug)
+		dump_tokenstream("LEXER", &tokv);
+	join_seq(&tokv);
+	if (data->debug)
+		dump_tokenstream("PARSER", &tokv);
+	if (!heredoc_routine(&tokv, data))
+	{
+		clean_tokenstream(&tokv);
+		return ;
+	}
+	// TODO: aqui pasarle al constructor del AST
+	// tokv antes de limpiarla
+	clean_tokenstream(&tokv);
+}
+
+void	core_loop(t_data *data)
+{
+	t_vec		tokv;
+
+	while (1)
+	{
+		read_l(&data->prompt, &tokv);
+		if (!tokv.size)
+			continue ;
+		if (data->debug)
+			dump_tokenstream("LEXER", &tokv);
+		join_seq(&tokv);
+		if (data->debug)
+			dump_tokenstream("PARSER", &tokv);
+		if (check_exit(&tokv))
+		{
+			clean_tokenstream(&tokv);
+			rl_clear_history();
+			return ;
+		}
+		if (!heredoc_routine(&tokv, data))
+		{
+			clean_tokenstream(&tokv);
+			continue ;
+		}
+		// TODO: aqui pasarle al constructor del AST
+		// tokv antes de limpiarla
+		clean_tokenstream(&tokv);
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_vec_helpers.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 19:48:26 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 19:48:33 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "core.h"
+
+bool	check_vec_eq(t_vec *a, t_vec *b)
+{
+	size_t	i;
+	t_tok	*t1;
+	t_tok	*t2;
+
+	if (a == b)
+		return (true);
+	if ((!a && b) || (a && !b) || a->size != b->size)
+		return (false);
+	i = 0;
+	while (i < a->size)
+	{
+		t1 = (t_tok *)ft_vec_get(a, i);
+		t2 = (t_tok *)ft_vec_get(b, i);
+		if (t1->type != t2->type)
+			return (false);
+		if (ft_strcmp(t1->s.data, t2->s.data))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
+{
+	size_t	i;
+	t_tok	t;
+
+	i = s;
+	while (i < b->size)
+	{
+		t = *((t_tok *)ft_vec_get(b, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
+		ft_vec_push(a, &t, 1);
+		i++;
+	}
+}
+
+void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx)
+{
+	t_vec	c;
+	size_t	i;
+	t_tok	t;
+
+	i = 0;
+	c = ft_vec(a->size + b->size, sizeof(t_tok));
+	while (i < idx)
+	{
+		t = *((t_tok *)ft_vec_get(a, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(a, i))->s);
+		ft_vec_push(&c, &t, 1);
+		i++;
+	}
+	i = 0;
+	while (i < b->size)
+	{
+		t = *((t_tok *)ft_vec_get(b, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
+		ft_vec_push(&c, &t, 1);
+		i++;
+	}
+	vec_deep_copy(&c, a, idx);
+	clean_tokenstream(b);
+	clean_tokenstream(a);
+	*a = c;
+}
+
+void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
+{
+	size_t	i;
+	t_tok	t;
+
+	i = w;
+	while (i < b->size)
+	{
+		t = *((t_tok *)ft_vec_get(b, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
+		if (t.type == TOK_SCOLON || t.type == TOK_PIPE
+			|| t.type == TOK_AND)
+		{
+			ft_tstr_free(&t.s);
+			break ;
+		}
+		ft_vec_push(a, &t, 1);
+		i++;
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   collapser.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 12:29:07 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 12:29:17 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_parser.h"
+
+static bool	strings_concat(t_tok *t)
+{
+	return ((t->type == TOK_IDENT
+			|| t->type == TOK_STRING_DQ
+			|| t->type == TOK_STRING
+			|| t->type == TOK_STRING_SQ) && ((t + 1)->type == TOK_IDENT
+			|| (t + 1)->type == TOK_STRING_DQ
+			|| (t + 1)->type == TOK_STRING
+			|| (t + 1)->type == TOK_STRING_SQ));
+}
+
+void	collapse_at(t_vec *tokv, t_tok *t)
+{
+	ft_tstr_free(&t->s);
+	ft_memmove(t, t + 1, (tokv->size - 1) * tokv->sizeof_type);
+	--tokv->size;
+}
+
+static void	clean_spaces(t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+
+	i = 0;
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			i++;
+			continue ;
+		}
+		if (t->type == TOK_SPACE)
+			collapse_at(tokv, t);
+		i++;
+	}
+}
+
+void	join_seq(t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+
+	i = 0;
+	var_recon(tokv);
+	var_recon_instr(tokv);
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			i++;
+			continue ;
+		}
+		if (strings_concat(t))
+		{
+			t->type = TOK_STRING;
+			ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
+			collapse_at(tokv, t + 1);
+			--i;
+		}
+		i++;
+	}
+	clean_spaces(tokv);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   recognition.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/19 01:04:13 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/19 01:04:23 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_parser.h"
+
+void	var_recon(t_vec *tokv)
+{
+	size_t		i;
+	t_tok		*t;
+
+	i = 0;
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			i++;
+			continue ;
+		}
+		if (t->type == TOK_DOLLAR && (t + 1)->type == TOK_IDENT)
+		{
+			ft_memswap(t, t + 1, sizeof(t_tok));
+			t->type = TOK_VAR;
+			collapse_at(tokv, t + 1);
+		}
+		i++;
+	}
+}
+
+void	var_recon_instr(t_vec *tokv)
+{
+	size_t		i;
+	t_tok		*t;
+
+	i = 0;
+	while (i < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			i++;
+			continue ;
+		}
+		if (t->type == TOK_STRING_DQ && *t->s.data == '$'
+			&& ft_s_isblob(t->s.data))
+		{
+			t->type = TOK_VAR;
+			ft_memmove(t->s.data, t->s.data + 1, t->s.len--);
+			t->s.data[t->s.len] = 0;
+		}
+		i++;
+	}
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/19 01:15:54 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/19 01:16:16 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minish.h"
+
+void	phelp(void)
+{
+	
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 17:13:42 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/16 17:13:49 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minish.h"
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_data	data;
+
+	signal_setup();
+	data = getopts(argc, argv, envp);
+	if (!data.oneliner)
+		core_loop(&data);
+	else
+		handle_oneliner(&data);
+	clean_data(&data);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   eaters.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 02:23:33 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 02:23:34 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minish.h"
+
+size_t	goto_next(t_string *s, size_t offst)
+{
+	if (!s || !s->data)
+		return (offst);
+	while (offst < s->len
+		&& ft_isspace(s->data[offst]))
+		offst++;
+	if (s->data[offst] == '\\' && offst == s->len - 1)
+		offst++;
+	if (s->data[offst] == '\\' && offst + 1 < s->len
+		&& s->data[offst + 1] == '\\')
+		offst++;
+	return (offst);
+}
+
+size_t	eat_string_sq(t_string *s, size_t offst)
+{
+	static char		*errmsg;
+	static size_t	errl;
+
+	if (!s || !s->data)
+		return (offst);
+	if (!errmsg)
+	{
+		errmsg = ANSI_RED"syntax error: "ANSI_RESET"unclosed \'\n";
+		errl = ft_strlen(errmsg);
+	}
+	++offst;
+	while (offst < s->len - 1 && s->data[offst] != '\'')
+	{
+		if (s->data[offst] == '\\' && offst + 1 < s->len
+			&& (s->data[offst + 1] == '\'' || s->data[offst + 1] == '\"'))
+		{
+			remove_scape(s, offst++);
+			continue ;
+		}
+		offst++;
+	}
+	if (offst < s->len && s->data[offst] == '\'')
+		return (++offst);
+	write(2, errmsg, errl);
+	return (SIZE_MAX);
+}
+
+size_t	eat_string_dq(t_string *s, size_t offst)
+{
+	static char		*errmsg;
+	static size_t	errl;
+
+	if (!s || !s->data)
+		return (offst);
+	if (!errmsg)
+	{
+		errmsg = ANSI_RED"syntax error: "ANSI_RESET"unclosed \"\n";
+		errl = ft_strlen(errmsg);
+	}
+	++offst;
+	while (offst < s->len - 1 && s->data[offst] != '\"')
+	{
+		if (s->data[offst] == '\\' && offst + 1 < s->len
+			&& (s->data[offst + 1] == '\'' || s->data[offst + 1] == '\"'))
+		{
+			remove_scape(s, offst++);
+			continue ;
+		}
+		offst++;
+	}
+	if (offst < s->len && s->data[offst] == '\"')
+		return (++offst);
+	write(2, errmsg, errl);
+	return (SIZE_MAX);
+}
+
+size_t	eat_ident(t_string *s, size_t offst)
+{
+	if (!s || !s->data)
+		return (offst);
+	while (offst < s->len && (isvalidident(s->data[offst])
+			|| isunsupported(s->data[offst])))
+	{
+		if (s->data[offst] == '\\')
+		{
+			remove_scape(s, offst++);
+			continue ;
+		}
+		if (ft_isspace(s->data[offst])
+			&& ((offst >= 1 && s->data[offst - 1] != '\\') || offst == 0))
+			return (offst);
+		if ((s->data[offst] == '\'' || s->data[offst] == '\"')
+			&& offst >= 1 && s->data[offst - 1] != '\\')
+			return (offst);
+		offst++;
+	}
+	return (offst);
+}
+
+size_t	eat_op(t_string *s, size_t offst)
+{
+	char	c;
+
+	if (!s || !s->data || offst >= s->len)
+		return (offst);
+	c = s->data[offst++];
+	if (offst < s->len && ((s->data[offst] == c
+				&& (c == '&' || c == '|' || c == '<' || c == '>'))
+			|| (s->data[offst] == '&' && c == '>')))
+		offst++;
+	return (offst);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tok_infer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 08:42:09 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 08:42:16 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+
+t_toktype	get_token_type_1(t_string *s)
+{
+	if (!s || s->len != 1)
+		return (0xff);
+	if (*s->data == '<')
+		return (TOK_LR);
+	else if (*s->data == '>')
+		return (TOK_RR);
+	else if (*s->data == '&')
+		return (TOK_AND);
+	else if (*s->data == '|')
+		return (TOK_PIPE);
+	else if (*s->data == '(')
+		return (TOK_LPAREN);
+	else if (*s->data == ')')
+		return (TOK_RPAREN);
+	else if (*s->data == '{')
+		return (TOK_LCURLY);
+	else if (*s->data == '}')
+		return (TOK_RCURLY);
+	else if (*s->data == '$')
+		return (TOK_DOLLAR);
+	else if (*s->data == ';')
+		return (TOK_SCOLON);
+	else
+		return (0xff);
+}
+
+t_toktype	get_token_type_1_2(t_string *s)
+{
+	if (!s || s->len != 1)
+		return (0xff);
+	if (*s->data == '=')
+		return (TOK_EQ);
+	else
+		return (0xff);
+}
+
+t_toktype	get_token_type_2(t_string *s)
+{
+	char	a;
+	char	b;
+
+	if (!s || s->len != 2)
+		return (0xff);
+	a = s->data[0];
+	b = s->data[1];
+	if (a == '>' && b == '>')
+		return (TOK_RAPPEND);
+	else if (a == '<' && b == '<')
+		return (TOK_HDOC);
+	else if (a == '&' && b == '&')
+		return (TOK_AND);
+	else if (a == '|' && b == '|')
+		return (TOK_OR);
+	else if (a == '>' && b == '&')
+		return (TOK_REDIR);
+	else
+		return (0xff);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   try_lexas.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 07:33:36 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 20:37:39 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+
+void	try_lexas_spc(t_string *s, t_vec *out, size_t *offst)
+{
+	t_tok	tmp;
+
+	if (ft_isspace(s->data[*offst]))
+	{
+		*offst = goto_next(s, *offst);
+		tmp = (t_tok){.type = TOK_SPACE,
+			.s = ft_tstr_from_cstr(" ")};
+		ft_vec_push(out, &tmp, 1);
+	}
+}
+
+void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
+{
+	size_t	offst2;
+	t_tok	tmp;
+
+	if (!s || !s->len)
+		return ;
+	if (isvalidident(s->data[*offst]) || isunsupported(s->data[*offst]))
+	{
+		offst2 = eat_ident(s, *offst);
+		tmp = (t_tok){.type = TOK_IDENT,
+			.s = ft_tstr_from_slice(
+				s->data + *offst, offst2 - *offst)};
+		if (tmp.s.len < 1)
+			return ;
+		ft_vec_push(out, &tmp, 1);
+		*offst = offst2;
+	}
+}
+
+void	try_lexas_op(t_string *s, t_vec *out, size_t *offst)
+{
+	size_t	offst2;
+	t_tok	tmp;
+
+	if (!s || !s->len)
+		return ;
+	if (isvalidop(s->data[*offst]) && ((*offst >= 1
+				&& s->data[*offst - 1] != '\\') || *offst == 0))
+	{
+		offst2 = eat_op(s, *offst);
+		tmp = (t_tok){.type = 0,
+			.s = ft_tstr_from_slice(
+				s->data + *offst, offst2 - *offst)};
+		if (tmp.s.len == 1)
+		{
+			tmp.type = get_token_type_1(&tmp.s);
+			if (tmp.type == 0xff)
+				tmp.type = get_token_type_1_2(&tmp.s);
+		}
+		else
+			tmp.type = get_token_type_2(&tmp.s);
+		if (tmp.s.len < 1)
+			return ;
+		ft_vec_push(out, &tmp, 1);
+		*offst = offst2;
+	}
+}
+
+bool	try_lexas_qs(t_string *s, t_vec *out, size_t *offst)
+{
+	size_t	offst2;
+	t_tok	tmp;
+
+	offst2 = 0;
+	if (s && s->len && s->data[*offst] == '\"')
+	{
+		tmp.type = TOK_STRING_DQ;
+		offst2 = eat_string_dq(s, *offst);
+	}
+	else if (s && s->len && s->data[*offst] == '\'')
+	{
+		tmp.type = TOK_STRING_SQ;
+		offst2 = eat_string_sq(s, *offst);
+	}
+	else
+		return (true);
+	if (offst2 == (size_t) -1)
+		return (false);
+	tmp.s = ft_tstr_from_slice(s->data + *offst, offst2 - *offst);
+	ft_tstr_trim_one(&tmp.s, "\"\'");
+	if (tmp.type == TOK_STRING_DQ && tmp.s.len > 2 && tmp.s.data[0] == '$'
+		&& tmp.s.data[1] == '(' && tmp.s.data[tmp.s.len - 1] == ')')
+		tmp.type = TOK_STRING_TOEXPAND;
+	ft_vec_push(out, &tmp, 1);
+	return (*offst = offst2, true);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   display.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 23:32:41 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/18 23:34:37 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+
+const char	*get_token_pretty(t_toktype t)
+{
+	if (t == TOK_STRING_TOEXPAND)
+		return ("TOK_STRING_TOEXPAND");
+	else if (t == TOK_IDENT)
+		return ("TOK_IDENT");
+	else if (t == TOK_STRING)
+		return ("TOK_STRING");
+	else if (t == TOK_STRING_DQ)
+		return ("TOK_STRING_DQ");
+	else if (t == TOK_STRING_SQ)
+		return ("TOK_STRING_SQ");
+	else if (t == TOK_DQ)
+		return ("TOK_DQ");
+	else if (t == TOK_SQ)
+		return ("TOK_SQ");
+	else
+		return (get_token_pretty_1(t));
+}
+
+const char	*get_token_pretty_1(t_toktype t)
+{
+	if (t == TOK_LR)
+		return ("TOK_LR");
+	else if (t == TOK_RAPPEND)
+		return ("TOK_RAPPEND");
+	else if (t == TOK_REDIR)
+		return ("TOK_REDIR");
+	else if (t == TOK_HDOC)
+		return ("TOK_HDOC");
+	else if (t == TOK_RR)
+		return ("TOK_RR");
+	else if (t == TOK_AND)
+		return ("TOK_AND");
+	else if (t == TOK_PIPE)
+		return ("TOK_PIPE");
+	else if (t == TOK_EQ)
+		return ("TOK_EQ");
+	else
+		return (get_token_pretty_2(t));
+}
+
+const char	*get_token_pretty_2(t_toktype t)
+{
+	if (t == TOK_OR)
+		return ("TOK_OR");
+	else if (t == TOK_LPAREN)
+		return ("TOK_LPAREN");
+	else if (t == TOK_RPAREN)
+		return ("TOK_RPAREN");
+	else if (t == TOK_LCURLY)
+		return ("TOK_LCURLY");
+	else if (t == TOK_RCURLY)
+		return ("TOK_RCURLY");
+	else if (t == TOK_DOLLAR)
+		return ("TOK_DOLLAR");
+	else if (t == TOK_SCOLON)
+		return ("TOK_SCOLON");
+	else
+		return (get_token_pretty_3(t));
+}
+
+const char	*get_token_pretty_3(t_toktype t)
+{
+	if (t == TOK_VAR)
+		return ("TOK_VAR");
+	else if (t == TOK_SPACE)
+		return ("TOK_SPACE");
+	else
+		return ("TOK_UNKNOWN");
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lex.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 05:52:16 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 05:52:56 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+#include "minish.h"
+
+void	clean_tokenstream(t_vec *v)
+{
+	size_t	i;
+	t_tok	*t;
+
+	if (!v || !v->size || !v->data)
+		return ;
+	i = 0;
+	while (i < v->size)
+	{
+		t = (t_tok *)ft_vec_get(v, i++);
+		if (!t)
+			continue ;
+		ft_tstr_free(&t->s);
+	}
+	ft_vec_free(v);
+}
+
+static void	clean_err(char *str, t_vec *out)
+{
+	write(2, str, ft_strlen(str));
+	clean_tokenstream(out);
+}
+
+static void	manage_paren(t_tok *t, size_t *paren_l)
+{
+	if (!t || !t->s.data || !t->s.len)
+		return ;
+	if (t->type == TOK_LPAREN)
+		(*paren_l)++;
+	else if (t->type == TOK_RPAREN)
+		(*paren_l)--;
+}
+
+t_vec	lex(t_string *s)
+{
+	t_vec	out;
+	size_t	offst;
+	size_t	paren_l;
+
+	if (!s || !s->len)
+		return ((t_vec){0});
+	paren_l = 0;
+	offst = 0;
+	out = ft_vec(10, sizeof(t_tok));
+	while (offst < s->len)
+	{
+		try_lexas_spc(s, &out, &offst);
+		if (offst == SIZE_MAX)
+			return (clean_tokenstream(&out), (t_vec){0});
+		if (!try_lexas_qs(s, &out, &offst))
+			return (clean_tokenstream(&out), (t_vec){0});
+		try_lexas_ident(s, &out, &offst);
+		try_lexas_op(s, &out, &offst);
+		manage_paren((t_tok *)ft_vec_peek_last(&out), &paren_l);
+	}
+	if (paren_l != 0)
+		return (clean_err(ANSI_RED"error: "ANSI_RESET"unclosed paren\n", &out),
+			(t_vec){0});
+	return (out);
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sequences.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 06:42:14 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 06:45:35 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+
+bool	isvalidident(char c)
+{
+	return (c == '_' || c == '/'
+		|| c == '.' || c == '-'
+		|| c == '@' || c == '~'
+		|| c == '\\' || c == '*'
+		|| c == '\'' || c == '\"'
+		|| c == '+' || ft_isalnum(c));
+}
+
+bool	isunsupported(char c)
+{
+	return (!isvalidident(c) && !isvalidop(c));
+}
+
+bool	isvalidop(char c)
+{
+	return (c == '&' || c == '|'
+		|| c == '=' || c == '<'
+		|| c == '>' || c == ';'
+		|| c == '!' || c == '('
+		|| c == '$' || c == '?'
+		|| c == ')');
+}
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sanitize.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/17 17:41:07 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/17 17:41:18 by jaicastr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "mini_lexer.h"
+
+void	remove_scape(t_string *s, size_t offst)
+{
+	ft_memmove(s->data + offst, s->data + offst + 1, s->len - offst);
+	s->data[--s->len] = 0;
+}

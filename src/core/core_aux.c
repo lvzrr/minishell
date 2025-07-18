@@ -68,39 +68,3 @@ bool	check_exit(t_vec *tokv)
 	}
 	return (false);
 }
-
-t_data	getopts(int argc, char **argv, char **envp)
-{
-	int		i;
-	t_data	data;
-
-	ft_memset(&data, 0, sizeof(t_data));
-	data.envp = envp;
-	data.prompt = ft_tstr_from_cstr("$ ");
-	i = 0;
-	while (i < argc)
-	{
-		if (!ft_strcmp(argv[i], "--debug"))
-			data.debug = true;
-		else if (!ft_strcmp(argv[i], "-c"))
-		{
-			data.oneliner = true;
-			if (i + 1 < argc)
-				data.oneliner_s = ft_tstr_from_cstr(argv[i + 1]);
-			else
-				ft_printf(ANSI_RED"error: "ANSI_RESET"no input\n");
-		}
-		i++;
-	}
-	return (data);
-}
-
-void	clean_data(t_data *data)
-{
-	if (!data)
-		return ;
-	if (data->prompt.data)
-		ft_tstr_free(&data->prompt);
-	if (data->oneliner_s.data)
-		ft_tstr_free(&data->oneliner_s);
-}

@@ -18,6 +18,11 @@ int	main(int argc, char **argv, char **envp)
 
 	signal_setup();
 	data = getopts(argc, argv, envp);
+	if (data.phelp)
+	{
+		phelp();
+		return (clean_data(&data), EXIT_SUCCESS);
+	}
 	if (!data.oneliner)
 		core_loop(&data);
 	else

@@ -30,6 +30,7 @@ typedef struct s_data
 	char		**envp;
 	bool		debug;
 	bool		oneliner;
+	bool		phelp;
 	t_string	oneliner_s;
 }	t_data;
 
@@ -55,4 +56,5 @@ t_vec	check_heredoc(t_vec *tokv);
 bool	heredoc_routine(t_vec *tokv, t_data *data);
 void	hdoc_prompt(t_data *data);
 void	default_prompt(t_data *data);
+void	phelp(void);
 #endif
