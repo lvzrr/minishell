@@ -52,7 +52,11 @@ void	var_recon_instr(t_vec *tokv)
 		}
 		if (t->type == TOK_STRING_DQ && *t->s.data == '$'
 			&& ft_s_isblob(t->s.data))
+		{
 			t->type = TOK_VAR;
+			ft_memmove(t->s.data, t->s.data + 1, t->s.len--);
+			t->s.data[t->s.len] = 0;
+		}
 		i++;
 	}
 }
