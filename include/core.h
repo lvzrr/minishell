@@ -6,7 +6,7 @@
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 11:01:14 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/18 11:01:16 by jaicastr         ###   ########.fr       */
+/*   Updated: 2025/07/18 19:51:02 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,10 @@ void	handle_oneliner(t_data *data);
 t_data	getopts(int argc, char **argv, char **envp);
 void	signal_setup(void);
 void	ctrl_c(int s);
+bool	check_vec_eq(t_vec *a, t_vec *b);
+void	vec_push_tokens(t_vec *a, t_vec *b);
+void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w);
+t_vec	check_heredoc(t_vec *tokv);
+bool	heredoc_routine(t_vec *tokv, t_data *data);
+
 #endif

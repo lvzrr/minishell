@@ -46,6 +46,11 @@ void	core_loop(t_data *data)
 			rl_clear_history();
 			return ;
 		}
+		if (!heredoc_routine(&tokv, data))
+		{
+			clean_tokenstream(&tokv);
+			continue ;
+		}
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
 		clean_tokenstream(&tokv);

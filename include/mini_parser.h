@@ -15,5 +15,6 @@
 
 # include "mini_lexer.h"
 
+void	collapse_at(t_vec *tokv, t_tok *t);
 void	join_seq(t_vec *tokv);
 #endif

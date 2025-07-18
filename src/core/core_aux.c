@@ -17,6 +17,8 @@ void	dump_tokenstream(char *mod, t_vec *tokv)
 	size_t	i;
 	t_tok	*t;
 
+	if (!tokv || !tokv->size || !tokv->data)
+		return ;
 	i = 0;
 	while (i < tokv->size)
 	{
