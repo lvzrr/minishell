@@ -78,7 +78,11 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 				clean_tokenstream(hdoc_exit), true);
 		}
 		else
+		{
 			vec_push_tokens(tokv, &hdoc_ret, idx++);
+			if (data->debug)
+				dump_tokenstream("HDOC STREAM", tokv);
+		}
 	}
 }
 
@@ -87,6 +91,8 @@ bool	heredoc_routine(t_vec *tokv, t_data *data)
 	size_t	idx;
 	t_vec	hdoc_exit;
 
+	if (!tokv || !tokv->size || !tokv->data)
+		return (true);
 	idx = look4hdoc(tokv);
 	hdoc_exit = check_heredoc(tokv);
 	if (!hdoc_exit.size
@@ -95,8 +101,6 @@ bool	heredoc_routine(t_vec *tokv, t_data *data)
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)
 		return (true);
-	if (data->debug)
-		dump_tokenstream("HDOC", &hdoc_exit);
 	ft_tstr_clear(&data->prompt);
 	ft_tstr_pushstr(&data->prompt, "hdoc > ");
 	hdoc_loop(&hdoc_exit, idx, tokv, data);
