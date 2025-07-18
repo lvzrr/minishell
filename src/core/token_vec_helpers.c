@@ -20,10 +20,10 @@ bool	check_vec_eq(t_vec *a, t_vec *b)
 
 	if (a == b)
 		return (true);
-	if ((!a && b) || (a && !b))
+	if ((!a && b) || (a && !b) || a->size != b->size)
 		return (false);
 	i = 0;
-	while (i + 1 < a->size)
+	while (i < a->size)
 	{
 		t1 = (t_tok *)ft_vec_get(a, i);
 		t2 = (t_tok *)ft_vec_get(b, i);
