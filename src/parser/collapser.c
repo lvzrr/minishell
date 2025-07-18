@@ -26,7 +26,7 @@ static bool	strings_concat(t_tok *t)
 void	collapse_at(t_vec *tokv, t_tok *t)
 {
 	ft_tstr_free(&t->s);
-	ft_memmove(t, t + 1, tokv->size * tokv->sizeof_type);
+	ft_memmove(t, t + 1, (tokv->size - 1) * tokv->sizeof_type);
 	--tokv->size;
 }
 

@@ -12,6 +12,27 @@
 
 #include "core.h"
 
+size_t	look4hdoc(t_vec *tokv)
+{
+	size_t	i;
+	t_tok	*t;
+
+	i = 0;
+	while (i + 1 < tokv->size)
+	{
+		t = (t_tok *)ft_vec_get(tokv, i);
+		if (!t || !t->s.data || !t->s.len)
+		{
+			++i;
+			continue ;
+		}
+		if (t->type == TOK_HDOC)
+			return (i);
+		i++;
+	}
+	return (SIZE_MAX);
+}
+
 t_vec	check_heredoc(t_vec *tokv)
 {
 	size_t	i;
@@ -32,40 +53,40 @@ t_vec	check_heredoc(t_vec *tokv)
 			tokenseq_end = ft_vec(tokv->size - i, sizeof(t_tok));
 			vec_push_tokens_from(&tokenseq_end, tokv, i + 1);
 			collapse_at(tokv, t);
-			return (tokv->size = tokv->size - (tokv->size - i), tokenseq_end);
+			return (tokenseq_end);
 		}
 		i++;
 	}
 	return ((t_vec){0});
 }
 
-static bool	hdoc_loop(t_vec *hdoc_ret, t_vec *hdoc_exit,
+static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	t_vec *tokv, t_data *data)
 {
+	t_vec	hdoc_ret;
+
 	while (1)
 	{
-		read_l(&data->prompt, hdoc_ret);
-		join_seq(hdoc_ret);
-		if (check_vec_eq(hdoc_ret, hdoc_exit))
+		read_l(&data->prompt, &hdoc_ret);
+		join_seq(&hdoc_ret);
+		if (check_vec_eq(&hdoc_ret, hdoc_exit))
 		{
 			ft_tstr_clear(&data->prompt);
 			ft_tstr_pushstr(&data->prompt, "ft_sh $ ");
-			return (clean_tokenstream(hdoc_ret),
+			return (clean_tokenstream(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), true);
 		}
 		else
-		{
-			vec_push_tokens(tokv, hdoc_ret);
-			clean_tokenstream(hdoc_ret);
-		}
+			vec_push_tokens(tokv, &hdoc_ret, idx++);
 	}
 }
 
 bool	heredoc_routine(t_vec *tokv, t_data *data)
 {
+	size_t	idx;
 	t_vec	hdoc_exit;
-	t_vec	hdoc_ret;
 
+	idx = look4hdoc(tokv);
 	hdoc_exit = check_heredoc(tokv);
 	if (!hdoc_exit.size
 		&& ((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
@@ -77,7 +98,7 @@ bool	heredoc_routine(t_vec *tokv, t_data *data)
 		dump_tokenstream("HDOC", &hdoc_exit);
 	ft_tstr_clear(&data->prompt);
 	ft_tstr_pushstr(&data->prompt, "hdoc > ");
-	hdoc_loop(&hdoc_ret, &hdoc_exit, tokv, data);
+	hdoc_loop(&hdoc_exit, idx, tokv, data);
 	if (data->debug)
 		dump_tokenstream("HDOC OUT", tokv);
 	return (true);

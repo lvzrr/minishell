@@ -36,12 +36,12 @@ bool	check_vec_eq(t_vec *a, t_vec *b)
 	return (true);
 }
 
-void	vec_push_tokens(t_vec *a, t_vec *b)
+static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 {
 	size_t	i;
 	t_tok	t;
 
-	i = 0;
+	i = s;
 	while (i < b->size)
 	{
 		t = *((t_tok *)ft_vec_get(b, i));
@@ -49,6 +49,35 @@ void	vec_push_tokens(t_vec *a, t_vec *b)
 		ft_vec_push(a, &t, 1);
 		i++;
 	}
+}
+
+void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx)
+{
+	t_vec	c;
+	size_t	i;
+	t_tok	t;
+
+	i = 0;
+	c = ft_vec(a->size + b->size, sizeof(t_tok));
+	while (i < idx)
+	{
+		t = *((t_tok *)ft_vec_get(a, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(a, i))->s);
+		ft_vec_push(&c, &t, 1);
+		i++;
+	}
+	i = 0;
+	while (i < b->size)
+	{
+		t = *((t_tok *)ft_vec_get(b, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
+		ft_vec_push(&c, &t, 1);
+		i++;
+	}
+	vec_deep_copy(&c, a, idx + 1);
+	clean_tokenstream(b);
+	clean_tokenstream(a);
+	*a = c;
 }
 
 void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
@@ -62,6 +91,9 @@ void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 		t = *((t_tok *)ft_vec_get(b, i));
 		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
 		ft_tstr_free(&((t_tok *)ft_vec_get(b, i))->s);
+		if (t.type == TOK_SCOLON || t.type == TOK_PIPE
+			|| t.type == TOK_AND)
+			break ;
 		ft_vec_push(a, &t, 1);
 		i++;
 	}

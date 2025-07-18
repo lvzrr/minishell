@@ -1,2 +1,5 @@
 - [ ] señales de terminacion
-- [ ] parser
+- [ ] env
+- [ ] builtins
+- [ ] heredocs recursivos
+- [ ] arbol

@@ -33,6 +33,12 @@ typedef struct s_data
 	t_string	oneliner_s;
 }	t_data;
 
+typedef struct s_hdoc
+{
+	t_vec	*hdoc_exit;
+	t_vec	*hdoc_ret;
+}	t_hdoc;
+
 void	dump_tokenstream(char *s, t_vec *tokv);
 void	read_l(t_string *prompt, t_vec *tokv);
 void	core_loop(t_data *data);
@@ -43,9 +49,8 @@ t_data	getopts(int argc, char **argv, char **envp);
 void	signal_setup(void);
 void	ctrl_c(int s);
 bool	check_vec_eq(t_vec *a, t_vec *b);
-void	vec_push_tokens(t_vec *a, t_vec *b);
+void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx);
 void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w);
 t_vec	check_heredoc(t_vec *tokv);
 bool	heredoc_routine(t_vec *tokv, t_data *data);
-
 #endif
