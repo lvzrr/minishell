@@ -43,14 +43,11 @@ static void	read_l(t_string *prompt, t_vec *tokv)
 	add_history(line.data);
 	*tokv = lex(&line);
 	ft_tstr_free(&line);
-	// quitar despues:
-	ft_tstr_free(prompt);
 }
 
 void	core_loop(t_data *data)
 {
 	t_vec		tokv;
-	t_string	prompt;
 	size_t		i;
 
 	while (1)
@@ -59,8 +56,7 @@ void	core_loop(t_data *data)
 		// malloc cada vez, el prompt deberia
 		// de hacerlo una funcion solo cuando
 		// cambie de directorio/usuario, etc...
-		prompt = ft_tstr_from_cstr("$ ");
-		read_l(&prompt, &tokv);
+		read_l(&data->prompt, &tokv);
 		if (data->debug)
 			dump_tokenstream(&tokv);
 		i = 0;
