@@ -19,4 +19,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+// TODO: poner aqui el path, el
+// env, etc...
+typedef struct s_data
+{
+	t_string	prompt;
+	char		**envp;
+	bool		debug;
+}	t_data;
+
+void	core_loop(t_data *data);
+
 #endif
