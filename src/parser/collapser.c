@@ -49,7 +49,7 @@ void	join_seq(t_vec *tokv)
 			t->type = TOK_STRING;
 			ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 			collapse_at(tokv, t + 1);
-			i = 0;
+			--i;
 		}
 		i++;
 	}
