@@ -15,18 +15,19 @@
 static bool	strings_concat(t_tok *t)
 {
 	return ((t->type == TOK_IDENT
-		|| t->type == TOK_STRING_DQ
-		|| t->type == TOK_STRING
-		|| t->type == TOK_STRING_SQ) && ((t + 1)->type == TOK_IDENT
-		|| (t + 1)->type == TOK_STRING_DQ
-		|| (t + 1)->type == TOK_STRING
-		|| (t + 1)->type == TOK_STRING_SQ));
+			|| t->type == TOK_STRING_DQ
+			|| t->type == TOK_STRING
+			|| t->type == TOK_STRING_SQ) && ((t + 1)->type == TOK_IDENT
+			|| (t + 1)->type == TOK_STRING_DQ
+			|| (t + 1)->type == TOK_STRING
+			|| (t + 1)->type == TOK_STRING_SQ));
 }
 
 static void	collapse_at(t_vec *tokv, t_tok *t)
 {
 	ft_tstr_free(&t->s);
-	ft_memmove(t, t + 1, tokv->size-- * tokv->sizeof_type);
+	ft_memmove(t, t + 1, tokv->size * tokv->sizeof_type);
+	--tokv->size;
 }
 
 void	join_seq(t_vec *tokv)
@@ -35,7 +36,7 @@ void	join_seq(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
-	while (i < tokv->size)
+	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || !t->s.len)
@@ -43,11 +44,12 @@ void	join_seq(t_vec *tokv)
 			i++;
 			continue ;
 		}
-		if (i + 1 < tokv->size && strings_concat(t))
+		if (strings_concat(t))
 		{
 			t->type = TOK_STRING;
 			ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 			collapse_at(tokv, t + 1);
+			i = 0;
 		}
 		i++;
 	}
