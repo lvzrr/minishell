@@ -22,7 +22,8 @@ static void	dump_tokenstream(t_vec *tokv)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (t && t->s.data && t->s.len)
-			ft_printf(ANSI_BLUE"token: "ANSI_RESET"%s\n", t->s.data);
+			ft_printf(ANSI_BLUE"token: "ANSI_RESET"%s "
+				ANSI_BLUE"(type %d)\n"ANSI_RESET, t->s.data, t->type);
 		i++;
 	}
 }
