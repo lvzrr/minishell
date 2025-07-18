@@ -12,6 +12,19 @@
 
 #include "mini_lexer.h"
 
+void	try_lexas_spc(t_string *s, t_vec *out, size_t *offst)
+{
+	t_tok	tmp;
+
+	if (ft_isspace(s->data[*offst]))
+	{
+		*offst = goto_next(s, *offst);
+		tmp = (t_tok){.type = TOK_SPACE,
+			.s = ft_tstr_from_cstr(" ")};
+		ft_vec_push(out, &tmp, 1);
+	}
+}
+
 void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 {
 	size_t	offst2;

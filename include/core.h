@@ -15,7 +15,11 @@
 
 # include "tstr.h"
 # include "vec.h"
-# include "unistd.h"
+# include "mini_parser.h"
+# include "mini_lexer.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 // TODO: poner aqui el path, el
 // env, etc...
@@ -26,7 +30,7 @@ typedef struct s_data
 	bool		debug;
 }	t_data;
 
-void	dump_tokenstream(t_vec *tokv);
+void	dump_tokenstream(char *s, t_vec *tokv);
 void	read_l(t_string *prompt, t_vec *tokv);
 void	core_loop(t_data *data);
 bool	check_exit(t_vec *tokv);

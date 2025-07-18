@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "core.h"
 
 void	core_loop(t_data *data)
 {
@@ -20,7 +20,10 @@ void	core_loop(t_data *data)
 	{
 		read_l(&data->prompt, &tokv);
 		if (data->debug)
-			dump_tokenstream(&tokv);
+			dump_tokenstream("LEXER", &tokv);
+		join_seq(&tokv);
+		if (data->debug)
+			dump_tokenstream("PARSER", &tokv);
 		if (check_exit(&tokv))
 		{
 			clean_tokenstream(&tokv);

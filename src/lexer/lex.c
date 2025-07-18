@@ -60,7 +60,7 @@ t_vec	lex(t_string *s)
 	out = ft_vec(10, sizeof(t_tok));
 	while (offst < s->len)
 	{
-		offst = goto_next(s, offst);
+		try_lexas_spc(s, &out, &offst);
 		if (offst == SIZE_MAX)
 			return (clean_tokenstream(&out), (t_vec){0});
 		if (!try_lexas_qs(s, &out, &offst))

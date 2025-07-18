@@ -24,6 +24,7 @@ typedef enum e_toktype
 {
 	TOK_STRING_TOEXPAND,
 	TOK_IDENT,
+	TOK_STRING,
 	TOK_STRING_DQ,
 	TOK_STRING_SQ,
 	TOK_DQ,
@@ -42,6 +43,7 @@ typedef enum e_toktype
 	TOK_RCURLY,
 	TOK_DOLLAR,
 	TOK_SCOLON,
+	TOK_SPACE,
 }	t_toktype;
 
 typedef struct s_tok
@@ -68,6 +70,8 @@ void		try_lexas_ident(t_string *s, t_vec *out,
 void		try_lexas_op(t_string *s, t_vec *out,
 				size_t *offst);
 bool		try_lexas_qs(t_string *s, t_vec *out,
+				size_t *offst);
+void		try_lexas_spc(t_string *s, t_vec *out,
 				size_t *offst);
 t_vec		lex(t_string *s);
 #endif

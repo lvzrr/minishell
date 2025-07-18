@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "core.h"
 
-void	dump_tokenstream(t_vec *tokv)
+void	dump_tokenstream(char *mod, t_vec *tokv)
 {
 	size_t	i;
 	t_tok	*t;
@@ -22,8 +22,8 @@ void	dump_tokenstream(t_vec *tokv)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (t && t->s.data && t->s.len)
-			ft_printf(ANSI_BLUE"token: "ANSI_RESET"%s "
-				ANSI_BLUE"(type %d)\n"ANSI_RESET, t->s.data, t->type);
+			ft_printf(ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
+				ANSI_BLUE"(type %d)\n"ANSI_RESET, mod, t->s.data, t->type);
 		i++;
 	}
 }
