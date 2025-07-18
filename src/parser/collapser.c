@@ -49,8 +49,8 @@ void	var_recon(t_vec *tokv)
 				|| (t + 1)->type == TOK_STRING_SQ
 				|| (t + 1)->type == TOK_IDENT))
 		{
-			t->type = TOK_VAR;
 			ft_memswap(t, t + 1, sizeof(t_tok));
+			t->type = TOK_VAR;
 			collapse_at(tokv, t + 1);
 		}
 		i++;
