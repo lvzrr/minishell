@@ -74,7 +74,7 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx)
 		ft_vec_push(&c, &t, 1);
 		i++;
 	}
-	vec_deep_copy(&c, a, idx + 1);
+	vec_deep_copy(&c, a, idx);
 	clean_tokenstream(b);
 	clean_tokenstream(a);
 	*a = c;
@@ -90,10 +90,12 @@ void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 	{
 		t = *((t_tok *)ft_vec_get(b, i));
 		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
-		ft_tstr_free(&((t_tok *)ft_vec_get(b, i))->s);
 		if (t.type == TOK_SCOLON || t.type == TOK_PIPE
 			|| t.type == TOK_AND)
+		{
+			ft_tstr_free(&t.s);
 			break ;
+		}
 		ft_vec_push(a, &t, 1);
 		i++;
 	}
