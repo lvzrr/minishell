@@ -31,6 +31,7 @@ typedef enum e_toktype
 	TOK_SQ,
 	TOK_LR,
 	TOK_RAPPEND,
+	TOK_REDIR,
 	TOK_HDOC,
 	TOK_RR,
 	TOK_AND,
@@ -43,6 +44,7 @@ typedef enum e_toktype
 	TOK_RCURLY,
 	TOK_DOLLAR,
 	TOK_SCOLON,
+	TOK_VAR,
 	TOK_SPACE,
 }	t_toktype;
 

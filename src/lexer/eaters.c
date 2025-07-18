@@ -115,8 +115,9 @@ size_t	eat_op(t_string *s, size_t offst)
 	if (!s || !s->data || offst >= s->len)
 		return (offst);
 	c = s->data[offst++];
-	if (offst < s->len && s->data[offst] == c
+	if (offst < s->len && ((s->data[offst] == c
 		&& (c == '&' || c == '|' || c == '<' || c == '>'))
+		|| (s->data[offst] == '&' && c == '>')))
 		offst++;
 	return (offst);
 }

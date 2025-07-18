@@ -67,6 +67,8 @@ t_toktype	get_token_type_2(t_string *s)
 		return (TOK_AND);
 	else if (a == '|' && b == '|')
 		return (TOK_OR);
+	else if (a == '>' && b == '&')
+		return (TOK_REDIR);
 	else
 		return (0xff);
 }
