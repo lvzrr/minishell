@@ -74,7 +74,7 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx)
 		ft_vec_push(&c, &t, 1);
 		i++;
 	}
-	vec_deep_copy(&c, a, idx);
+	vec_deep_copy(&c, a, idx + 2);
 	clean_tokenstream(b);
 	clean_tokenstream(a);
 	*a = c;

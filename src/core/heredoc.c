@@ -43,9 +43,6 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 	{
 		tokenseq_end = ft_vec(tokv->size - idx, sizeof(t_tok));
 		vec_push_tokens_from(&tokenseq_end, tokv, idx + 1);
-		collapse_at(tokv, t);
-		if (idx + 1 < tokv->size)
-			collapse_at(tokv, t);
 		return (tokenseq_end);
 	}
 	return ((t_vec){0});
