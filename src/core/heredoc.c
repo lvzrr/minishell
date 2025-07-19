@@ -66,7 +66,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 				, true);
 		else
 		{
-			vec_push_tokens(tokv, &hdoc_ret, idx++);
+			vec_push_tokens(tokv, &hdoc_ret, idx);
 			if (data->debug)
 				dump_tokenstream("HDOC STREAM", tokv);
 		}
