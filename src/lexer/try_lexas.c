@@ -96,9 +96,6 @@ bool	try_lexas_qs(t_string *s, t_vec *out, size_t *offst)
 		return (false);
 	tmp.s = ft_tstr_from_slice(s->data + *offst, offst2 - *offst);
 	ft_tstr_trim_one(&tmp.s, "\"\'");
-	if (tmp.type == TOK_STRING_DQ && tmp.s.len > 2 && tmp.s.data[0] == '$'
-		&& tmp.s.data[1] == '(' && tmp.s.data[tmp.s.len - 1] == ')')
-		tmp.type = TOK_STRING_TOEXPAND;
 	ft_vec_push(out, &tmp, 1);
 	return (*offst = offst2, true);
 }

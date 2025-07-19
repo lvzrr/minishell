@@ -22,7 +22,6 @@
 
 typedef enum e_toktype
 {
-	TOK_STRING_TOEXPAND,
 	TOK_IDENT,
 	TOK_STRING,
 	TOK_STRING_DQ,
@@ -45,6 +44,8 @@ typedef enum e_toktype
 	TOK_DOLLAR,
 	TOK_SCOLON,
 	TOK_VAR,
+	TOK_STRING_TOEXPAND,
+	TOK_SUBSHELL,
 	TOK_SPACE,
 }	t_toktype;
 

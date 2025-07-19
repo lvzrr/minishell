@@ -28,6 +28,8 @@ const char	*get_token_pretty(t_toktype t)
 		return ("TOK_DQ");
 	else if (t == TOK_SQ)
 		return ("TOK_SQ");
+	else if (t == TOK_SUBSHELL)
+		return ("TOK_SUBSHELL");
 	else
 		return (get_token_pretty_1(t));
 }
