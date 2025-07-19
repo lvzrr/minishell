@@ -12,13 +12,48 @@
 
 #include "mini_parser.h"
 
-void	var_recon(t_vec *tokv)
+static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 {
-	size_t		i;
-	t_tok		*t;
+	if (t->type == TOK_DOLLAR && idx + 1 < tokv->size
+		&& (t + 1)->type == TOK_IDENT)
+	{
+		ft_memswap(t, t + 1, sizeof(t_tok));
+		t->type = TOK_VAR;
+		collapse_at(tokv, t + 1);
+	}
+	else
+		if (t->type == TOK_DOLLAR && idx + 1 == tokv->size)
+			ft_vec_pop(tokv);
+}
+
+static void	var_recon_instr(t_vec *tokv, t_tok *t, size_t idx)
+{
+	size_t	pos;
+
+	(void)idx;
+	(void)tokv;
+	if (t->s.len <= 1)
+		return ;
+	pos = ft_tstr_instr(&t->s, "$");
+	if (pos == 0 && ft_s_isblob(t->s.data))
+	{
+		t->type = TOK_VAR;
+		ft_memmove(t->s.data, t->s.data + 1, t->s.len - 1);
+		t->s.len--;
+	}
+	else if (pos == 0 && !ft_isspace(t->s.data[pos + 1]))
+		t->type = TOK_STRING_TOEXPAND;
+	else if (pos >= 1 && t->s.data[pos - 1] != '\\')
+		t->type = TOK_STRING_TOEXPAND;
+}
+
+void	detect_vars(t_vec *tokv)
+{
+	t_tok	*t;
+	size_t	i;
 
 	i = 0;
-	while (i + 1 < tokv->size)
+	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || !t->s.len)
@@ -26,12 +61,10 @@ void	var_recon(t_vec *tokv)
 			i++;
 			continue ;
 		}
-		if (t->type == TOK_DOLLAR && (t + 1)->type == TOK_IDENT)
-		{
-			ft_memswap(t, t + 1, sizeof(t_tok));
-			t->type = TOK_VAR;
-			collapse_at(tokv, t + 1);
-		}
+		if (t->type == TOK_DOLLAR)
+			var_recon(tokv, t, i);
+		if (t->type == TOK_STRING_DQ)
+			var_recon_instr(tokv, t, i);
 		i++;
 	}
 }
@@ -60,29 +93,4 @@ bool	omit_hdoc(t_vec *tokv)
 		i++;
 	}
 	return (c > 0);
-}
-
-void	var_recon_instr(t_vec *tokv)
-{
-	size_t		i;
-	t_tok		*t;
-
-	i = 0;
-	while (i < tokv->size)
-	{
-		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || !t->s.len)
-		{
-			i++;
-			continue ;
-		}
-		if (t->type == TOK_STRING_DQ && *t->s.data == '$'
-			&& ft_s_isblob(t->s.data))
-		{
-			t->type = TOK_VAR;
-			ft_memmove(t->s.data, t->s.data + 1, t->s.len--);
-			t->s.data[t->s.len] = 0;
-		}
-		i++;
-	}
 }

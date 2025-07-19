@@ -56,8 +56,6 @@ void	join_seq(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
-	var_recon(tokv);
-	var_recon_instr(tokv);
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
@@ -76,4 +74,5 @@ void	join_seq(t_vec *tokv)
 		i++;
 	}
 	clean_spaces(tokv);
+	detect_vars(tokv);
 }
