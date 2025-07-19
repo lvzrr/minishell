@@ -57,6 +57,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	while (1)
 	{
 		read_l(&data->prompt, &hdoc_ret);
+		omit_hdoc(&hdoc_ret);
 		if (!hdoc_ret.size && !hdoc_ret.data)
 		{
 			clean_tokenstream(&hdoc_ret);

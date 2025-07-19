@@ -21,4 +21,5 @@ void	join_seq(t_vec *tokv);
 void	var_recon(t_vec *tokv);
 void	var_recon_instr(t_vec *tokv);
 void	del_unused(t_vec *tokv, size_t idx);
+bool	omit_hdoc(t_vec *tokv);
 #endif
