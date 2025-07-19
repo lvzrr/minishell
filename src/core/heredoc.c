@@ -18,7 +18,7 @@ size_t	look4hdoc(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
-	while (i + 1 < tokv->size)
+	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || !t->s.len)
@@ -33,30 +33,20 @@ size_t	look4hdoc(t_vec *tokv)
 	return (SIZE_MAX);
 }
 
-t_vec	check_heredoc(t_vec *tokv)
+t_vec	check_heredoc(t_vec *tokv, size_t idx)
 {
-	size_t	i;
 	t_tok	*t;
 	t_vec	tokenseq_end;
 
-	i = 0;
-	while (i + 1 < tokv->size)
+	t = (t_tok *)ft_vec_get(tokv, idx);
+	if (t->type == TOK_HDOC && (t + 1)->type == TOK_IDENT)
 	{
-		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || !t->s.len)
-		{
-			++i;
-			continue ;
-		}
-		if (t->type == TOK_HDOC)
-		{
-			tokenseq_end = ft_vec(tokv->size - i, sizeof(t_tok));
-			vec_push_tokens_from(&tokenseq_end, tokv, i + 1);
+		tokenseq_end = ft_vec(tokv->size - idx, sizeof(t_tok));
+		vec_push_tokens_from(&tokenseq_end, tokv, idx + 1);
+		collapse_at(tokv, t);
+		if (idx + 1 < tokv->size)
 			collapse_at(tokv, t);
-			collapse_at(tokv, t);
-			return (tokenseq_end);
-		}
-		i++;
+		return (tokenseq_end);
 	}
 	return ((t_vec){0});
 }
@@ -86,17 +76,30 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	}
 }
 
-bool	heredoc_routine(t_vec *tokv, t_data *data)
+bool	heredoc(t_vec *tokv, t_data *data)
 {
 	size_t	idx;
+
+	idx = look4hdoc(tokv);
+	while (idx != SIZE_MAX)
+	{
+		if (!heredoc_routine(tokv, data, idx))
+			return (false);
+		idx = look4hdoc(tokv);
+	}
+	return (true);
+}
+
+bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
+{
 	t_vec	hdoc_exit;
 
 	if (!tokv || !tokv->size || !tokv->data)
 		return (true);
-	idx = look4hdoc(tokv);
-	hdoc_exit = check_heredoc(tokv);
+	hdoc_exit = check_heredoc(tokv, idx);
 	if (!hdoc_exit.size
-		&& ((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
+		&& ((((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
+			|| (((t_tok *)ft_vec_get(tokv, idx)) + 1)->type != TOK_IDENT))
 		return (ft_fprintf(2, ANSI_RED"syntax error: "
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)

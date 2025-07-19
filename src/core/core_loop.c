@@ -26,7 +26,7 @@ void	handle_oneliner(t_data *data)
 	join_seq(&tokv);
 	if (data->debug)
 		dump_tokenstream("PARSER", &tokv);
-	if (!heredoc_routine(&tokv, data))
+	if (!heredoc(&tokv, data))
 	{
 		clean_tokenstream(&tokv);
 		return ;
@@ -56,7 +56,7 @@ void	core_loop(t_data *data)
 			rl_clear_history();
 			return ;
 		}
-		if (!heredoc_routine(&tokv, data))
+		if (!heredoc(&tokv, data))
 		{
 			clean_tokenstream(&tokv);
 			continue ;
