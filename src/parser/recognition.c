@@ -26,12 +26,10 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 			ft_tstr_free(&t->s);
 }
 
-static void	var_recon_instr(t_vec *tokv, t_tok *t, size_t idx)
+static void	var_recon_instr(t_tok *t)
 {
 	size_t	pos;
 
-	(void)idx;
-	(void)tokv;
 	if (t->s.len <= 1)
 		return ;
 	pos = ft_tstr_instr(&t->s, "$");
@@ -67,7 +65,7 @@ void	detect_vars(t_vec *tokv)
 		if (t->type == TOK_DOLLAR)
 			var_recon(tokv, t, i);
 		if (t->type == TOK_STRING_DQ)
-			var_recon_instr(tokv, t, i);
+			var_recon_instr(t);
 		i++;
 	}
 }
