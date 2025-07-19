@@ -18,15 +18,14 @@ void	clean_tokenstream(t_vec *v)
 	size_t	i;
 	t_tok	*t;
 
-	if (!v || !v->size || !v->data)
-		return ;
 	i = 0;
 	while (i < v->size)
 	{
-		t = (t_tok *)ft_vec_get(v, i++);
+		t = (t_tok *)ft_vec_get(v, i);
 		if (!t)
 			continue ;
 		ft_tstr_free(&t->s);
+		i++;
 	}
 	ft_vec_free(v);
 }

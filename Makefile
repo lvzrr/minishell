@@ -17,7 +17,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.c
 
 $(NAME): $(OBJ)
 	$(MAKE) -C libft libft.a
-	$(CC) $(OBJ) $(LDFLAGS) -o $@
+	$(CC) $(OBJ) $(LDFLAGS) -o $@ -g3
 
 clean:
 	$(MAKE) -C libft clean

@@ -21,6 +21,8 @@ void	handle_oneliner(t_data *data)
 		|| !*data->oneliner_s.data)	
 		return ;
 	tokv = lex(&data->oneliner_s);
+	if (!tokv.size)
+		clean_tokenstream(&tokv);
 	if (data->debug)
 		dump_tokenstream("LEXER", &tokv);
 	join_seq(&tokv);
