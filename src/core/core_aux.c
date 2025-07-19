@@ -39,8 +39,8 @@ void	read_l(t_string *prompt, t_vec *tokv)
 	s = readline(prompt->data);
 	line = ft_tstr_from_cstr(s);
 	free(s);
-	ft_tstr_trim(&line, " \t\n\r");
-	if (line.len < 1 || !line.data)
+	ft_tstr_trim(&line, " \t\r");
+	if (!line.len || !line.data)
 	{
 		ft_tstr_free(&line);
 		*tokv = (t_vec){0};

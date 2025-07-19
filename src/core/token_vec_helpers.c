@@ -42,6 +42,7 @@ static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 	t_tok	t;
 
 	i = s;
+	ft_vec_reserve(a, b->size);
 	while (i < b->size)
 	{
 		t = *((t_tok *)ft_vec_get(b, i));
@@ -74,20 +75,17 @@ static void	copy_helper(t_vec *a, t_vec *b, t_vec *c, size_t idx)
 	}
 }
 
-void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx)
+void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 {
 	t_vec			c;
 	const t_tok		*t;
 
 	c = ft_vec(a->size + b->size, sizeof(t_tok));
-	copy_helper(a, b, &c, idx);
-	t = ft_vec_get(a, idx);
+	copy_helper(a, b, &c, *idx);
+	t = ft_vec_get(a, *idx);
 	if (!t || !t->s.len || !t->s.data)
 		return ;
-	if (t->type == TOK_HDOC && idx + 1 < a->size)
-		vec_deep_copy(&c, a, idx + 2);
-	else
-		vec_deep_copy(&c, a, idx);
+	vec_deep_copy(&c, a, (*idx)++);
 	clean_tokenstream(a);
 	clean_tokenstream(b);
 	*a = c;

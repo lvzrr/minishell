@@ -20,4 +20,5 @@ void	collapse_to_delim(t_vec *tokv, t_tok *t);
 void	join_seq(t_vec *tokv);
 void	var_recon(t_vec *tokv);
 void	var_recon_instr(t_vec *tokv);
+void	del_unused(t_vec *tokv, size_t idx);
 #endif

@@ -1,5 +1,5 @@
 - [ ] señales de terminacion
+- [ ] arreglar el heredoc para que no este al revés
 - [ ] env
 - [ ] builtins
-- [ ] heredocs recursivos
 - [ ] arbol

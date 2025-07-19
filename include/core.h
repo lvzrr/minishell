@@ -50,7 +50,7 @@ t_data	getopts(int argc, char **argv, char **envp);
 void	signal_setup(void);
 void	ctrl_c(int s);
 bool	check_vec_eq(t_vec *a, t_vec *b);
-void	vec_push_tokens(t_vec *a, t_vec *b, size_t idx);
+void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx);
 void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w);
 t_vec	check_heredoc(t_vec *tokv, size_t s);
 bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx);
