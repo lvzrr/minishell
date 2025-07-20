@@ -25,7 +25,7 @@ void	handle_oneliner(t_data *data)
 		clean_tokenstream(&tokv);
 	if (data->debug)
 		dump_tokenstream("LEXER", &tokv);
-	join_seq(&tokv);
+	post_process(&tokv);
 	if (data->debug)
 		dump_tokenstream("PARSER", &tokv);
 	if (!heredoc(&tokv, data))
@@ -49,7 +49,7 @@ void	core_loop(t_data *data)
 			continue ;
 		if (data->debug)
 			dump_tokenstream("LEXER", &tokv);
-		join_seq(&tokv);
+		post_process(&tokv);
 		if (data->debug)
 			dump_tokenstream("PARSER", &tokv);
 		if (check_exit(&tokv))

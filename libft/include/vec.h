@@ -187,4 +187,7 @@ void		*ft_vec_get_clone(t_vec *vec, size_t idx);
  */
 const void	*ft_vec_get(t_vec *vec, size_t idx);
 
+void		ft_vec_remove_f(t_vec *v, size_t i, void (*f) (void *));
+void		ft_vec_remove(t_vec *v, size_t i);
+
 #endif

@@ -57,9 +57,9 @@ typedef struct s_node
 	t_u			u;
 }	t_node;
 
-void	collapse_at(t_vec *tokv, t_tok *t);
+void	collapse_at(t_vec *tokv, size_t i);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
-void	join_seq(t_vec *tokv);
+void	post_process(t_vec *tokv);
 void	detect_vars(t_vec *tokv);
 void	del_unused(t_vec *tokv, size_t idx);
 bool	omit_hdoc(t_vec *tokv);

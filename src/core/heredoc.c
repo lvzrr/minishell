@@ -63,7 +63,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 			clean_tokenstream(&hdoc_ret);
 			continue ;
 		}
-		join_seq(&hdoc_ret);
+		post_process(&hdoc_ret);
 		if (check_vec_eq(&hdoc_ret, hdoc_exit))
 			return (del_unused(tokv, idx), clean_tokenstream(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data)
