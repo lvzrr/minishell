@@ -80,12 +80,23 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 	t_vec			c;
 	const t_tok		*t;
 
-	c = ft_vec(a->size + b->size, sizeof(t_tok));
-	copy_helper(a, b, &c, *idx);
-	t = ft_vec_get(a, *idx);
-	if (!t || !t->s.len || !t->s.data)
+	if (*idx == a->size)
+	{
+		ft_printf("%u, %u\n", a->size, *idx);
+		vec_deep_copy(a, b, 0);
+		*idx += b->size;
+		clean_tokenstream(b);
 		return ;
-	vec_deep_copy(&c, a, (*idx)++);
+	}
+	else
+	{
+		c = ft_vec(a->size + b->size, sizeof(t_tok));
+		copy_helper(a, b, &c, *idx);
+		t = ft_vec_get(a, *idx);
+		if (!t || !t->s.len || !t->s.data)
+			return ;
+		vec_deep_copy(&c, a, (*idx)++);
+	}
 	clean_tokenstream(a);
 	clean_tokenstream(b);
 	*a = c;
@@ -97,6 +108,7 @@ void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 	t_tok	t;
 
 	i = w;
+	collapse_at(b, i);
 	while (i < b->size)
 	{
 		t = *((t_tok *)ft_vec_get(b, i));
@@ -108,6 +120,6 @@ void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 			break ;
 		}
 		ft_vec_push(a, &t, 1);
-		i++;
+		collapse_at(b, i);
 	}
 }

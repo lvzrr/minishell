@@ -23,7 +23,7 @@ void	dump_tokenstream(char *mod, t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (t && t->s.data && t->s.len)
+		if (t && t->s.data && (t->s.len || t->type == TOK_STRING_EMPTY))
 			ft_printf(ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
 				ANSI_BLUE"(%s)\n"ANSI_RESET, mod, t->s.data,
 				get_token_pretty(t->type));

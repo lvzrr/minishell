@@ -15,6 +15,10 @@
 
 static bool	strings_concat(t_tok *t)
 {
+	if (t->type == TOK_STRING_EMPTY && ((t + 1)->type == TOK_STRING_DQ
+			|| (t + 1)->type == TOK_IDENT || (t + 1)->type == TOK_STRING
+			|| (t + 1)->type == TOK_STRING_SQ))
+		return (true);
 	return ((t->type == TOK_IDENT
 			|| t->type == TOK_STRING_DQ
 			|| t->type == TOK_STRING

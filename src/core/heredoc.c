@@ -43,7 +43,7 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 		&& (t + 1)->type == TOK_IDENT)
 	{
 		tokenseq_end = ft_vec(tokv->size - idx, sizeof(t_tok));
-		vec_push_tokens_from(&tokenseq_end, tokv, idx + 1);
+		vec_push_tokens_from(&tokenseq_end, tokv, idx);
 		return (tokenseq_end);
 	}
 	return ((t_vec){0});
@@ -65,7 +65,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 		}
 		post_process(&hdoc_ret);
 		if (check_vec_eq(&hdoc_ret, hdoc_exit))
-			return (del_unused(tokv, idx), clean_tokenstream(&hdoc_ret),
+			return (clean_tokenstream(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data)
 				, true);
 		else
@@ -105,6 +105,8 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)
 		return (true);
+	if (data->debug)
+		dump_tokenstream("HDOC RETURN SEQ", &hdoc_exit);
 	hdoc_prompt(data);
 	hdoc_loop(&hdoc_exit, idx, tokv, data);
 	if (data->debug)
