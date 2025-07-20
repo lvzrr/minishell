@@ -83,7 +83,7 @@ void	post_process(t_vec *tokv)
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data)
+		if (!t || !t->s.data || (!t->s.len && t->type != TOK_STRING_EMPTY))
 		{
 			i++;
 			continue ;
