@@ -82,7 +82,6 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 
 	if (*idx == a->size)
 	{
-		ft_printf("%u, %u\n", a->size, *idx);
 		vec_deep_copy(a, b, 0);
 		*idx += b->size;
 		clean_tokenstream(b);
