@@ -26,6 +26,7 @@ typedef enum e_toktype
 	TOK_STRING,
 	TOK_STRING_DQ,
 	TOK_STRING_SQ,
+	TOK_STRING_SQ_NOEXPAND,
 	TOK_DQ,
 	TOK_SQ,
 	TOK_LR,

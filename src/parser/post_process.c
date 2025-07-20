@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "mini_parser.h"
+#include "core.h"
 
 static bool	strings_concat(t_tok *t)
 {
@@ -62,7 +63,10 @@ static void	try_varcollapse(t_vec *tokv, t_tok *t, size_t *i)
 	{
 		t->type = TOK_STRING_TOEXPAND;
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
-		collapse_at(tokv, *i + 1);
+		if (*i < tokv->size - 1)
+			collapse_at(tokv, *i + 1);
+		else
+			collapse_at(tokv, *i + 2);
 		(*i)--;
 	}
 }

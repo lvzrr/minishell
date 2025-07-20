@@ -28,12 +28,12 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 
 static void	var_recon_instr(t_tok *t)
 {
-	size_t	pos;
+	ssize_t	pos;
 
 	if (t->s.len <= 1)
 		return ;
 	pos = ft_tstr_instr(&t->s, "$");
-	if (pos + 1 < t->s.len && t->s.data[pos + 1] == '(')
+	if (pos >= 0 && (size_t)pos + 1 < t->s.len && t->s.data[pos + 1] == '(')
 		t->type = TOK_SUBSHELL;
 	else if (pos == 0 && ft_s_isblob(t->s.data))
 	{
