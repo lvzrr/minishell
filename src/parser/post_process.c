@@ -15,12 +15,12 @@
 static bool	strings_concat(t_tok *t)
 {
 	return ((t->type == TOK_IDENT
-	|| t->type == TOK_STRING_DQ
-	|| t->type == TOK_STRING
-	|| t->type == TOK_STRING_SQ) && ((t + 1)->type == TOK_IDENT
-	|| (t + 1)->type == TOK_STRING_DQ
-	|| (t + 1)->type == TOK_STRING
-	|| (t + 1)->type == TOK_STRING_SQ));
+			|| t->type == TOK_STRING_DQ
+			|| t->type == TOK_STRING
+			|| t->type == TOK_STRING_SQ) && ((t + 1)->type == TOK_IDENT
+			|| (t + 1)->type == TOK_STRING_DQ
+			|| (t + 1)->type == TOK_STRING
+			|| (t + 1)->type == TOK_STRING_SQ));
 }
 
 static void	clean_spaces(t_vec *tokv)
@@ -46,14 +46,19 @@ static void	clean_spaces(t_vec *tokv)
 static void	try_varcollapse(t_vec *tokv, t_tok *t, size_t *i)
 {
 	if (*i + 1 < tokv->size && (((t->type == TOK_STRING_DQ
-		|| t->type == TOK_STRING || t->type == TOK_IDENT
-		|| t->type == TOK_STRING_TOEXPAND || t->type == TOK_STRING_SQ)
-		&& ((t + 1)->type == TOK_VAR || (t + 1)->type == TOK_STRING_TOEXPAND))
-		|| (((t + 1)->type == TOK_STRING_DQ
-		|| (t + 1)->type == TOK_STRING_SQ
-		|| (t + 1)->type == TOK_STRING || (t + 1)->type == TOK_IDENT
-		|| (t + 1)->type == TOK_STRING_TOEXPAND)
-		&& (t->type == TOK_VAR || t->type == TOK_STRING_TOEXPAND))))
+					|| t->type == TOK_STRING
+					|| t->type == TOK_IDENT
+					|| t->type == TOK_STRING_TOEXPAND
+					|| t->type == TOK_STRING_SQ)
+				&& ((t + 1)->type == TOK_VAR
+					|| (t + 1)->type == TOK_STRING_TOEXPAND))
+			|| (((t + 1)->type == TOK_STRING_DQ
+					|| (t + 1)->type == TOK_STRING_SQ
+					|| (t + 1)->type == TOK_STRING
+					|| (t + 1)->type == TOK_IDENT
+					|| (t + 1)->type == TOK_STRING_TOEXPAND)
+				&& (t->type == TOK_VAR
+					|| t->type == TOK_STRING_TOEXPAND))))
 	{
 		t->type = TOK_STRING_TOEXPAND;
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
