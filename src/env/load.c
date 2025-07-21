@@ -57,7 +57,8 @@ static void	load_default_env(t_data *data)
 			"/usr/local/sbin/:/usr/local/bin:/usr/bin:/bin");
 	ft_vec_push(&data->env, &var, 1);
 	var.name = ft_tstr_from_cstr("SHLVL");
-	var.value = ft_tstr_from_cstr("0");
+	var.value = ft_tstr_from_cstr("1");
+	ft_vec_push(&data->env, &var, 1);
 	dir = getcwd(NULL, 0);
 	var.name = ft_tstr_from_cstr("PWD");
 	if (dir)
