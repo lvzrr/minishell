@@ -19,6 +19,7 @@ void	ft_tstr_insert(t_string *str, char *topush, size_t s, size_t idx)
 		return ;
 	if (!str->data || !str->alloc_size || idx == str->len)
 	{
+		ft_tstr_repeat(str, " ", idx);
 		ft_tstr_pushslice(str, topush, s);
 		return ;
 	}
