@@ -16,5 +16,6 @@
 # include "lft.h"
 # include "mini_lexer.h"
 # include "core.h"
+# include "env.h"
 
 #endif

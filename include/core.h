@@ -22,8 +22,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-// TODO: poner aqui el path, el
-// env, etc...
 typedef struct s_data
 {
 	t_string	prompt;
@@ -32,6 +30,7 @@ typedef struct s_data
 	bool		oneliner;
 	bool		phelp;
 	t_string	oneliner_s;
+	t_vec		env;
 }	t_data;
 
 typedef struct s_hdoc

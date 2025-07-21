@@ -48,4 +48,6 @@ void	clean_data(t_data *data)
 		ft_tstr_free(&data->prompt);
 	if (data->oneliner_s.data)
 		ft_tstr_free(&data->oneliner_s);
+	if (data->env.data)
+		clean_env(&data->env);
 }

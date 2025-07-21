@@ -16,8 +16,11 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	signal_setup();
+	// signal_setup();
 	data = getopts(argc, argv, envp);
+	load_env(&data, envp);
+	if (data.debug)
+		print_env(&data.env);
 	if (data.phelp)
 	{
 		phelp();
@@ -27,5 +30,5 @@ int	main(int argc, char **argv, char **envp)
 		core_loop(&data);
 	else
 		handle_oneliner(&data);
-	clean_data(&data);
+	return (clean_data(&data),EXIT_SUCCESS);
 }
