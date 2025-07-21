@@ -12,6 +12,28 @@
 
 #include "env.h"
 
+static void	increase_shell_lvl(t_vec *env)
+{
+	t_var	*var;
+	size_t	lvl;
+	char	*new_val;
+	size_t	i;
+
+	i = 0;
+	while (i < env->size)
+	{
+		var = ft_vec_get_mut(env, i++);
+		if (!ft_strncmp(var->name.data, "SHLVL", 5))
+		{
+			lvl = ft_atoul(var->value.data);
+			ft_tstr_free(&var->value);
+			new_val = ft_utoa_base(++lvl, "0123456789");
+			var->value = ft_tstr_from_cstr(new_val);
+			ft_free((void **)&new_val);
+		}
+	}
+}
+
 static void	free_split(char **split)
 {
 	size_t	i;
@@ -35,7 +57,7 @@ static void	load_default_env(t_data *data)
 			"/usr/local/sbin/:/usr/local/bin:/usr/bin:/bin");
 	ft_vec_push(&data->env, &var, 1);
 	var.name = ft_tstr_from_cstr("SHLVL");
-	var.value = ft_tstr_from_cstr("1");
+	var.value = ft_tstr_from_cstr("0");
 	dir = getcwd(NULL, 0);
 	var.name = ft_tstr_from_cstr("PWD");
 	if (dir)
@@ -77,4 +99,5 @@ void	load_env(t_data *data, char **envp)
 		free_split(tmp);
 		ft_vec_push(&data->env, &var, 1);
 	}
+	increase_shell_lvl(&data->env);
 }

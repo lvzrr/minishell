@@ -14,6 +14,7 @@
 # define ENV_H
 
 # include "core.h"
+# include "conv.h"
 
 typedef struct s_var
 {

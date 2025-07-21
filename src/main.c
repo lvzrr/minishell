@@ -30,5 +30,5 @@ int	main(int argc, char **argv, char **envp)
 		core_loop(&data);
 	else
 		handle_oneliner(&data);
-	return (clean_data(&data),EXIT_SUCCESS);
+	return (clean_data(&data), EXIT_SUCCESS);
 }
