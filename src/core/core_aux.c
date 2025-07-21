@@ -63,6 +63,25 @@ void	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 	ft_tstr_free(&line);
 }
 
+void	read_l_raw(t_data *data, t_vec *tokv, bool addhist)
+{
+	t_string	line;
+
+	line = ft_readline(&data->prompt, false, data->hdoc_terminate);
+	ft_tstr_trim(&line, " \t\n\r");
+	ft_readline(&data->prompt, true, false);
+	if (!line.len || !line.data)
+	{
+		ft_tstr_free(&line);
+		*tokv = (t_vec){0};
+		return ;
+	}
+	if (*line.data && addhist)
+		add_history(line.data);
+	*tokv = lex(&line);
+	ft_tstr_free(&line);
+}
+
 /*
 *	Mira que en el stream haya un token, identificador,
 *	que sea exit, para salir del shell, si es "exit" o 'exit'

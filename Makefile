@@ -8,7 +8,7 @@ SRC         := $(call rwildcard,$(SRCDIR)/,*.c)
 OBJ         := $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRC))
 
 CC          := clang
-CFLAGS      := -Wall -Wextra -Werror -I./include -I./libft/include
+CFLAGS      := -Wall -Wextra -Werror -DBUFSIZE=1 -I./include -I./libft/include
 LDFLAGS     := libft/libft.a -lreadline -lhistory
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.c

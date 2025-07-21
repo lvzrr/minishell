@@ -12,7 +12,7 @@
 
 #include "io.h"
 
-t_string	ft_readline(t_string *prompt, bool clean)
+t_string	ft_readline(t_string *prompt, bool clean, bool interrupt)
 {
 	t_string	out;
 	char		c;
@@ -22,7 +22,7 @@ t_string	ft_readline(t_string *prompt, bool clean)
 	out = ft_tstr_new(100);
 	write(1, prompt->data, prompt->len);
 	c = ft_fgetc(0, false);
-	while (c != EOF && c != '\n')
+	while (c != EOF && c != '\n' && !interrupt)
 	{
 		ft_tstr_push(&out, c);
 		c = ft_fgetc(0, false);

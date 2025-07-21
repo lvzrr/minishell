@@ -81,7 +81,10 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 
 	while (1)
 	{
-		read_l(&data->prompt, &hdoc_ret, false);
+		read_l_raw(data, &hdoc_ret, false);
+		if (data->hdoc_terminate)
+			return (clean_tokenstream(&hdoc_ret),
+				clean_tokenstream(hdoc_exit), default_prompt(data), false);
 		omit_hdoc(&hdoc_ret);
 		if (!hdoc_ret.size && !hdoc_ret.data)
 		{
@@ -116,8 +119,15 @@ bool	heredoc(t_vec *tokv, t_data *data)
 	idx = look4hdoc(tokv);
 	while (idx != SIZE_MAX)
 	{
-		if (!heredoc_routine(tokv, data, idx))
+		if (!heredoc_routine(tokv, data, idx) || data->hdoc_terminate)
+		{
+			if (data->hdoc_terminate == true)
+			{
+				data->hdoc_terminate = false;
+				signal_setup();
+			}
 			return (false);
+		}
 		idx = look4hdoc(tokv);
 	}
 	return (true);
@@ -134,6 +144,7 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 
 	if (!tokv || !tokv->size || !tokv->data)
 		return (true);
+	hdoc_signal_setup();
 	hdoc_exit = check_heredoc(tokv, idx);
 	if (!hdoc_exit.size
 		&& ((((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)

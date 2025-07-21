@@ -177,6 +177,6 @@ int				ft_fgetc(int fd, bool clean);
  * @param clean If true, cleans up internal buffers.
  * @return A dynamic string containing the line read, or an empty string on EOF.
  */
-t_string		ft_readline(t_string *prompt, bool clean);
+t_string		ft_readline(t_string *prompt, bool clean, bool interrupt);
 
 #endif

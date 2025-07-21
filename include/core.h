@@ -18,7 +18,11 @@
 # include "mini_parser.h"
 # include "mini_lexer.h"
 # include <stdio.h>
+# include <sys/ioctl.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -29,6 +33,7 @@ typedef struct s_data
 	bool		debug;
 	bool		oneliner;
 	bool		phelp;
+	bool		hdoc_terminate;
 	t_string	oneliner_s;
 	t_vec		env;
 }	t_data;
@@ -56,5 +61,8 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx);
 bool	heredoc(t_vec *tokv, t_data *data);
 void	hdoc_prompt(t_data *data);
 void	default_prompt(t_data *data);
+void	*flag_updater(t_data *datap);
+void	read_l_raw(t_data *data, t_vec *tokv, bool addhist);
+void	hdoc_signal_setup(void);
 void	phelp(void);
 #endif
