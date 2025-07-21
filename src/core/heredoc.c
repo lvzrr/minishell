@@ -130,6 +130,8 @@ bool	heredoc(t_vec *tokv, t_data *data)
 		}
 		idx = look4hdoc(tokv);
 	}
+	if (data->debug)
+		dump_tokenstream("HDOC OUT", tokv);
 	return (true);
 }
 
@@ -157,7 +159,5 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 		dump_tokenstream("HDOC RETURN SEQ", &hdoc_exit);
 	hdoc_prompt(data);
 	hdoc_loop(&hdoc_exit, idx, tokv, data);
-	if (data->debug)
-		dump_tokenstream("HDOC OUT", tokv);
 	return (true);
 }
