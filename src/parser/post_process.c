@@ -71,15 +71,14 @@ static void	clean_spaces(t_vec *tokv)
 *	es decir, si tenemos
 *
 *	$hola
+*	y el string es
 *	$holamundo
 *
-*	y el string es
-*	$holamundomiau
-*
-*	deberemos usar solo $holamundo, si la
-*	encontramos claro, en principio se debería
-*	usar $holamundo\miau para que funcione como en
-*	posix, pero bueno la vida es dura.
+*	debe dar error, deberemos usar
+*	$hola\mundo para que funcione
+*	las secuencias $hola\mundo
+*	se marcan como TOK_STRING_TOEXPAND
+*	así que podemos identificarlas después
 */
 
 void	post_process(t_vec *tokv)

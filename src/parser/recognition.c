@@ -52,7 +52,7 @@ static void	var_recon_instr(t_tok *t)
 	pos = ft_tstr_instr(&t->s, "$");
 	if (pos >= 0 && (size_t)pos + 1 < t->s.len && t->s.data[pos + 1] == '(')
 		t->type = TOK_SUBSHELL;
-	else if (pos == 0 && ft_s_isblob(t->s.data))
+	else if (pos == 0 && ft_s_isblob(t->s.data + 1))
 	{
 		t->type = TOK_VAR;
 		return ;
