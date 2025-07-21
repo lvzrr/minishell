@@ -10,7 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "mini_lexer.h"
+
+/*
+*	esta funcion se traga los espacios entre palabras,
+*	teniendo en cuenta los escapes.
+*/
 
 size_t	goto_next(t_string *s, size_t offst)
 {
@@ -26,6 +31,11 @@ size_t	goto_next(t_string *s, size_t offst)
 		offst++;
 	return (offst);
 }
+
+/*
+*	esta funcion se traga las comillas simples,
+*	no para in en " ni en \'.
+*/
 
 size_t	eat_string_sq(t_string *s, size_t offst)
 {
@@ -53,6 +63,11 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 	return (SIZE_MAX);
 }
 
+/*
+*	esta funcion se traga las comillas dobles,
+*	no para in en ' ni en \".
+*/
+
 size_t	eat_string_dq(t_string *s, size_t offst)
 {
 	static char		*errmsg;
@@ -79,6 +94,11 @@ size_t	eat_string_dq(t_string *s, size_t offst)
 	return (SIZE_MAX);
 }
 
+/*
+*	esta funcion se traga las palabras sueltas,
+*	para en <,>,&&,<<,|,",',(,),$,;
+*/
+
 size_t	eat_ident(t_string *s, size_t offst)
 {
 	if (!s || !s->data)
@@ -101,6 +121,12 @@ size_t	eat_ident(t_string *s, size_t offst)
 	}
 	return (offst);
 }
+
+/*
+*	esta funcion se traga los operadores,
+*	<,>,&&,<<,|,",',(,),$,; y sucesiones
+*	de varios carácteres de los mismos
+*/
 
 size_t	eat_op(t_string *s, size_t offst)
 {

@@ -12,6 +12,12 @@
 
 #include "core.h"
 
+/*
+*	Funcion que maneja la flag '-c'
+*	TODO:
+*	abstraerla para que pase norminette
+*/
+
 void	handle_oneliner(t_data *data)
 {
 	t_vec		tokv;
@@ -38,13 +44,20 @@ void	handle_oneliner(t_data *data)
 	clean_tokenstream(&tokv);
 }
 
+/*
+*	Funcion que maneja la lógica principal de la
+*	shell en modo normal
+*	TODO:
+*	abstraerla para que pase norminette
+*/
+
 void	core_loop(t_data *data)
 {
 	t_vec		tokv;
 
 	while (1)
 	{
-		read_l(&data->prompt, &tokv);
+		read_l(&data->prompt, &tokv, true);
 		if (!tokv.size)
 			continue ;
 		if (data->debug)

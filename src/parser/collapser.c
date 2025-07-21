@@ -22,6 +22,11 @@ static void	free_tok(void *v)
 	ft_tstr_free(&t->s);
 }
 
+/*
+*	Elimina un elemento del vector,
+*	haciendo free a la string que contiene
+*/
+
 void	collapse_at(t_vec *tokv, size_t i)
 {
 	ft_vec_remove_f(tokv, i, free_tok);

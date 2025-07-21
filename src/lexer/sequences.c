@@ -12,6 +12,11 @@
 
 #include "mini_lexer.h"
 
+/*
+*	Carácteres válidos para palabras sueltas
+*	dentro del comando
+*/
+
 bool	isvalidident(char c)
 {
 	return (c == '_' || c == '/'
@@ -22,17 +27,28 @@ bool	isvalidident(char c)
 		|| c == '+' || ft_isalnum(c));
 }
 
+/*
+*	Esto esta para casos como la ñ,
+*	+, etc ..., para que no se rompa
+*	cuando le metes cosas no-ascii o
+*	operaciones que no soportamos, lo
+*	interpreta como una palabra suelta y ya
+*/
+
 bool	isunsupported(char c)
 {
 	return (!isvalidident(c) && !isvalidop(c));
 }
+
+/*
+*	Operadores, poco que explicar aquí
+*/
 
 bool	isvalidop(char c)
 {
 	return (c == '&' || c == '|'
 		|| c == '=' || c == '<'
 		|| c == '>' || c == ';'
-		|| c == '!' || c == '('
 		|| c == '$' || c == '?'
-		|| c == ')');
+		|| c == ')' || c == '(');
 }

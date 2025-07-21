@@ -11,7 +11,12 @@
 /* ************************************************************************** */
 
 #include "mini_lexer.h"
-#include "minish.h"
+
+/*
+*	Esta funcion limpia todos los
+*	elementos del vector, limpiando
+*	antes la string que contienen dentro
+*/
 
 void	clean_tokenstream(t_vec *v)
 {
@@ -23,18 +28,33 @@ void	clean_tokenstream(t_vec *v)
 	{
 		t = (t_tok *)ft_vec_get(v, i);
 		if (!t)
+		{
+			i++;
 			continue ;
+		}
 		ft_tstr_free(&t->s);
 		i++;
 	}
 	ft_vec_free(v);
 }
 
+/*
+*	Esto existe solo por la norminette, que la
+*	linea donde la llamo es muy grande si no
+*/
+
 static void	clean_err(char *str, t_vec *out)
 {
 	write(2, str, ft_strlen(str));
 	clean_tokenstream(out);
 }
+
+/*
+*	Esta funcion tb existe solo por norminette,
+*	pone las cuentas de los parentesis en su
+*	sitio para detectar cuando estan mal
+*	cerrados.
+*/
 
 static void	manage_paren(t_tok *t, size_t *paren_l)
 {
@@ -45,6 +65,16 @@ static void	manage_paren(t_tok *t, size_t *paren_l)
 	else if (t->type == TOK_RPAREN)
 		(*paren_l)--;
 }
+
+/*
+*	funcion principal del lexer, devuelve el vector
+*	dando a la funcion que la llame la pertenencia
+*	de la estructura, le das un string, come por
+*	secciones con una pseudo-maquina de estados,
+*	que realmente son funciones que si no les toca
+*	lo suyo pasan a la siguiente, y devuelve un vector
+*	diferente que contiene tokens que hay en esa string
+*/
 
 t_vec	lex(t_string *s)
 {

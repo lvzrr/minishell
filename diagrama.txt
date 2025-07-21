@@ -1,0 +1,17 @@
+
+== CASO NORMAL:
+
+        lex()                       post_process()
+input --------> vec<[tipo, token]> ----------------> vec<[tipo, token]> ($var -> "...", sin espacios, strings colapsadas)
+
+ TODO: AST_build()            TODO: run_tree()
+--------------------> TODO  ---------------------> TODO
+
+
+== CASO HEREDOC:
+
+        lex()                       post_process()
+input --------> vec<[tipo, token]> ----------------> vec<[tipo, token]> ($var -> "...", sin espacios, strings colapsadas)
+
+ check_hdoc                              TODO: AST_build()            TODO: run_tree()
+--------->  falso=otra vez, verdadero: --------------------> TODO  ---------------------> TODO

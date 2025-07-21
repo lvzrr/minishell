@@ -11,7 +11,13 @@
 /* ************************************************************************** */
 
 #include "mini_parser.h"
-#include "core.h"
+
+/*
+*	Condicion para que una string se concatene con otra,
+*	basicamente que no esten separadas por un espacio,
+*	lo que quiere decir que "hola"mundo -> holamundo,
+*	pero hola mundo -> hola mundo
+*/
 
 static bool	strings_concat(t_tok *t)
 {
@@ -26,6 +32,12 @@ static bool	strings_concat(t_tok *t)
 			|| (t + 1)->type == TOK_STRING_SQ));
 }
 
+/*
+*	Una vez que todo lo concatenable esta concatenado,
+*	esto quita los espacios de en medio para poder analizar
+*	los tokens mejor
+*/
+
 static void	clean_spaces(t_vec *tokv)
 {
 	size_t	i;
@@ -35,7 +47,7 @@ static void	clean_spaces(t_vec *tokv)
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || !t->s.len)
+		if (!t || !t->s.data || (!t->s.len && t->type != TOK_STRING_EMPTY))
 		{
 			i++;
 			continue ;
@@ -46,32 +58,29 @@ static void	clean_spaces(t_vec *tokv)
 	}
 }
 
-static void	try_varcollapse(t_vec *tokv, t_tok *t, size_t *i)
-{
-	if (*i + 1 < tokv->size && (((t->type == TOK_STRING_DQ
-					|| t->type == TOK_STRING
-					|| t->type == TOK_IDENT
-					|| t->type == TOK_STRING_TOEXPAND
-					|| t->type == TOK_STRING_SQ)
-				&& ((t + 1)->type == TOK_VAR
-					|| (t + 1)->type == TOK_STRING_TOEXPAND))
-			|| (((t + 1)->type == TOK_STRING_DQ
-					|| (t + 1)->type == TOK_STRING_SQ
-					|| (t + 1)->type == TOK_STRING
-					|| (t + 1)->type == TOK_IDENT
-					|| (t + 1)->type == TOK_STRING_TOEXPAND)
-				&& (t->type == TOK_VAR
-					|| t->type == TOK_STRING_TOEXPAND))))
-	{
-		t->type = TOK_STRING_TOEXPAND;
-		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
-		if (*i < tokv->size - 1)
-			collapse_at(tokv, *i + 1);
-		else
-			collapse_at(tokv, *i + 2);
-		(*i)--;
-	}
-}
+/*
+*	Funcion principal del 'parser'
+*	colapsa secuencias de tokens y reconoce (y expande)
+*	variables en principio,
+*
+*	TODO: hacer una funcion antes
+*	de esta que encuentre asignaciones "inline", aunque
+*	se puede dejar asi por ahora.
+*
+*	El reconocimento de variables deberá ser greedy,
+*	es decir, si tenemos
+*
+*	$hola
+*	$holamundo
+*
+*	y el string es
+*	$holamundomiau
+*
+*	deberemos usar solo $holamundo, si la
+*	encontramos claro, en principio se debería
+*	usar $holamundo\miau para que funcione como en
+*	posix, pero bueno la vida es dura.
+*/
 
 void	post_process(t_vec *tokv)
 {
@@ -80,12 +89,13 @@ void	post_process(t_vec *tokv)
 
 	i = 0;
 	detect_vars(tokv);
+	// TODO: expandir variables aqui
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || (!t->s.len && t->type != TOK_STRING_EMPTY))
 		{
-			i++;
+			collapse_at(tokv, i);
 			continue ;
 		}
 		if (strings_concat(t))
@@ -95,7 +105,6 @@ void	post_process(t_vec *tokv)
 			collapse_at(tokv, i + 1);
 			--i;
 		}
-		try_varcollapse(tokv, t, &i);
 		i++;
 	}
 	clean_spaces(tokv);

@@ -12,6 +12,12 @@
 
 #include "mini_parser.h"
 
+/*
+*	reconoce variables en el stream, pero que no esten
+*	en dobles comillas, cualquier secuencia como $"hola" o
+*	$ solo, retira el dollar e interpreta lo que haya detras
+*/
+
 static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 {
 	if (t->type == TOK_DOLLAR && idx + 1 < tokv->size
@@ -21,10 +27,21 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 		collapse_at(tokv, idx + 1);
 	}
-	else
-		if (t->type == TOK_DOLLAR && idx + 1 == tokv->size)
-			collapse_at(tokv, idx);
+	else if (t->type == TOK_DOLLAR && idx + 1 == tokv->size)
+		collapse_at(tokv, idx);
+	else if (t->type == TOK_DOLLAR && idx + 1 < tokv->size
+		&& (t + 1)->type != TOK_IDENT)
+		collapse_at(tokv, idx);
 }
+
+/*
+*	Busca dólares en cada string doble del stream, si las hay,
+*	mira que no esten escapadas, si estan escapadas, quita el
+*	escape para que quede solo el dollar sin cambiar el sentito
+*	del token, si un string doble tiene un $ como primer carácter
+*	y no tiene espacios, interpreta el token como una variable
+*	directamente.
+*/
 
 static void	var_recon_instr(t_tok *t)
 {
@@ -48,6 +65,11 @@ static void	var_recon_instr(t_tok *t)
 		remove_scape(&t->s, pos - 1);
 }
 
+/*
+*	Simplemente recorre el array buscando cosas que poder
+*	interpretar y los manda a las funciones de arriba.
+*/
+
 void	detect_vars(t_vec *tokv)
 {
 	t_tok	*t;
@@ -69,6 +91,14 @@ void	detect_vars(t_vec *tokv)
 		i++;
 	}
 }
+
+/*
+*	Cuando estamos dentro de un heredoc y se introduce la
+*	secuencia '<<', hay que interpretarla como un string
+*	normal, asi que recorre todo en busca de ese token y si lo
+*	hay le cambia el tipo a un identificador para que so
+*	corra otro heredoc a partir de él.
+*/
 
 bool	omit_hdoc(t_vec *tokv)
 {

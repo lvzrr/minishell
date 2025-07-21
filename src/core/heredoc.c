@@ -12,6 +12,12 @@
 
 #include "core.h"
 
+/*
+*	Busca tokens << en el stream,
+*	si los hubiera, devuelve donde está el primero
+*	de ellos, si no, devuelve SIZE_MAX.
+*/
+
 size_t	look4hdoc(t_vec *tokv)
 {
 	size_t	i;
@@ -33,6 +39,15 @@ size_t	look4hdoc(t_vec *tokv)
 	return (SIZE_MAX);
 }
 
+/*
+*	se cerciona de que el heredoc
+*	tiene un identificador detras, si no,
+*	lanza un error.
+*
+*	Ademas borra el identificador del stream
+*	a la vez que la secuencia de terminacion
+*/
+
 t_vec	check_heredoc(t_vec *tokv, size_t idx)
 {
 	t_tok	*t;
@@ -49,6 +64,16 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 	return ((t_vec){0});
 }
 
+/*
+*	Loop principal del heredoc,
+*	primero lee la linea, la tokeniza,
+*	despues, ignora si hay heredocs dentro,
+*	compara si es la secuencia de salida,
+*	si lo es, limpia la condicion y sale,
+*	si no, añade al stream los tokens en
+*	la posición correspondiente.
+*/
+
 static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	t_vec *tokv, t_data *data)
 {
@@ -56,7 +81,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 
 	while (1)
 	{
-		read_l(&data->prompt, &hdoc_ret);
+		read_l(&data->prompt, &hdoc_ret, false);
 		omit_hdoc(&hdoc_ret);
 		if (!hdoc_ret.size && !hdoc_ret.data)
 		{
@@ -77,6 +102,13 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	}
 }
 
+/*
+*	Mira si hay heredocs en la string, mientras haya,
+*	no sale, es decir, bloquea todo hasta que no quede
+*	ninguno, lo que hace que pueda manejar varios en el
+*	input
+*/
+
 bool	heredoc(t_vec *tokv, t_data *data)
 {
 	size_t	idx;
@@ -90,6 +122,11 @@ bool	heredoc(t_vec *tokv, t_data *data)
 	}
 	return (true);
 }
+
+/*
+*	Propaga el error de check_heredoc, y pone el loop
+*	a punto con el prompt
+*/
 
 bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 {

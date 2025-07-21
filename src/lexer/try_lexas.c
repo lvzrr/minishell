@@ -12,6 +12,13 @@
 
 #include "mini_lexer.h"
 
+/*
+*	Mira si el caracter en el que estamos es un espacio o
+*	parecido, y salta hasta la siguiente seccion con informacion
+*	relevante, pone un token de espacio para evitar colapsar cosas
+*	como "hola" mundo, pero si colapsar cosas como "hola"mundo
+*/
+
 void	try_lexas_spc(t_string *s, t_vec *out, size_t *offst)
 {
 	t_tok	tmp;
@@ -24,6 +31,11 @@ void	try_lexas_spc(t_string *s, t_vec *out, size_t *offst)
 		ft_vec_push(out, &tmp, 1);
 	}
 }
+
+/*
+*	Lo mismo, si es un identificador o tienen un encoding raro,
+*	lo interpreta como palabra.
+*/
 
 void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 {
@@ -44,6 +56,12 @@ void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 		*offst = offst2;
 	}
 }
+
+/*
+ *	Exactamente lo mismo, pero para los operadores,
+ *	usa get_token_type_* para pasar de char a la representacion
+ *	en tokens
+*/
 
 void	try_lexas_op(t_string *s, t_vec *out, size_t *offst)
 {
@@ -74,6 +92,16 @@ void	try_lexas_op(t_string *s, t_vec *out, size_t *offst)
 	}
 }
 
+/*
+*	esto come tanto secuencias "...", como '', luego
+*	ve a cual de las dos pertenece, y borra SOLO las
+*	primeras comillas, las que delimitan la string,
+*	dejando la string intacta.
+*
+*	Si la string esta vacía, lo interpreta como un token
+*	a parte.
+*/
+
 bool	try_lexas_qs(t_string *s, t_vec *out, size_t *offst)
 {
 	size_t	offst2;
@@ -96,8 +124,6 @@ bool	try_lexas_qs(t_string *s, t_vec *out, size_t *offst)
 		return (false);
 	tmp.s = ft_tstr_from_slice(s->data + *offst, offst2 - *offst);
 	ft_tstr_trim_one(&tmp.s, "\"\'");
-	if (tmp.type == TOK_STRING_SQ && ft_tstr_instr(&tmp.s, "$") >= 0)
-		tmp.type = TOK_STRING_SQ_NOEXPAND;
 	if (tmp.s.len == 0)
 		tmp.type = TOK_STRING_EMPTY;
 	return (ft_vec_push(out, &tmp, 1), *offst = offst2, true);

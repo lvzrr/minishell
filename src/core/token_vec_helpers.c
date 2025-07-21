@@ -12,6 +12,10 @@
 
 #include "core.h"
 
+/*
+*	Mira que un vector sea igual que otro
+*/
+
 bool	check_vec_eq(t_vec *a, t_vec *b)
 {
 	size_t	i;
@@ -36,6 +40,10 @@ bool	check_vec_eq(t_vec *a, t_vec *b)
 	return (true);
 }
 
+/*
+*	Copia los tokens y sus strings de un vector a otro
+*/
+
 static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 {
 	size_t	i;
@@ -51,6 +59,33 @@ static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 		i++;
 	}
 }
+
+/*
+*	las siguentes funciones son terrorificas, cualquier cosa
+*	a mi directo, pero en resumen para los heredoc:
+*
+*	vec_push_tokens_from:
+*
+*	token_stream: [a, b, c, <<, d, ..., delim]
+*
+*	pasan a ser:
+*
+*	token_stream: [a, b, c , delim, ...]
+*	                     ^ idx
+*	hdoc_exit: [d]
+*	=================================
+*
+*	copy_helper y vec_push_tokens
+*	
+*	token_stream [a, b, c]
+*                       ^ idx
+*   primero, si idx es el ultimp lugar, mete tokens sin
+*   mas, si no, primero copia todo lo de a hasta idx en
+*   un nuevo vector, pone los elementos nuevos, y copia
+*   el resto de a en el vector nuevo, limpia el vector
+*   inyectado y el de tokens antiguo, cambiandolo por el
+*   nuevo.
+*/
 
 static void	copy_helper(t_vec *a, t_vec *b, t_vec *c, size_t idx)
 {

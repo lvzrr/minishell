@@ -12,6 +12,11 @@
 
 #include "core.h"
 
+/*
+*	Pone los tokens en STDERR, con el correspondiente
+*	módulo donde se encuentran.
+*/
+
 void	dump_tokenstream(char *mod, t_vec *tokv)
 {
 	size_t	i;
@@ -23,15 +28,21 @@ void	dump_tokenstream(char *mod, t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (t && t->s.data && (t->s.len || t->type == TOK_STRING_EMPTY))
-			ft_printf(ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
+		if (t)
+			ft_fprintf(2, ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
 				ANSI_BLUE"(%s)\n"ANSI_RESET, mod, t->s.data,
 				get_token_pretty(t->type));
 		i++;
 	}
 }
 
-void	read_l(t_string *prompt, t_vec *tokv)
+/*
+*	Ayuda a leer una linea, limpiar el principio y el final
+*	si, la opcion addhist es true, lo guarda en la historia,
+*	eso esta hacho para que en los heredocs no se guarde
+*/
+
+void	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 {
 	char		*s;
 	t_string	line;
@@ -46,11 +57,21 @@ void	read_l(t_string *prompt, t_vec *tokv)
 		*tokv = (t_vec){0};
 		return ;
 	}
-	if (*line.data)
+	if (*line.data && addhist)
 		add_history(line.data);
 	*tokv = lex(&line);
 	ft_tstr_free(&line);
 }
+
+/*
+*	Mira que en el stream haya un token, identificador,
+*	que sea exit, para salir del shell, si es "exit" o 'exit'
+*	no vale.
+*
+*	TODO:
+*	cambiar y devolver la posicion del exit, por si 
+*	alguen hace cat "hello" && exit, que no termine inmediatamente
+*/
 
 bool	check_exit(t_vec *tokv)
 {

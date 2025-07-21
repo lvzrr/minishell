@@ -12,6 +12,11 @@
 
 #include "mini_lexer.h"
 
+/*
+*	Estas funciones en cascada solo sirven para --debug
+*	son para ver los tokens en vez de ver los numeros
+*/
+
 const char	*get_token_pretty(t_toktype t)
 {
 	if (t == TOK_STRING_TOEXPAND)

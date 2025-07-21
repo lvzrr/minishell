@@ -12,6 +12,13 @@
 
 #include "mini_lexer.h"
 
+/*
+*	Esto realmente lo que hace es borrar un
+*	caracter del string, y termina el string
+*	con un cero, haciendo compatible la string
+*	con las strings de C puro.
+*/
+
 void	remove_scape(t_string *s, size_t offst)
 {
 	ft_memmove(s->data + offst, s->data + offst + 1, s->len - offst);
