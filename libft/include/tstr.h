@@ -229,4 +229,7 @@ t_string		ft_tstr_clone(t_string *s);
  */
 char			*ft_tstr_strrchr(const t_string *haystack, int needle);
 
+void			ft_tstr_insert(t_string *str,
+					char *topush, size_t s, size_t idx);
+
 #endif

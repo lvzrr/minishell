@@ -67,9 +67,9 @@ void	read_l_raw(t_data *data, t_vec *tokv, bool addhist)
 {
 	t_string	line;
 
-	line = ft_readline(&data->prompt, false, data->hdoc_terminate);
+	line = ft_readline(&data->prompt, false);
 	ft_tstr_trim(&line, " \t\n\r");
-	ft_readline(&data->prompt, true, false);
+	ft_readline(&data->prompt, true);
 	if (!line.len || !line.data)
 	{
 		ft_tstr_free(&line);
