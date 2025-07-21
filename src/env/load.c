@@ -51,7 +51,7 @@ static void	load_default_env(t_data *data)
 	t_var	var;
 	char	*dir;
 
-	data->env = ft_vec(10, sizeof(t_var));
+	data->env = ft_vec(3, sizeof(t_var));
 	var.name = ft_tstr_from_cstr("PATH");
 	var.value = ft_tstr_from_cstr(
 			"/usr/local/sbin/:/usr/local/bin:/usr/bin:/bin");
