@@ -136,6 +136,13 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 	*a = c;
 }
 
+/*
+*	Esto antes molaba (era un loop que pillaba hasta el delimeter)
+*	PERO BASH SOLO PILLA EL PRIMER TOKEN
+*
+*	me estoy volviendo loco
+*/
+
 void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 {
 	size_t	i;
@@ -143,17 +150,8 @@ void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
 
 	i = w;
 	collapse_at(b, i);
-	while (i < b->size)
-	{
-		t = *((t_tok *)ft_vec_get(b, i));
-		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
-		if (t.type == TOK_SCOLON || t.type == TOK_PIPE
-			|| t.type == TOK_AND)
-		{
-			ft_tstr_free(&t.s);
-			break ;
-		}
-		ft_vec_push(a, &t, 1);
-		collapse_at(b, i);
-	}
+	t = *((t_tok *)ft_vec_get(b, i));
+	t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
+	ft_vec_push(a, &t, 1);
+	collapse_at(b, i);
 }
