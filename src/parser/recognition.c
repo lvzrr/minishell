@@ -23,8 +23,8 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 	if (t->type == TOK_DOLLAR && idx + 1 < tokv->size
 		&& (t + 1)->type == TOK_IDENT)
 	{
+		ft_memswap(t, t + 1, sizeof(t_tok));
 		t->type = TOK_VAR;
-		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 		collapse_at(tokv, idx + 1);
 	}
 	else if (t->type == TOK_DOLLAR && idx + 1 == tokv->size)
@@ -55,6 +55,7 @@ static void	var_recon_instr(t_tok *t)
 	else if (pos == 0 && ft_s_isblob(t->s.data + 1))
 	{
 		t->type = TOK_VAR;
+		remove_char(&t->s, pos);
 		return ;
 	}
 	else if (pos == 0 && !ft_isspace(t->s.data[pos + 1]))
@@ -62,7 +63,7 @@ static void	var_recon_instr(t_tok *t)
 	else if (pos >= 1 && t->s.data[pos - 1] != '\\')
 		t->type = TOK_STRING_TOEXPAND;
 	else if (pos >= 1 && t->s.data[pos - 1] == '\\')
-		remove_scape(&t->s, pos - 1);
+		remove_char(&t->s, pos - 1);
 }
 
 /*

@@ -54,7 +54,7 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 	{
 		if (s->data[offst] == '\\' && offst + 1 < s->len
 			&& s->data[offst + 1] == '\'')
-			remove_scape(s, offst);
+			remove_char(s, offst);
 		offst++;
 	}
 	if (offst < s->len && s->data[offst] == '\'')
@@ -85,7 +85,7 @@ size_t	eat_string_dq(t_string *s, size_t offst)
 	{
 		if (s->data[offst] == '\\' && offst + 1 < s->len
 			&& s->data[offst + 1] == '\"')
-			remove_scape(s, offst);
+			remove_char(s, offst);
 		offst++;
 	}
 	if (offst < s->len && s->data[offst] == '\"')
@@ -108,7 +108,7 @@ size_t	eat_ident(t_string *s, size_t offst)
 	{
 		if (s->data[offst] == '\\')
 		{
-			remove_scape(s, offst++);
+			remove_char(s, offst++);
 			continue ;
 		}
 		if (ft_isspace(s->data[offst])

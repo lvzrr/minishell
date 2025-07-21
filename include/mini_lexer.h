@@ -67,7 +67,7 @@ bool		isvalidop(char c);
 t_toktype	get_token_type_1(t_string *s);
 t_toktype	get_token_type_1_2(t_string *s);
 t_toktype	get_token_type_2(t_string *s);
-void		remove_scape(t_string *s, size_t offst);
+void		remove_char(t_string *s, size_t offst);
 void		clean_tokenstream(t_vec *v);
 bool		isunsupported(char c);
 void		try_lexas_ident(t_string *s, t_vec *out,

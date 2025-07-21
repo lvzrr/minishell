@@ -16,7 +16,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	// signal_setup();
+	signal_setup();
 	data = getopts(argc, argv, envp);
 	load_env(&data, envp);
 	if (data.debug)
