@@ -140,15 +140,28 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 *	Esto antes molaba (era un loop que pillaba hasta el delimeter)
 *	PERO BASH SOLO PILLA EL PRIMER TOKEN
 *
+*
+*	para los de atras:
+*
+*	[a, <<, b, ...]
+*	     ^ idx
+*
+*	luego colapsa dos veces en idx tal que
+*	[a, ...]
+*	 ^ idx
+*
+*	y todo lo que añadamos en idx va detras de a, y quitamos
+*	lo sobrante del stream de tokens
+*
 *	me estoy volviendo loco
 */
 
-void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t w)
+void	vec_push_tokens_from(t_vec *a, t_vec *b, size_t idx)
 {
 	size_t	i;
 	t_tok	t;
 
-	i = w;
+	i = idx;
 	collapse_at(b, i);
 	t = *((t_tok *)ft_vec_get(b, i));
 	t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
