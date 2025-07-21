@@ -22,7 +22,7 @@ void	print_env(t_vec *env)
 	while (i < env->size)
 	{
 		var = ft_vec_get(env, i++);
-		ft_fprintf(2, ANSI_MAGENTA"%s"ANSI_RESET"=%s\n",
+		ft_fprintf(2, ANSI_MAGENTA"%s"ANSI_RESET"=\"%s\"\n",
 			var->name.data, var->value.data);
 	}
 	ft_fprintf(2, ANSI_MAGENTA"==END OF ENV==\n"ANSI_RESET);
