@@ -22,8 +22,10 @@ typedef struct s_var
 	t_string	value;
 }	t_var;
 
-void	load_env(t_data *data, char **envp);
+void	*load_env(t_data *data, char **envp, char *invocation);
 void	clean_env(t_vec *env);
-void	print_env(t_vec *env);
-
+void	print_env(t_data *data);
+void	load_hot_vars(t_data *data);
+t_var	*getvar(char *name, t_vec *env);
+void	load_invocation_helper(t_data *data, t_var oldvar);
 #endif

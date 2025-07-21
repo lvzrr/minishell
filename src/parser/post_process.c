@@ -81,13 +81,14 @@ static void	clean_spaces(t_vec *tokv)
 *	así que podemos identificarlas después
 */
 
-void	post_process(t_vec *tokv)
+void	post_process(t_vec *tokv, t_data *data)
 {
 	size_t	i;
 	t_tok	*t;
 
 	i = 0;
 	detect_vars(tokv);
+	(void)data;
 	// TODO: expandir variables aqui
 	while (i + 1 < tokv->size)
 	{

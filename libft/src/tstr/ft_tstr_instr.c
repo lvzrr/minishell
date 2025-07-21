@@ -19,7 +19,6 @@ static ssize_t	ft_find(const char *haystack, const char *needle, size_t n,
 	size_t	i;
 
 	i = 0;
-	l = 0;
 	if (!*needle)
 		return (0);
 	if (!*haystack)

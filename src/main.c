@@ -19,9 +19,9 @@ int	main(int argc, char **argv, char **envp)
 	signal_setup();
 	data = getopts(argc, argv, envp);
 	(void)flag_updater(&data);
-	load_env(&data, envp);
+	load_env(&data, envp, argv[0]);
 	if (data.debug)
-		print_env(&data.env);
+		print_env(&data);
 	if (data.phelp)
 	{
 		phelp();

@@ -74,23 +74,32 @@ static void	load_default_env(t_data *data)
 	else
 		var.value = ft_tstr_from_cstr("/");
 	ft_vec_push(&data->env, &var, 1);
-	var.name = ft_tstr_from_cstr("_");
-	var.value = ft_tstr_clone(&var.value);
-	ft_tstr_pushstr(&var.value, "/./minishell");
-	ft_vec_push(&data->env, &var, 1);
+	load_invocation_helper(data, var);
 }
 
-void	load_env(t_data *data, char **envp)
+/*
+*	NOTE:
+*	esto sólo devuelve null por que quería meter
+*	una línea mas y necesitaba la tupla del return
+*	con norminette.
+*
+*	No usar el resultado de esta función en ningun
+*	momento. Es solo que para las variables de accesso
+*	rápido no tenia sentido usar otra funcion.
+*/
+
+void	*load_env(t_data *data, char **envp, char *inv)
 {
 	t_var	var;
 	char	**tmp;
 	size_t	i;
 
 	i = 0;
+	data->invocation = inv;
 	if (!envp || !*envp)
 	{
 		load_default_env(data);
-		return ;
+		return (load_hot_vars(data), NULL);
 	}
 	data->env = ft_vec(10, sizeof(t_var));
 	while (envp[i])
@@ -98,13 +107,10 @@ void	load_env(t_data *data, char **envp)
 		tmp = ft_split(envp[i++], '=');
 		if (!tmp)
 			continue ;
-		var = (t_var)
-		{
-			.name = ft_tstr_from_cstr(tmp[0]),
-			.value = ft_tstr_from_cstr(tmp[1]),
-		};
+		var = (t_var){.name = ft_tstr_from_cstr(tmp[0]),
+			.value = ft_tstr_from_cstr(tmp[1])};
 		free_split(tmp);
 		ft_vec_push(&data->env, &var, 1);
 	}
-	increase_shell_lvl(&data->env);
+	return (increase_shell_lvl(&data->env), load_hot_vars(data), NULL);
 }

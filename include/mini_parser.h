@@ -17,6 +17,24 @@
 
 typedef struct s_node	t_node;
 
+// TODO: llenar las variables de acceso frecuente
+// para evitar buscarlas todo el rato
+
+typedef struct s_data
+{
+	t_string	prompt;
+	char		**envp;
+	bool		debug;
+	bool		oneliner;
+	bool		phelp;
+	bool		hdoc_terminate;
+	char		*invocation;
+	t_string	oneliner_s;
+	t_vec		env;
+	t_string	*path;
+	t_string	*pwd;
+}	t_data;
+
 typedef enum e_node_t
 {
 	N_ASSIGN,
@@ -59,7 +77,7 @@ typedef struct s_node
 
 void	collapse_at(t_vec *tokv, size_t i);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
-void	post_process(t_vec *tokv);
+void	post_process(t_vec *tokv, t_data *data);
 void	detect_vars(t_vec *tokv);
 void	del_unused(t_vec *tokv, size_t idx);
 bool	omit_hdoc(t_vec *tokv);

@@ -26,19 +26,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct s_data
-{
-	t_string	prompt;
-	char		**envp;
-	bool		debug;
-	bool		oneliner;
-	bool		phelp;
-	bool		hdoc_terminate;
-	char		*invocation;
-	t_string	oneliner_s;
-	t_vec		env;
-}	t_data;
-
 typedef struct s_hdoc
 {
 	t_vec	*hdoc_exit;

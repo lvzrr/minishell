@@ -91,17 +91,13 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 			clean_tokenstream(&hdoc_ret);
 			continue ;
 		}
-		post_process(&hdoc_ret);
+		post_process(&hdoc_ret, data);
 		if (check_vec_eq(&hdoc_ret, hdoc_exit))
 			return (clean_tokenstream(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data)
 				, true);
 		else
-		{
 			vec_push_tokens(tokv, &hdoc_ret, &idx);
-			if (data->debug)
-				dump_tokenstream("HDOC STREAM", tokv);
-		}
 	}
 }
 
