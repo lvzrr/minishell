@@ -124,10 +124,10 @@ bool	heredoc(t_vec *tokv, t_data *data)
 			}
 			return (false);
 		}
+		if (data->debug)
+			dump_tokenstream("HDOC OUT", tokv);
 		idx = look4hdoc(tokv);
 	}
-	if (data->debug)
-		dump_tokenstream("HDOC OUT", tokv);
 	return (true);
 }
 
