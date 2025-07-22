@@ -38,7 +38,7 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 }
 
 /*
- *	Como la minishell no soporta expansion de subshells,
+ *	Como la minishell no soporta expansion de sustituciones,
  *	y probablemente alguien intente usarlas, por lo menos avisamos
  *	y hacemos algo util con la secuencia, ya que la string puede tener
  *	info valiosa para el usuario, no es lo mejor, por que puede dejar
