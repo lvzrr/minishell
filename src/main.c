@@ -16,7 +16,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 
-	// signal_setup();
+	signal_setup();
 	(void)flag_updater(&data);
 	data = getopts(argc, argv, envp);
 	if (data.debug)
