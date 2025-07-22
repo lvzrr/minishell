@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "tstr.h"
-#include "io.h"
 
 void	ft_tstr_insert(t_string *str, char *topush, size_t s, size_t idx)
 {
