@@ -34,6 +34,7 @@ typedef struct s_data
 	t_string	oneliner_s;
 	t_vec		env;
 	t_string	*path;
+	t_string	*username;
 	t_string	*pwd;
 }	t_data;
 

@@ -17,9 +17,8 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 
 	// signal_setup();
-	data = getopts(argc, argv, envp);
 	(void)flag_updater(&data);
-	load_env(&data, envp, argv[0]);
+	data = getopts(argc, argv, envp);
 	if (data.debug)
 		print_env(&data);
 	if (data.phelp)

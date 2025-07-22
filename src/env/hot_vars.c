@@ -31,6 +31,19 @@ t_var	*getvar(char *name, t_vec *env)
 	return (NULL);
 }
 
+static void	check_valgrind(t_data *data)
+{
+	t_var	*tmp;
+
+	tmp = getvar("_", &data->env);
+	if (tmp && ft_tstr_instr(&tmp->value, "valgrind") > 0)
+	{
+		ft_fprintf(2, ANSI_YELLOW"(˶°ㅁ°)!! Valgrind-chan? pls don't look"
+			" (╥﹏╥), even though i don't leak (¬_¬\")\n"ANSI_RESET);
+		data->under_valgrind = true;
+	}
+}
+
 /*
 *	Guarda variables de acceso frecuente como punteros
 *	en la estructura global, NO LIBERAR, se liberan con
@@ -61,11 +74,10 @@ void	load_hot_vars(t_data *data)
 		data->path = &tmp->value;
 	else
 		data->path = NULL;
-	tmp = getvar("_", &data->env);
-	if (tmp && ft_tstr_instr(&tmp->value, "valgrind") > 0)
-	{
-		ft_fprintf(2, ANSI_YELLOW"(˶°ㅁ°)!! Valgrind-chan? pls don't look"
-			" (╥﹏╥), even though i don't leak (¬_¬\")\n"ANSI_RESET);
-		data->under_valgrind = true;
-	}
+	tmp = getvar("USER", &data->env);
+	if (tmp)
+		data->username = &tmp->value;
+	else
+		data->username = NULL;
+	check_valgrind(data);
 }

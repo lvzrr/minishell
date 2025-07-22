@@ -19,7 +19,6 @@ t_data	getopts(int argc, char **argv, char **envp)
 
 	data = (t_data){0};
 	data.envp = envp;
-	data.prompt = ft_tstr_from_cstr("$ ");
 	i = 0;
 	while (i < argc)
 	{
@@ -37,7 +36,7 @@ t_data	getopts(int argc, char **argv, char **envp)
 		}
 		i++;
 	}
-	return (data);
+	return (load_env(&data, envp, argv[0]), default_prompt(&data), data);
 }
 
 void	clean_data(t_data *data)
