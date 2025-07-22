@@ -86,7 +86,7 @@ static void	var_recon_instr(t_tok *t)
 			remove_char(&t->s, pos);
 			return ;
 		}
-		if (pos >= 1)
+		if (t->s.data[pos] == '$')
 		{
 			t->type = TOK_STRING_TOEXPAND;
 			return ;
@@ -100,7 +100,7 @@ static void	var_recon_instr(t_tok *t)
 *	interpretar y los manda a las funciones de arriba.
 */
 
-void	detect_vars(t_vec *tokv)
+void	detect_vars(t_vec *tokv, t_data *data)
 {
 	t_tok	*t;
 	size_t	i;
@@ -123,6 +123,9 @@ void	detect_vars(t_vec *tokv)
 			t->type = TOK_IDENT;
 		i++;
 	}
+	if (data->debug)
+		dump_tokenstream("PRE_EXPANSION", tokv);
+	expand_vars(tokv, data);
 }
 
 /*

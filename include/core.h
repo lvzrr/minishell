@@ -26,6 +26,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_data	t_data;
 typedef struct s_hdoc
 {
 	t_vec	*hdoc_exit;

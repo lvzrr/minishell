@@ -87,8 +87,7 @@ void	post_process(t_vec *tokv, t_data *data)
 	t_tok	*t;
 
 	i = 0;
-	detect_vars(tokv);
-	expand_vars(tokv, data);
+	detect_vars(tokv, data);
 	while (i + 1 < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
