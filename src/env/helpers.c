@@ -12,6 +12,14 @@
 
 #include "env.h"
 
+/*
+ *	Estas funciones actualizan la variable
+ *	$SHELL o la crean, por que si no cuando
+ *	le pasemos el env a los programas los
+ *	ejecutables van a ver que estan bajo otra
+ *	shell e intentar cosas raras a veces
+ */
+
 static void	set_shell_noenv(t_data *data)
 {
 	t_var	*var;
