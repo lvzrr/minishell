@@ -55,6 +55,11 @@ static void	var_init(t_data *data, char *a, char *b)
 	ft_vec_push(&data->env, &var, 1);
 }
 
+/*
+ *  TODO: buscar el usuario en
+ * /etc/passwd parseando /proc/self
+ */
+
 static void	load_default_env(t_data *data)
 {
 	t_var	var;
