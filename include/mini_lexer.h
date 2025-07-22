@@ -47,6 +47,7 @@ typedef enum e_toktype
 	TOK_VAR,
 	TOK_STRING_TOEXPAND,
 	TOK_SUBSHELL,
+	TOK_SUBSH_START,
 	TOK_SPACE,
 }	t_toktype;
 

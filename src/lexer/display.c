@@ -89,6 +89,8 @@ const char	*get_token_pretty_3(t_toktype t)
 		return ("TOK_SPACE");
 	else if (t == TOK_STRING_EMPTY)
 		return ("TOK_STRING_EMPTY");
+	else if (t == TOK_SUBSH_START)
+		return ("TOK_SUBSH_START");
 	else
 		return ("TOK_UNKNOWN");
 }
