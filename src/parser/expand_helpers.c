@@ -34,7 +34,7 @@ void	delete_subs(t_vec *tokv, size_t start)
 	ft_fprintf(2, ANSI_YELLOW"WARNING: Command substitutions"
 		" are not supported (yet): it will be ommited\n"ANSI_RESET);
 	t = ft_vec_get_mut(tokv, start);
-	if (t && t->type == TOK_SUBSHELL)
+	if (t && t->type == TOK_SUBSTITUTION)
 	{
 		collapse_at(tokv, start);
 		return ;

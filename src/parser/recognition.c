@@ -34,7 +34,7 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 		collapse_at(tokv, idx);
 	else if (t->type == TOK_DOLLAR && idx + 1 < tokv->size
 		&& (t + 1)->type == TOK_LPAREN)
-		t->type = TOK_SUBSH_START;
+		t->type = TOK_SUBS_START;
 }
 
 /*

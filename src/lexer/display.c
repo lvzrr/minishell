@@ -33,8 +33,8 @@ const char	*get_token_pretty(t_toktype t)
 		return ("TOK_DQ");
 	else if (t == TOK_SQ)
 		return ("TOK_SQ");
-	else if (t == TOK_SUBSHELL)
-		return ("TOK_SUBSHELL");
+	else if (t == TOK_SUBSTITUTION)
+		return ("TOK_SUBSTITUTION");
 	else
 		return (get_token_pretty_1(t));
 }
@@ -89,8 +89,8 @@ const char	*get_token_pretty_3(t_toktype t)
 		return ("TOK_SPACE");
 	else if (t == TOK_STRING_EMPTY)
 		return ("TOK_STRING_EMPTY");
-	else if (t == TOK_SUBSH_START)
-		return ("TOK_SUBSH_START");
+	else if (t == TOK_SUBS_START)
+		return ("TOK_SUBS_START");
 	else
 		return ("TOK_UNKNOWN");
 }
