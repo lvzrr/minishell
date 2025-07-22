@@ -26,13 +26,13 @@ void	remove_scaping_singledollar(t_tok *t)
 	}
 }
 
-void	delete_subshell(t_vec *tokv, size_t start)
+void	delete_subs(t_vec *tokv, size_t start)
 {
 	size_t	plevel;
 	t_tok	*t;
 
-	ft_fprintf(2, ANSI_YELLOW"WARNING: Subshells are not supported (yet):"
-		" the subshell command will be ommited\n"ANSI_RESET);
+	ft_fprintf(2, ANSI_YELLOW"WARNING: Command substitutions"
+		" are not supported (yet): it will be ommited\n"ANSI_RESET);
 	t = ft_vec_get_mut(tokv, start);
 	if (t && t->type == TOK_SUBSHELL)
 	{
