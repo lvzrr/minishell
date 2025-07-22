@@ -80,4 +80,5 @@ void	load_hot_vars(t_data *data)
 	else
 		data->username = NULL;
 	check_valgrind(data);
+	set_shell_var(data);
 }
