@@ -29,6 +29,7 @@ typedef struct s_data
 	bool		oneliner;
 	bool		phelp;
 	bool		hdoc_terminate;
+	bool		under_valgrind;
 	char		*invocation;
 	t_string	oneliner_s;
 	t_vec		env;

@@ -44,6 +44,9 @@ void	clean_data(t_data *data)
 {
 	if (!data)
 		return ;
+	if (data->under_valgrind)
+		ft_fprintf(2, ANSI_GREEN"(づ ᴗ _ᴗ)づ manifesting no leaks, Mr.Valgrind.\n"
+			ANSI_RESET);
 	if (data->prompt.data)
 		ft_tstr_free(&data->prompt);
 	if (data->oneliner_s.data)

@@ -63,6 +63,9 @@ void	load_hot_vars(t_data *data)
 		data->path = NULL;
 	tmp = getvar("_", &data->env);
 	if (tmp && ft_tstr_instr(&tmp->value, "valgrind") > 0)
+	{
 		ft_fprintf(2, ANSI_YELLOW"(˶°ㅁ°)!! Valgrind-chan? pls don't look"
 			" (╥﹏╥), even though i don't leak (¬_¬\")\n"ANSI_RESET);
+		data->under_valgrind = true;
+	}
 }
