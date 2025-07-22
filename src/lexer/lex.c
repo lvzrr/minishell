@@ -95,6 +95,7 @@ t_vec	lex(t_string *s)
 		if (!try_lexas_qs(s, &out, &offst))
 			return (clean_tokenstream(&out), (t_vec){0});
 		try_lexas_ident(s, &out, &offst);
+		try_lexas_comment(s, &offst);
 		try_lexas_op(s, &out, &offst);
 		manage_paren((t_tok *)ft_vec_peek_last(&out), &paren_l);
 	}

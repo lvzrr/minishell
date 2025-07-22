@@ -57,6 +57,7 @@ typedef struct s_tok
 	t_string	s;
 }	t_tok;
 
+void		try_lexas_comment(t_string *s, size_t *offst);
 size_t		goto_next(t_string *s, size_t offst);
 size_t		eat_string_sq(t_string *s, size_t offst);
 size_t		eat_string_dq(t_string *s, size_t offst);

@@ -44,7 +44,7 @@ static void	clean_spaces(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
-	while (i + 1 < tokv->size)
+	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || (!t->s.len && t->type != TOK_STRING_EMPTY))

@@ -23,13 +23,19 @@ void	try_lexas_spc(t_string *s, t_vec *out, size_t *offst)
 {
 	t_tok	tmp;
 
-	if (ft_isspace(s->data[*offst]))
+	if (*offst < s->len && ft_isspace(s->data[*offst]))
 	{
 		*offst = goto_next(s, *offst);
 		tmp = (t_tok){.type = TOK_SPACE,
 			.s = ft_tstr_from_cstr(" ")};
 		ft_vec_push(out, &tmp, 1);
 	}
+}
+
+void	try_lexas_comment(t_string *s, size_t *offst)
+{
+	if (s->data[*offst] == '#')
+		*offst = s->len;
 }
 
 /*
@@ -42,7 +48,7 @@ void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 	size_t	offst2;
 	t_tok	tmp;
 
-	if (!s || !s->len)
+	if (!s || !s->len || *offst >= s->len)
 		return ;
 	if (isvalidident(s->data[*offst]) || isunsupported(s->data[*offst]))
 	{
@@ -68,7 +74,7 @@ void	try_lexas_op(t_string *s, t_vec *out, size_t *offst)
 	size_t	offst2;
 	t_tok	tmp;
 
-	if (!s || !s->len)
+	if (!s || !s->len || *offst >= s->len)
 		return ;
 	if (isvalidop(s->data[*offst]) && ((*offst >= 1
 				&& s->data[*offst - 1] != '\\') || *offst == 0))
@@ -108,12 +114,12 @@ bool	try_lexas_qs(t_string *s, t_vec *out, size_t *offst)
 	t_tok	tmp;
 
 	offst2 = 0;
-	if (s && s->len && s->data[*offst] == '\"')
+	if (s && s->len && *offst < s->len && s->data[*offst] == '\"')
 	{
 		tmp.type = TOK_STRING_DQ;
 		offst2 = eat_string_dq(s, *offst);
 	}
-	else if (s && s->len && s->data[*offst] == '\'')
+	else if (s && s->len && *offst < s->len && s->data[*offst] == '\'')
 	{
 		tmp.type = TOK_STRING_SQ;
 		offst2 = eat_string_sq(s, *offst);
