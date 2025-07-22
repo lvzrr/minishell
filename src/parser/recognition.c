@@ -37,6 +37,11 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 		t->type = TOK_SUBSH_START;
 }
 
+/*
+ *	Como la minishell no soporta expansion de subshells,
+ *	y probablemente alguien intente usarlas, por lo menos avisamos
+ */
+
 static void	warn_subshell_behaviour(t_tok *t)
 {
 	size_t	pos;
@@ -48,7 +53,7 @@ static void	warn_subshell_behaviour(t_tok *t)
 			&& t->s.data[pos + 1] == '(' && ft_strchr(t->s.data + pos, ')'))
 		{
 			ft_fprintf(2, ANSI_YELLOW"WARNING: subshell will be parsed"
-				" as a variable and won't be expanded\n"ANSI_RESET);
+				" as a variable and will be expanded as such\n"ANSI_RESET);
 		}
 		pos++;
 	}
@@ -110,6 +115,8 @@ void	detect_vars(t_vec *tokv)
 			var_recon(tokv, t, i);
 		else if (t->type == TOK_STRING_DQ)
 			var_recon_instr(t);
+		if (t->type == TOK_DOLLAR)
+			t->type = TOK_IDENT;
 		i++;
 	}
 }
