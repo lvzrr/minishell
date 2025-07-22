@@ -31,7 +31,7 @@ void	default_prompt(t_data *data)
 	{
 		ft_tstr_pushstr(&data->prompt, ANSI_MAGENTA);
 		ft_tstr_pushslice(&data->prompt, data->username->data,
-					data->username->len);
+			data->username->len);
 		ft_tstr_pushstr(&data->prompt, ANSI_RESET);
 		ft_tstr_push(&data->prompt, '@');
 		append_path_currdir(&data->prompt, data->pwd);
