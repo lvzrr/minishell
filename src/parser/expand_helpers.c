@@ -25,3 +25,32 @@ void	remove_scaping_singledollar(t_tok *t)
 		i++;
 	}
 }
+
+void	delete_subshell(t_vec *tokv, size_t start)
+{
+	size_t	plevel;
+	t_tok	*t;
+
+	ft_fprintf(2, ANSI_YELLOW"WARNING: Subshells are not supported (yet):"
+		" the subshell command will be ommited\n"ANSI_RESET);
+	t = ft_vec_get_mut(tokv, start);
+	if (t && t->type == TOK_SUBSHELL)
+	{
+		collapse_at(tokv, start);
+		return ;
+	}
+	plevel = 0;
+	collapse_at(tokv, start);
+	while (start < tokv->size)
+	{
+		if (t->type == TOK_LPAREN)
+			plevel++;
+		else if (t->type == TOK_RPAREN)
+			plevel--;
+		if (plevel == 0)
+			break ;
+		collapse_at(tokv, start);
+	}
+	if (t->type == TOK_RPAREN)
+		collapse_at(tokv, start);
+}

@@ -125,7 +125,9 @@ void	expand_vars(t_vec *tokv, t_data *data)
 	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i++);
-		if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
+		if (t->type == TOK_SUBSH_START || t->type == TOK_SUBSHELL)
+			delete_subshell(tokv, --i);
+		else if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
 			continue ;
 		if (t->type == TOK_VAR)
 			expand_var(t, data);

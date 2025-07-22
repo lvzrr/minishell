@@ -37,6 +37,23 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 		t->type = TOK_SUBSH_START;
 }
 
+static void	warn_subshell_behaviour(t_tok *t)
+{
+	size_t	pos;
+
+	pos = 0;
+	while (t->s.len > 1 && pos < t->s.len)
+	{
+		if (pos + 1 < t->s.len && t->s.data[pos] == '$'
+			&& t->s.data[pos + 1] == '(' && ft_strchr(t->s.data + pos, ')'))
+		{
+			ft_fprintf(2, ANSI_YELLOW"WARNING: subshell will be parsed"
+				" as a variable and won't be expanded\n"ANSI_RESET);
+		}
+		pos++;
+	}
+}
+
 /*
 *	Busca dólares en cada string doble del stream, si las hay,
 *	mira que no esten escapadas, si estan escapadas, quita el
@@ -50,10 +67,9 @@ static void	var_recon_instr(t_tok *t)
 {
 	size_t	pos;
 
-	if (t->s.len <= 1)
-		return ;
 	pos = 0;
-	while (pos < t->s.len)
+	warn_subshell_behaviour(t);
+	while (t->s.len > 1 && pos < t->s.len)
 	{
 		if (pos == 0 && t->s.data[pos] == '$' && ft_s_isblob(t->s.data + 1))
 		{
@@ -61,7 +77,7 @@ static void	var_recon_instr(t_tok *t)
 			remove_char(&t->s, pos);
 			return ;
 		}
-		else if (pos >= 1)
+		if (pos >= 1)
 		{
 			t->type = TOK_STRING_TOEXPAND;
 			return ;
