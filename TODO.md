@@ -1,3 +1,3 @@
-- [ ] señales de terminacion
+- [ ] señales de terminacion (En el heredoc se buguean)
 - [ ] builtins
 - [ ] arbol

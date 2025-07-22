@@ -81,7 +81,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 
 	while (1)
 	{
-		read_l_raw(data, &hdoc_ret, false);
+		read_l(&data->prompt, &hdoc_ret, false);
 		if (data->hdoc_terminate)
 			return (clean_tokenstream(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data), false);
