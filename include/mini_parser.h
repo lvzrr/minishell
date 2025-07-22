@@ -83,4 +83,5 @@ void	del_unused(t_vec *tokv, size_t idx);
 bool	omit_hdoc(t_vec *tokv);
 void	expand_vars(t_vec *tokv, t_data *data);
 ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset);
+void	remove_scaping_singledollar(t_tok *t);
 #endif

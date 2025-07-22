@@ -130,6 +130,9 @@ void	expand_vars(t_vec *tokv, t_data *data)
 		if (t->type == TOK_VAR)
 			expand_var(t, data);
 		else
+		{
 			expand_string(t, data);
+			remove_scaping_singledollar(t);
+		}
 	}
 }

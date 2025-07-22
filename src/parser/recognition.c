@@ -58,7 +58,7 @@ static void	var_recon_instr(t_tok *t)
 			remove_char(&t->s, pos);
 			return ;
 		}
-		else if (pos >= 1 && t->s.data[pos - 1] != '\\')
+		else if (pos >= 1)
 		{
 			t->type = TOK_STRING_TOEXPAND;
 			return ;
