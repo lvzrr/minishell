@@ -45,25 +45,26 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 
 static void	var_recon_instr(t_tok *t)
 {
-	ssize_t	pos;
+	size_t	pos;
 
 	if (t->s.len <= 1)
 		return ;
-	pos = ft_tstr_instr(&t->s, "$");
-	if (pos >= 0 && (size_t)pos + 1 < t->s.len && t->s.data[pos + 1] == '(')
-		t->type = TOK_SUBSHELL;
-	else if (pos == 0 && ft_s_isblob(t->s.data + 1))
+	pos = 0;
+	while (pos < t->s.len)
 	{
-		t->type = TOK_VAR;
-		remove_char(&t->s, pos);
-		return ;
+		if (pos == 0 && t->s.data[pos] == '$' && ft_s_isblob(t->s.data + 1))
+		{
+			t->type = TOK_VAR;
+			remove_char(&t->s, pos);
+			return ;
+		}
+		else if (pos >= 1 && t->s.data[pos - 1] != '\\')
+		{
+			t->type = TOK_STRING_TOEXPAND;
+			return ;
+		}
+		pos++;
 	}
-	else if (pos == 0 && !ft_isspace(t->s.data[pos + 1]))
-		t->type = TOK_STRING_TOEXPAND;
-	else if (pos >= 1 && t->s.data[pos - 1] != '\\')
-		t->type = TOK_STRING_TOEXPAND;
-	else if (pos >= 1 && t->s.data[pos - 1] == '\\')
-		remove_char(&t->s, pos - 1);
 }
 
 /*

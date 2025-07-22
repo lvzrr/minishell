@@ -39,33 +39,78 @@ static void	expand_var(t_tok *t, t_data *data)
 	}
 }
 
+static void	look_and_insert(t_tok *t, size_t pos,
+	t_string *vname, t_data *data)
+{
+	t_var		*var;
+	t_string	newstr;
+
+	if (t->s.data[pos] == '\\' && !(pos + 1 < t->s.len
+			&& t->s.data[pos + 1] == '$'))
+		remove_char(&t->s, pos);
+	var = getvar(vname->data, &data->env);
+	if (!var)
+	{
+		if (!t->s.len)
+			t->type = TOK_STRING_EMPTY;
+		else
+			t->type = TOK_STRING_DQ;
+		return ;
+	}
+	newstr = ft_tstr_from_slice(t->s.data, pos);
+	ft_tstr_pushslice(&newstr, var->value.data, var->value.len);
+	ft_tstr_pushslice(&newstr, t->s.data + pos, t->s.len - pos);
+	ft_tstr_free(&t->s);
+	t->s = newstr;
+}
+
+ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset)
+{
+	size_t	i;
+
+	i = *offset;
+	while (i < t->s.len)
+	{
+		if (t->s.data[i] == '$' && i == 0)
+			return (i);
+		else if (i >= 1 && t->s.data[i] == '$' && t->s.data[i - 1] != '\\')
+			return (i);
+		else if (i >= 1 && t->s.data[i] == '$' && t->s.data[i - 1] == '\\')
+		{
+			remove_char(&t->s, i - 1);
+			*offset = i;
+			continue ;
+		}
+		i++;
+	}
+	return (-1);
+}
+
 static void	expand_string(t_tok *t, t_data *data)
 {
-	ssize_t	pos;
-	size_t	slicelen;
-	char	*vname;
-	t_var	*var;
+	ssize_t		pos;
+	size_t		l;
+	size_t		offset;
+	t_string	vname;
 
-	pos = ft_tstr_instr(&t->s, "$");
+	offset = 0;
+	pos = get_dollar_notscaped(t, &offset);
 	while (pos >= 0)
 	{
-		slicelen = (size_t)pos;
-		while (slicelen < t->s.len && (!ft_isspace(t->s.data[slicelen])
-				|| t->s.data[slicelen] != '\\'))
-			++slicelen;
-		vname = ft_memclone(t->s.data + pos + 1, slicelen);
-		var = getvar(vname, &data->env);
-		while (--slicelen >= (size_t)pos)
+		remove_char(&t->s, (size_t)pos);
+		l = 0;
+		while (pos + l < t->s.len && !ft_isspace(t->s.data[pos + l])
+			&& t->s.data[pos + l] != '\\' && t->s.data[pos + l] != '$'
+			&& t->s.data[pos + l] != '\'')
+			++l;
+		vname = ft_tstr_from_slice(t->s.data + (size_t)pos, l);
+		while (l-- > 0)
 			remove_char(&t->s, pos);
-		if (var)
-			ft_tstr_insert(&t->s, var->value.data, var->value.len, pos);
-		pos = ft_tstr_instr(&t->s, "$");
-		ft_free((void **)&vname);
+		look_and_insert(t, pos, &vname, data);
+		ft_tstr_free(&vname);
+		pos = get_dollar_notscaped(t, &offset);
 	}
-	if (!t->s.len)
-		t->type = TOK_STRING_EMPTY;
-	else
-		t->type = TOK_STRING_DQ;
+	t->type = TOK_STRING_DQ;
 }
 
 void	expand_vars(t_vec *tokv, t_data *data)
