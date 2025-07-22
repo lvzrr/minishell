@@ -86,9 +86,10 @@ void	detect_vars(t_vec *tokv)
 			i++;
 			continue ;
 		}
-		if (t->type == TOK_DOLLAR)
+		if (i + 1 < tokv->size && t->type == TOK_DOLLAR
+			&& (t + 1)->type != TOK_SPACE)
 			var_recon(tokv, t, i);
-		if (t->type == TOK_STRING_DQ)
+		else if (t->type == TOK_STRING_DQ)
 			var_recon_instr(t);
 		i++;
 	}

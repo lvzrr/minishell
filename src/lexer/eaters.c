@@ -106,7 +106,9 @@ size_t	eat_ident(t_string *s, size_t offst)
 	while (offst < s->len && (isvalidident(s->data[offst])
 			|| isunsupported(s->data[offst])))
 	{
-		if (s->data[offst] == '\\')
+		if (s->data[offst] == '\\'
+			|| (offst + 1 < s->len && s->data[offst] == '\\'
+				&& s->data[offst + 1] == '('))
 		{
 			remove_char(s, offst++);
 			continue ;
