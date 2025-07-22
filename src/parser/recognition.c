@@ -56,7 +56,7 @@ static void	warn_subs_behaviour(t_tok *t)
 		if (pos + 1 < t->s.len && t->s.data[pos] == '$'
 			&& t->s.data[pos + 1] == '(' && ft_strchr(t->s.data + pos, ')'))
 		{
-			ft_fprintf(2, ANSI_YELLOW"ヽ(°〇°)ﾉ WARNING:"
+			ft_fprintf(2, ANSI_YELLOW"(┛ಠДಠ)┛彡┻━┻ WARNING:"
 				" substitution will be parsed as a variable and will"
 				" be expanded as such (ง •̀_•́)ง‼\n"ANSI_RESET);
 		}
