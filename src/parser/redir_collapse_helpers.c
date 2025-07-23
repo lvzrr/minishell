@@ -16,7 +16,7 @@ bool	is_preceded_by_ident(t_tok *t, size_t i)
 {
 	while (i != 0)
 	{
-		if (isstringtoken(t - --i))
+		if (isstringtoken(t - i--))
 			return (true);
 	}
 	return (false);
