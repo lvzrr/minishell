@@ -34,7 +34,7 @@ typedef struct s_hdoc
 }	t_hdoc;
 
 void	dump_tokenstream(char *s, t_vec *tokv);
-void	read_l(t_string *prompt, t_vec *tokv, bool addaddh);
+bool	read_l(t_string *prompt, t_vec *tokv, bool addaddh);
 void	core_loop(t_data *data);
 bool	check_exit(t_vec *tokv);
 void	clean_data(t_data *data);

@@ -42,12 +42,14 @@ void	dump_tokenstream(char *mod, t_vec *tokv)
 *	eso esta hacho para que en los heredocs no se guarde
 */
 
-void	read_l(t_string *prompt, t_vec *tokv, bool addhist)
+bool	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 {
 	char		*s;
 	t_string	line;
 
 	s = readline(prompt->data);
+	if (s == NULL && addhist)
+		return (false);
 	line = ft_tstr_from_cstr(s);
 	free(s);
 	ft_tstr_trim(&line, " \t\n\r");
@@ -55,12 +57,13 @@ void	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 	{
 		ft_tstr_free(&line);
 		*tokv = (t_vec){0};
-		return ;
+		return (true);
 	}
 	if (*line.data && addhist)
 		add_history(line.data);
 	*tokv = lex(&line);
 	ft_tstr_free(&line);
+	return (true);
 }
 
 void	read_l_raw(t_data *data, t_vec *tokv, bool addhist)

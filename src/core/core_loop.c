@@ -58,9 +58,16 @@ void	core_loop(t_data *data)
 {
 	t_vec		tokv;
 
+	tokv = (t_vec){0};
 	while (1)
 	{
-		read_l(&data->prompt, &tokv, true);
+		if (!read_l(&data->prompt, &tokv, true))
+		{
+			rl_clear_history();
+			if (tokv.alloc_size)
+				clean_tokenstream(&tokv);
+			return ;
+		}
 		if (!tokv.size)
 			continue ;
 		if (data->debug)
