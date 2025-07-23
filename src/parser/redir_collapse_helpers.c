@@ -12,14 +12,24 @@
 
 #include "mini_parser.h"
 
-bool	is_preceded_by_ident(t_tok *t, size_t i)
+static bool	isredirect(t_toktype t)
 {
-	while (i != 0)
-	{
-		if (isstringtoken(t - i--))
-			return (true);
-	}
-	return (false);
+	return (t == TOK_REDIR_NN || t == TOK_REDIR_IN
+		|| t == TOK_REDIR_TO || t == TOK_APPEND_TO || t == TOK_REDIR_FROM_FD
+		|| t == TOK_APPEND_FROM_FD);
+}
+
+bool	is_preceded_by_ident(t_tok *t)
+{
+	size_t	i;
+
+	i = 1;
+	while ((t - i)->type == TOK_SPACE || isredirect((t - i)->type))
+		i++;
+	if (isstringtoken(t - i))
+		return (true);
+	else
+		return (false);
 }
 
 bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i)

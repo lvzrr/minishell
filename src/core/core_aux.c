@@ -29,8 +29,8 @@ void	dump_tokenstream(char *mod, t_vec *tokv)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (t)
-			ft_fprintf(2, ANSI_BLUE"[%s] token: "ANSI_RESET"%s "
-				ANSI_BLUE"(%s)\n"ANSI_RESET, mod, t->s.data,
+			ft_fprintf(2, ANSI_BLUE"[%s] token %u: "ANSI_RESET"%s "
+				ANSI_BLUE"(%s)\n"ANSI_RESET, mod, i, t->s.data,
 				get_token_pretty(t->type));
 		i++;
 	}

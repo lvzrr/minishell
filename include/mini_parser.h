@@ -155,5 +155,5 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i);
 bool	rl(t_tok *t, t_vec *tokv, size_t i);
 bool	rapp(t_tok *t, t_vec *tokv, size_t i);
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i);
-bool	is_preceded_by_ident(t_tok *t, size_t i);
+bool	is_preceded_by_ident(t_tok *t);
 #endif
