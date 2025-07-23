@@ -16,6 +16,10 @@
 *	reconoce variables en el stream, pero que no esten
 *	en dobles comillas, cualquier secuencia como $"hola" o
 *	$ solo, retira el dollar e interpreta lo que haya detras
+*
+*	Nota:
+*	la primera regla es rara, pero es como hace zsh las cosas,
+*	asi que yo no me pronuncio.
 */
 
 static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
