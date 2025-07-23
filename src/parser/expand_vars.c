@@ -71,17 +71,15 @@ ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset)
 	i = *offset;
 	while (i < t->s.len)
 	{
-		if (t->s.data[0] == '$' && t->s.len > 0 && !ft_isspace(t->s.data[1]))
-			return (i);
-		else if (i + 1 < t->s.len && t->s.data[i] == '$'
+		if (i + 1 < t->s.len && t->s.data[i] == '$'
 			&& ft_isspace(t->s.data[i + 1]))
-			;
+			*offset = i++;
 		else if (i >= 1 && t->s.data[i] == '$' && t->s.data[i - 1] != '\\')
 			return (i);
 		else if (i >= 1 && t->s.data[i] == '$' && t->s.data[i - 1] == '\\')
 		{
 			remove_char(&t->s, i - 1);
-			*offset = i;
+			*offset = i++;
 			continue ;
 		}
 		i++;
@@ -134,7 +132,9 @@ void	expand_vars(t_vec *tokv, t_data *data)
 		else
 		{
 			expand_string(t, data);
+			dump_tokenstream("post-expand", tokv);
 			remove_scaping_singledollar(t);
+			dump_tokenstream("post-remove", tokv);
 		}
 	}
 }
