@@ -18,7 +18,7 @@
 *	$ solo, retira el dollar e interpreta lo que haya detras
 *
 *	Nota:
-*	la primera regla es rara, pero es como hace zsh las cosas,
+*	la segunda regla es rara, pero es como hace zsh las cosas,
 *	asi que yo no me pronuncio.
 */
 
