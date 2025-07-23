@@ -28,7 +28,7 @@ static void	var_recon(t_vec *tokv, t_tok *t, size_t idx)
 		collapse_at(tokv, idx + 1);
 	}
 	else if (idx + 1 < tokv->size && t->type == TOK_DOLLAR
-		&& (t + 1)->type != TOK_IDENT)
+		&& (t + 1)->type == TOK_STRING_DQ)
 		t->type = TOK_IDENT;
 	else if (t->type == TOK_DOLLAR && idx + 1 == tokv->size)
 		collapse_at(tokv, idx);
