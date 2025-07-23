@@ -70,11 +70,12 @@ static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
 /*
 *	Funcion que maneja la lógica principal de la
 *	shell en modo normal
-*	TODO:
-*	abstraerla para que pase norminette
-*	también cambiar clean_tokenstream para que
-*	limpie el vector pero no lo cree todo el rato,
-*	reusar el mismo vector siempre vaya
+*
+* 	NOTA:
+* 	el vector de tokens vive durante toda la ejecución
+* 	del programa, es decir, reusamos el mismo malloc
+* 	hasta el final, donde se libera.
+*
 */
 
 void	core_loop(t_data *data)
