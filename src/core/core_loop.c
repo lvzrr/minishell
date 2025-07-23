@@ -44,6 +44,29 @@ void	handle_oneliner(t_data *data)
 	clean_tokenstream(&tokv);
 }
 
+static bool	check_clean_and_exit(bool ret, bool trigger, t_vec *tokv)
+{
+	if (ret == trigger)
+	{
+		rl_clear_history();
+		if (tokv->alloc_size)
+			clean_tokenstream(tokv);
+		return (true);
+	}
+	return (false);
+}
+
+static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
+{
+	if (ret == trigger)
+	{
+		if (tokv->alloc_size)
+			clean_tokenstream(tokv);
+		return (true);
+	}
+	return (false);
+}
+
 /*
 *	Funcion que maneja la lógica principal de la
 *	shell en modo normal
@@ -61,35 +84,21 @@ void	core_loop(t_data *data)
 	tokv = (t_vec){0};
 	while (1)
 	{
-		if (!read_l(&data->prompt, &tokv, true))
-		{
-			rl_clear_history();
-			if (tokv.alloc_size)
-				clean_tokenstream(&tokv);
+		if (check_clean_and_exit(read_l(&data->prompt, &tokv, true),
+				false, &tokv))
 			return ;
-		}
 		if (!tokv.size)
 			continue ;
 		if (data->debug)
 			dump_tokenstream("LEXER", &tokv);
-		if (!post_process(&tokv, data))
-		{
-			clean_tokenstream(&tokv);
+		if (opt_clean(post_process(&tokv, data), false, &tokv))
 			continue ;
-		}
 		if (data->debug)
 			dump_tokenstream("PARSER", &tokv);
-		if (check_exit(&tokv))
-		{
-			clean_tokenstream(&tokv);
-			rl_clear_history();
+		if (check_clean_and_exit(check_exit(&tokv), true, &tokv))
 			return ;
-		}
-		if (!heredoc(&tokv, data))
-		{
-			clean_tokenstream(&tokv);
+		if (opt_clean(heredoc(&tokv, data), false, &tokv))
 			continue ;
-		}
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
 		clean_tokenstream(&tokv);
