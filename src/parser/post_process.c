@@ -35,7 +35,20 @@ static bool	strings_concat(t_tok *t)
 /*
 *	Una vez que todo lo concatenable esta concatenado,
 *	esto quita los espacios de en medio para poder analizar
-*	los tokens mejor
+*	los tokens mejor.
+*
+*	El motivo del check de los operadores es que no es lo mismo:
+*	echo "hello" > test
+*	que
+*	echo "hello" 2> test
+*	que
+*	echo "hello" 2 > test
+*
+*	Asi que en la primera pasada quita los espacios que no rompen
+*	esta regla, y como manage_redirs cambia los tipos primitivos
+*	a TOK_REDIR_TO y cosas así, en la segunda pasada, si no se
+*	han colapsado en manage_redirs, ahí si que los quita.
+*
 */
 
 static void	clean_spaces(t_vec *tokv)
@@ -47,12 +60,12 @@ static void	clean_spaces(t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || (!t->s.len && t->type != TOK_STRING_EMPTY))
-		{
-			i++;
-			continue ;
-		}
-		if (t->type == TOK_SPACE)
+		if (!t || !t->s.data || (t->type == TOK_SPACE
+				&& i + 1 < tokv->size
+				&& (t + 1)->type != TOK_REDIR
+				&& (t + 1)->type != TOK_RAPPEND
+				&& (t + 1)->type != TOK_RR
+				&& (t + 1)->type != TOK_LR))
 			collapse_at(tokv, i);
 		i++;
 	}
@@ -105,5 +118,7 @@ void	post_process(t_vec *tokv, t_data *data)
 		}
 		i++;
 	}
+	clean_spaces(tokv);
+	manage_redirs(tokv);
 	clean_spaces(tokv);
 }

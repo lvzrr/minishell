@@ -67,6 +67,14 @@ const char	*get_token_pretty_2(t_toktype t)
 		return ("TOK_OR");
 	else if (t == TOK_LPAREN)
 		return ("TOK_LPAREN");
+	else if (t == TOK_SPACE)
+		return ("TOK_SPACE");
+	else if (t == TOK_STRING_EMPTY)
+		return ("TOK_STRING_EMPTY");
+	else if (t == TOK_SUBS_START)
+		return ("TOK_SUBS_START");
+	else if (t == TOK_REDIR_IN)
+		return ("TOK_REDIR_IN");
 	else if (t == TOK_RPAREN)
 		return ("TOK_RPAREN");
 	else if (t == TOK_LCURLY)
@@ -85,12 +93,16 @@ const char	*get_token_pretty_3(t_toktype t)
 {
 	if (t == TOK_VAR)
 		return ("TOK_VAR");
-	else if (t == TOK_SPACE)
-		return ("TOK_SPACE");
-	else if (t == TOK_STRING_EMPTY)
-		return ("TOK_STRING_EMPTY");
-	else if (t == TOK_SUBS_START)
-		return ("TOK_SUBS_START");
+	else if (t == TOK_REDIR_TO)
+		return ("TOK_REDIR_TO");
+	else if (t == TOK_REDIR_NN)
+		return ("TOK_REDIR_NN");
+	else if (t == TOK_APPEND_TO)
+		return ("TOK_APPEND_TO");
+	else if (t == TOK_REDIR_FROM_FD)
+		return ("TOK_REDIR_FROM_FD");
+	else if (t == TOK_APPEND_FROM_FD)
+		return ("TOK_APPEND_FROM_FD");
 	else
 		return ("TOK_UNKNOWN");
 }
