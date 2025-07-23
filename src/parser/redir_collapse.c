@@ -98,7 +98,7 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 	else
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' should be"
 				" wrapped in numbers, like this: [spc]N>&N[spc]\n"), false);
-	if ((i > 0 && !is_preceded_by_ident(t, i)) || i == 0)
+	if ((i > 0 && !is_preceded_by_ident(t, i - 1)) || i == 1)
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' must be"
 				" preceded by an identifier\n"), false);
 	(t - 1)->type = TOK_REDIR_NN;
