@@ -19,6 +19,23 @@ static bool	isredirect(t_toktype t)
 		|| t == TOK_APPEND_FROM_FD);
 }
 
+void	delete_redundant(t_vec *tokv, size_t i)
+{
+	collapse_at(tokv, i);
+	collapse_at(tokv, i);
+	collapse_at(tokv, i - 1);
+}
+
+/*
+*	Vale, esto deja secuencias de comandos seguidos
+*	por un cojon de redirecciones.
+*
+*	bloquea cosas como
+*	echo && > hello
+*	pero deja pasar:
+*	cat < miau >> texto 1>&2
+*/
+
 bool	is_preceded_by_ident(t_tok *t)
 {
 	size_t	i;

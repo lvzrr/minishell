@@ -15,6 +15,7 @@
 
 # include "mini_lexer.h"
 # include "core.h"
+# include "conv.h"
 
 typedef struct s_node	t_node;
 
@@ -156,4 +157,5 @@ bool	rl(t_tok *t, t_vec *tokv, size_t i);
 bool	rapp(t_tok *t, t_vec *tokv, size_t i);
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i);
 bool	is_preceded_by_ident(t_tok *t);
+void	delete_redundant(t_vec *tokv, size_t i);
 #endif

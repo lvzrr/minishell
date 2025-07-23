@@ -88,6 +88,11 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 		&& i > 0 && isstringtoken(t - 1)
 		&& ft_isnumeric((t - 1)->s.data) && ft_isnumeric((t + 1)->s.data))
 	{
+		if (!ft_strcmp((t + 1)->s.data, (t - 1)->s.data))
+		{
+			delete_redundant(tokv, i);
+			return (true);
+		}
 		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t - 1)->s.data, (t - 1)->s.len);
 		ft_tstr_push(&t->s, ':');
