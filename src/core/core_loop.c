@@ -12,12 +12,6 @@
 
 #include "core.h"
 
-/*
-*	Funcion que maneja la flag '-c'
-*	TODO:
-*	abstraerla para que pase norminette
-*/
-
 void	handle_oneliner(t_data *data)
 {
 	t_vec		tokv;
