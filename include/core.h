@@ -54,4 +54,5 @@ void	*flag_updater(t_data *datap);
 void	read_l_raw(t_data *data, t_vec *tokv, bool addhist);
 void	hdoc_signal_setup(void);
 void	phelp(void);
+void	s_handler(int signal);
 #endif

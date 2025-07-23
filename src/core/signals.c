@@ -40,12 +40,14 @@ void	hdoc_signal_setup(void)
 {
 	signal(SIGINT, ctrl_c_hdoc);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGSEGV, s_handler);
 }
 
 void	signal_setup(void)
 {
 	signal(SIGINT, ctrl_c);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGSEGV, s_handler);
 }
 
 void	ctrl_c(int signal)
