@@ -24,7 +24,7 @@ void	handle_oneliner(t_data *data)
 
 	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
 	if (!data->oneliner_s.len || !data->oneliner_s.data
-		|| !*data->oneliner_s.data)	
+		|| !*data->oneliner_s.data)
 		return ;
 	tokv = lex(&data->oneliner_s);
 	if (!tokv.size)
@@ -43,6 +43,14 @@ void	handle_oneliner(t_data *data)
 	// tokv antes de limpiarla
 	clean_tokenstream(&tokv);
 }
+
+/*
+ *	Estas dos funciones son para norminette,
+ *	miran si deben limpiarl el vector y salir
+ *	o continuar respectivamente, en base a una
+ *	flag "trigger" arbitraria, son esencialmente
+ *	una macro, pero como no dejan pues toca funcion
+ */
 
 static bool	check_clean_and_exit(bool ret, bool trigger, t_vec *tokv)
 {
