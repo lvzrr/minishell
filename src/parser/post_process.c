@@ -66,7 +66,10 @@ static void	clean_spaces(t_vec *tokv)
 				&& (t + 1)->type != TOK_RAPPEND
 				&& (t + 1)->type != TOK_RR
 				&& (t + 1)->type != TOK_LR))
+		{
 			collapse_at(tokv, i);
+			continue ;
+		}
 		i++;
 	}
 }
