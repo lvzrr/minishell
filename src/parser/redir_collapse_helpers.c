@@ -19,11 +19,12 @@ static bool	isredirect(t_toktype t)
 		|| t == TOK_APPEND_FROM_FD);
 }
 
-void	delete_redundant(t_vec *tokv, size_t i)
+bool	delete_redundant(t_vec *tokv, size_t i)
 {
 	collapse_at(tokv, i);
 	collapse_at(tokv, i);
 	collapse_at(tokv, i - 1);
+	return (true);
 }
 
 /*

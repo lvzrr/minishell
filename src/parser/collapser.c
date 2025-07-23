@@ -12,16 +12,6 @@
 
 #include "mini_parser.h"
 
-static void	free_tok(void *v)
-{
-	t_tok	*t;
-
-	if (!v)
-		return ;
-	t = (t_tok *)v;
-	ft_tstr_free(&t->s);
-}
-
 /*
 *	Elimina un elemento del vector,
 *	haciendo free a la string que contiene

@@ -113,7 +113,6 @@ static void	copy_helper(t_vec *a, t_vec *b, t_vec *c, size_t idx)
 void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 {
 	t_vec			c;
-	const t_tok		*t;
 
 	if (*idx == a->size)
 	{
@@ -122,15 +121,9 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 		clean_tokenstream(b);
 		return ;
 	}
-	else
-	{
-		c = ft_vec(a->size + b->size, sizeof(t_tok));
-		copy_helper(a, b, &c, *idx);
-		t = ft_vec_get(a, *idx);
-		if (!t || !t->s.len || !t->s.data)
-			return ;
-		vec_deep_copy(&c, a, (*idx)++);
-	}
+	c = ft_vec(a->size + b->size, sizeof(t_tok));
+	copy_helper(a, b, &c, *idx);
+	vec_deep_copy(&c, a, (*idx)++);
 	clean_tokenstream(a);
 	clean_tokenstream(b);
 	*a = c;

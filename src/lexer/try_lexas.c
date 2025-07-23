@@ -57,7 +57,10 @@ void	try_lexas_ident(t_string *s, t_vec *out, size_t *offst)
 			.s = ft_tstr_from_slice(
 				s->data + *offst, offst2 - *offst)};
 		if (tmp.s.len < 1)
+		{
+			free_tok(&tmp);
 			return ;
+		}
 		ft_vec_push(out, &tmp, 1);
 		*offst = offst2;
 	}
@@ -84,15 +87,14 @@ void	try_lexas_op(t_string *s, t_vec *out, size_t *offst)
 			.s = ft_tstr_from_slice(
 				s->data + *offst, offst2 - *offst)};
 		if (tmp.s.len == 1)
-		{
 			tmp.type = get_token_type_1(&tmp.s);
-			if (tmp.type == 0xff)
-				tmp.type = get_token_type_1_2(&tmp.s);
-		}
 		else
 			tmp.type = get_token_type_2(&tmp.s);
 		if (tmp.s.len < 1)
+		{
+			free_tok(&tmp);
 			return ;
+		}
 		ft_vec_push(out, &tmp, 1);
 		*offst = offst2;
 	}

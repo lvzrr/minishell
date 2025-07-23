@@ -83,10 +83,10 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	while (1)
 	{
 		read_l(&data->prompt, &hdoc_ret, false);
+		omit_hdoc(&hdoc_ret);
 		if (data->hdoc_terminate)
 			return (clean_tokenstream(&hdoc_ret), ft_vec_free(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data), false);
-		omit_hdoc(&hdoc_ret);
 		if (!hdoc_ret.size && !hdoc_ret.data)
 		{
 			clean_tokenstream(&hdoc_ret);
@@ -145,10 +145,8 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 		return (true);
 	hdoc_signal_setup();
 	hdoc_exit = check_heredoc(tokv, idx);
-	if (!hdoc_exit.size
-		&& ((((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
-			|| (((t_tok *)ft_vec_get(tokv, idx)) + 1)->type != TOK_IDENT))
-		return (ft_vec_free(&hdoc_exit), ft_fprintf(2, ANSI_RED"syntax error: "
+	if (!hdoc_exit.alloc_size)
+		return (ft_fprintf(2, ANSI_RED"syntax error: "
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)
 		return (ft_vec_free(&hdoc_exit), true);

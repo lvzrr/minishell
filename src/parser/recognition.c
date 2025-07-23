@@ -144,15 +144,13 @@ void	detect_vars(t_vec *tokv, t_data *data)
 *	corra otro heredoc a partir de él.
 */
 
-bool	omit_hdoc(t_vec *tokv)
+void	omit_hdoc(t_vec *tokv)
 {
 	size_t		i;
-	size_t		c;
 	t_tok		*t;
 
 	i = 0;
-	c = 0;
-	while (i + 1 < tokv->size)
+	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (!t || !t->s.data || !t->s.len)
@@ -161,11 +159,7 @@ bool	omit_hdoc(t_vec *tokv)
 			continue ;
 		}
 		if (t->type == TOK_HDOC)
-		{
 			t->type = TOK_IDENT;
-			c++;
-		}
 		i++;
 	}
-	return (c > 0);
 }

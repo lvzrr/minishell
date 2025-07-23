@@ -19,6 +19,16 @@
 *	con las strings de C puro.
 */
 
+void	free_tok(void *v)
+{
+	t_tok	*t;
+
+	if (!v)
+		return ;
+	t = (t_tok *)v;
+	ft_tstr_free(&t->s);
+}
+
 void	remove_char(t_string *s, size_t offst)
 {
 	ft_memmove(s->data + offst, s->data + offst + 1, s->len - offst);

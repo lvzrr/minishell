@@ -37,7 +37,7 @@ t_toktype	get_token_type_1(t_string *s)
 	else if (*s->data == ';')
 		return (TOK_SCOLON);
 	else
-		return (0xff);
+		return (get_token_type_1_2(s));
 }
 
 t_toktype	get_token_type_1_2(t_string *s)

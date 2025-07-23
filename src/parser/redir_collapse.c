@@ -82,6 +82,12 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 	return (true);
 }
 
+/*
+*	CASO ESPECIAL:
+*	para 1>&1 y cosas asi donde se "redirige hacia si mismo",
+*	simplemente nos cargamos el token, no sirve de nada nada
+*	mas que para liar luego.
+*/
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 {
 	if (i + 1 < tokv->size && isstringtoken(t + 1)
@@ -89,10 +95,7 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 		&& ft_isnumeric((t - 1)->s.data) && ft_isnumeric((t + 1)->s.data))
 	{
 		if (!ft_strcmp((t + 1)->s.data, (t - 1)->s.data))
-		{
-			delete_redundant(tokv, i);
-			return (true);
-		}
+			return (delete_redundant(tokv, i));
 		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t - 1)->s.data, (t - 1)->s.len);
 		ft_tstr_push(&t->s, ':');

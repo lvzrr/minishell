@@ -91,4 +91,5 @@ const char	*get_token_pretty(t_toktype t);
 const char	*get_token_pretty_1(t_toktype t);
 const char	*get_token_pretty_2(t_toktype t);
 const char	*get_token_pretty_3(t_toktype t);
+void		free_tok(void *v);
 #endif
