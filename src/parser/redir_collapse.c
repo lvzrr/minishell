@@ -32,7 +32,7 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i)
 	}
 	else
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"> must be"
-		  " followed by an identifier\n"), false);
+				" followed by an identifier\n"), false);
 	if (i > 0 && isstringtoken(t - 1) && ft_isnumeric((t - 1)->s.data))
 	{
 		ft_tstr_push(&t->s, ':');
@@ -55,7 +55,7 @@ bool	rl(t_tok *t, t_vec *tokv, size_t i)
 	}
 	else
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"< must be"
-		  " followed by an identifier\n"), false);
+				" followed by an identifier\n"), false);
 	t->type = TOK_REDIR_IN;
 	return (true);
 }
@@ -70,7 +70,7 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 	}
 	else
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET">> must be"
-		  " followed by an identifier\n"), false);
+				" followed by an identifier\n"), false);
 	if (i > 0 && isstringtoken(t - 1) && ft_isnumeric((t - 1)->s.data))
 	{
 		ft_tstr_push(&t->s, ':');
@@ -97,8 +97,8 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i);
 	}
 	else
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET">& should be wrapped"
-		  " in numbers, like this: [spc]N>&N[spc]\n"), false);
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET">& should be"
+				" wrapped in numbers, like this: [spc]N>&N[spc]\n"), false);
 	(t - 1)->type = TOK_REDIR_NN;
 	return (true);
 }
