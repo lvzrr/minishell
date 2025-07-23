@@ -141,7 +141,7 @@ typedef struct s_opnode
 
 void	collapse_at(t_vec *tokv, size_t i);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
-void	post_process(t_vec *tokv, t_data *data);
+bool	post_process(t_vec *tokv, t_data *data);
 void	detect_vars(t_vec *tokv, t_data *data);
 void	del_unused(t_vec *tokv, size_t idx);
 bool	omit_hdoc(t_vec *tokv);
@@ -149,6 +149,11 @@ void	expand_vars(t_vec *tokv, t_data *data);
 ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset);
 void	remove_scaping_singledollar(t_tok *t);
 void	delete_subs(t_vec *tokv, size_t start);
-void	manage_redirs(t_vec *tokv);
+bool	manage_redirs(t_vec *tokv);
 bool	isstringtoken(t_tok	*t);
+bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i);
+bool	rr(t_tok *t, t_vec *tokv, size_t i);
+bool	rl(t_tok *t, t_vec *tokv, size_t i);
+bool	rapp(t_tok *t, t_vec *tokv, size_t i);
+bool	rd_nn(t_tok *t, t_vec *tokv, size_t i);
 #endif

@@ -132,9 +132,7 @@ void	expand_vars(t_vec *tokv, t_data *data)
 		else
 		{
 			expand_string(t, data);
-			dump_tokenstream("post-expand", tokv);
 			remove_scaping_singledollar(t);
-			dump_tokenstream("post-remove", tokv);
 		}
 	}
 }

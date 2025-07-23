@@ -12,16 +12,6 @@
 
 #include "mini_parser.h"
 
-/*
- *	TODO:
- *	propagar errores en este archivo, basicamente
- *	si no se cumple la primera condicion de cada
- *	función, error + descartar input, lo hago
- *	mañana que es muy tarde ya.
- *
- *	TL;DR: hacer que el parser pueda devolver errores
- */
-
 bool	rr(t_tok *t, t_vec *tokv, size_t i)
 {
 	if (i + 1 < tokv->size && isstringtoken(t + 1))
@@ -103,7 +93,7 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 	return (true);
 }
 
-void	manage_redirs(t_vec *tokv)
+bool	manage_redirs(t_vec *tokv)
 {
 	size_t	i;
 	t_tok	*t;
@@ -117,14 +107,9 @@ void	manage_redirs(t_vec *tokv)
 			i++;
 			continue ;
 		}
-		if (t->type == TOK_RR)
-			rr(t, tokv, i);
-		else if (t->type == TOK_LR)
-			rl(t, tokv, i);
-		else if (t->type == TOK_REDIR)
-			rd_nn(t, tokv, i);
-		else if (t->type == TOK_RAPPEND)
-			rapp(t, tokv, i);
+		if (!try_collapse_redir(t, tokv, i))
+			return (false);
 		i++;
 	}
+	return (true);
 }

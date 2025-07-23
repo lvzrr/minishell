@@ -60,7 +60,12 @@ static void	clean_spaces(t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || (t->type == TOK_SPACE
+		if (t && ((i + 1 < tokv->size && t->type == TOK_SPACE
+					&& (t + 1)->type == TOK_EQ)
+				|| (i > 0 && t->type == TOK_SPACE
+					&& (t - 1)->type == TOK_EQ)))
+			;
+		else if (!t || !t->s.data || (t->type == TOK_SPACE
 				&& i + 1 < tokv->size
 				&& (t + 1)->type != TOK_REDIR
 				&& (t + 1)->type != TOK_RAPPEND
@@ -72,6 +77,15 @@ static void	clean_spaces(t_vec *tokv)
 		}
 		i++;
 	}
+}
+
+static bool	redirs_and_clean(t_vec *tokv)
+{
+	clean_spaces(tokv);
+	if (!manage_redirs(tokv))
+		return (false);
+	clean_spaces(tokv);
+	return (true);
 }
 
 /*
@@ -97,7 +111,7 @@ static void	clean_spaces(t_vec *tokv)
 *	así que podemos identificarlas después
 */
 
-void	post_process(t_vec *tokv, t_data *data)
+bool	post_process(t_vec *tokv, t_data *data)
 {
 	size_t	i;
 	t_tok	*t;
@@ -121,7 +135,5 @@ void	post_process(t_vec *tokv, t_data *data)
 		}
 		i++;
 	}
-	clean_spaces(tokv);
-	manage_redirs(tokv);
-	clean_spaces(tokv);
+	return (redirs_and_clean(tokv));
 }

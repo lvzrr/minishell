@@ -49,6 +49,9 @@ void	handle_oneliner(t_data *data)
 *	shell en modo normal
 *	TODO:
 *	abstraerla para que pase norminette
+*	también cambiar clean_tokenstream para que
+*	limpie el vector pero no lo cree todo el rato,
+*	reusar el mismo vector siempre vaya
 */
 
 void	core_loop(t_data *data)
@@ -62,7 +65,11 @@ void	core_loop(t_data *data)
 			continue ;
 		if (data->debug)
 			dump_tokenstream("LEXER", &tokv);
-		post_process(&tokv, data);
+		if (!post_process(&tokv, data))
+		{
+			clean_tokenstream(&tokv);
+			continue ;
+		}
 		if (data->debug)
 			dump_tokenstream("PARSER", &tokv);
 		if (check_exit(&tokv))
