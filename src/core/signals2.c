@@ -14,6 +14,9 @@
 
 /*
 *	Si la cagamos, por lo menos que sea con gracia
+*
+*	Si es la segunda vez que se llama a esta funcion,
+*	salimos y nos olvidamos.
 */
 
 void	s_handler(int signal)
@@ -22,6 +25,10 @@ void	s_handler(int signal)
 
 	(void)signal;
 	data = flag_updater(NULL);
+	if (!data->segfault)
+		data->segfault = true;
+	else
+		exit(EXIT_FAILURE);
 	ft_printf(ANSI_RED"SEGFAULT\n"ANSI_RESET);
 	clean_data(data);
 	exit(EXIT_FAILURE);

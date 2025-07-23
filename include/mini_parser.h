@@ -27,6 +27,7 @@ typedef struct s_data
 	bool		phelp;
 	bool		hdoc_terminate;
 	bool		under_valgrind;
+	bool		segfault;
 	char		*invocation;
 	t_string	oneliner_s;
 	t_vec		tokv;
