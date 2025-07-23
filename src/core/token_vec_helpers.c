@@ -125,6 +125,7 @@ void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
 	copy_helper(a, b, &c, *idx);
 	vec_deep_copy(&c, a, (*idx)++);
 	clean_tokenstream(a);
+	ft_vec_free(a);
 	clean_tokenstream(b);
 	*a = c;
 }

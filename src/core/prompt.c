@@ -35,18 +35,11 @@ void	default_prompt(t_data *data)
 		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
 		ft_tstr_push(&data->prompt, '@');
 		append_path_currdir(&data->prompt, data->pwd);
-		ft_tstr_pushstr(&data->prompt, " $ ");
-	}
-	else if (!data->username && data->pwd)
-	{
-		append_path_currdir(&data->prompt, data->pwd);
-		ft_tstr_pushstr(&data->prompt, " $ ");
 	}
 	else
-	{
-		append_path_currdir(&data->prompt, data->pwd);
-		ft_tstr_pushstr(&data->prompt, " $ ");
-	}
+		ft_tstr_pushslice(&data->prompt, data->pwd->data, data->pwd->len);
+	ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002"" $ "
+		"\001"ANSI_RESET"\002");
 }
 
 void	hdoc_prompt(t_data *data)
