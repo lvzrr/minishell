@@ -30,7 +30,6 @@ static void	ctrl_c_hdoc(int signal)
 {
 	(void)signal;
 	(void)flag_updater(NULL);
-	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
