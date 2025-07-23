@@ -12,6 +12,16 @@
 
 #include "mini_parser.h"
 
+bool	is_preceded_by_ident(t_tok *t, size_t i)
+{
+	while (i != 0)
+	{
+		if (isstringtoken(t - --i))
+			return (true);
+	}
+	return (false);
+}
+
 bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i)
 {
 	bool	r;
