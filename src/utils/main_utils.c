@@ -19,6 +19,7 @@ t_data	getopts(int argc, char **argv, char **envp)
 
 	data = (t_data){0};
 	data.envp = envp;
+	data.tokv = ft_vec(10, sizeof(t_tok));
 	i = 0;
 	while (i < argc)
 	{
@@ -52,4 +53,5 @@ void	clean_data(t_data *data)
 		ft_tstr_free(&data->oneliner_s);
 	if (data->env.data)
 		clean_env(&data->env);
+	ft_vec_free(&data->tokv);
 }

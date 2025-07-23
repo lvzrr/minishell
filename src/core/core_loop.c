@@ -14,28 +14,26 @@
 
 void	handle_oneliner(t_data *data)
 {
-	t_vec		tokv;
-
 	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
 	if (!data->oneliner_s.len || !data->oneliner_s.data
 		|| !*data->oneliner_s.data)
 		return ;
-	tokv = lex(&data->oneliner_s);
-	if (!tokv.size)
-		clean_tokenstream(&tokv);
+	lex(&data->oneliner_s, &data->tokv);
+	if (!data->tokv.size)
+		clean_tokenstream(&data->tokv);
 	if (data->debug)
-		dump_tokenstream("LEXER", &tokv);
-	post_process(&tokv, data);
+		dump_tokenstream("LEXER", &data->tokv);
+	post_process(&data->tokv, data);
 	if (data->debug)
-		dump_tokenstream("PARSER", &tokv);
-	if (!heredoc(&tokv, data))
+		dump_tokenstream("PARSER", &data->tokv);
+	if (!heredoc(&data->tokv, data))
 	{
-		clean_tokenstream(&tokv);
+		clean_tokenstream(&data->tokv);
 		return ;
 	}
 	// TODO: aqui pasarle al constructor del AST
 	// tokv antes de limpiarla
-	clean_tokenstream(&tokv);
+	clean_tokenstream(&data->tokv);
 }
 
 /*
@@ -81,28 +79,25 @@ static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
 
 void	core_loop(t_data *data)
 {
-	t_vec		tokv;
-
-	tokv = (t_vec){0};
 	while (1)
 	{
-		if (check_clean_and_exit(read_l(&data->prompt, &tokv, true),
-				false, &tokv))
+		clean_tokenstream(&data->tokv);
+		if (check_clean_and_exit(read_l(&data->prompt, &data->tokv, true),
+				false, &data->tokv))
 			return ;
-		if (!tokv.size)
+		if (!data->tokv.size)
 			continue ;
 		if (data->debug)
-			dump_tokenstream("LEXER", &tokv);
-		if (opt_clean(post_process(&tokv, data), false, &tokv))
+			dump_tokenstream("LEXER", &data->tokv);
+		if (opt_clean(post_process(&data->tokv, data), false, &data->tokv))
 			continue ;
 		if (data->debug)
-			dump_tokenstream("PARSER", &tokv);
-		if (check_clean_and_exit(check_exit(&tokv), true, &tokv))
+			dump_tokenstream("PARSER", &data->tokv);
+		if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
 			return ;
-		if (opt_clean(heredoc(&tokv, data), false, &tokv))
+		if (opt_clean(heredoc(&data->tokv, data), false, &data->tokv))
 			continue ;
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
-		clean_tokenstream(&tokv);
 	}
 }

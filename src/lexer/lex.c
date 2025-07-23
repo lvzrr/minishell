@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "mini_lexer.h"
+#include "mini_parser.h"
 
 /*
 *	Esta funcion limpia todos los
@@ -20,22 +21,8 @@
 
 void	clean_tokenstream(t_vec *v)
 {
-	size_t	i;
-	t_tok	*t;
-
-	i = 0;
-	while (i < v->size)
-	{
-		t = (t_tok *)ft_vec_get(v, i);
-		if (!t)
-		{
-			i++;
-			continue ;
-		}
-		ft_tstr_free(&t->s);
-		i++;
-	}
-	ft_vec_free(v);
+	while (v->size)
+		collapse_at(v, 0);
 }
 
 /*
@@ -76,31 +63,29 @@ static void	manage_paren(t_tok *t, size_t *paren_l)
 *	diferente que contiene tokens que hay en esa string
 */
 
-t_vec	lex(t_string *s)
+bool	lex(t_string *s, t_vec *tokv)
 {
-	t_vec	out;
 	size_t	offst;
 	size_t	paren_l;
 
 	if (!s || !s->len)
-		return ((t_vec){0});
+		return (false);
 	paren_l = 0;
 	offst = 0;
-	out = ft_vec(10, sizeof(t_tok));
 	while (offst < s->len)
 	{
-		try_lexas_spc(s, &out, &offst);
+		try_lexas_spc(s, tokv, &offst);
 		if (offst == SIZE_MAX)
-			return (clean_tokenstream(&out), (t_vec){0});
-		if (!try_lexas_qs(s, &out, &offst))
-			return (clean_tokenstream(&out), (t_vec){0});
-		try_lexas_ident(s, &out, &offst);
+			return (clean_tokenstream(tokv), false);
+		if (!try_lexas_qs(s, tokv, &offst))
+			return (clean_tokenstream(tokv), false);
+		try_lexas_ident(s, tokv, &offst);
 		try_lexas_comment(s, &offst);
-		try_lexas_op(s, &out, &offst);
-		manage_paren((t_tok *)ft_vec_peek_last(&out), &paren_l);
+		try_lexas_op(s, tokv, &offst);
+		manage_paren((t_tok *)ft_vec_peek_last(tokv), &paren_l);
 	}
 	if (paren_l != 0)
-		return (clean_err(ANSI_RED"error: "ANSI_RESET"unclosed paren\n", &out),
-			(t_vec){0});
-	return (out);
+		return (clean_err(ANSI_RED"error: "ANSI_RESET"unclosed paren\n", tokv),
+			false);
+	return (true);
 }

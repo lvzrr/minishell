@@ -79,11 +79,12 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 {
 	t_vec	hdoc_ret;
 
+	hdoc_ret = ft_vec(10, sizeof(t_tok));
 	while (1)
 	{
 		read_l(&data->prompt, &hdoc_ret, false);
 		if (data->hdoc_terminate)
-			return (clean_tokenstream(&hdoc_ret),
+			return (clean_tokenstream(&hdoc_ret), ft_vec_free(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data), false);
 		omit_hdoc(&hdoc_ret);
 		if (!hdoc_ret.size && !hdoc_ret.data)
@@ -93,7 +94,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 		}
 		post_process(&hdoc_ret, data);
 		if (check_vec_eq(&hdoc_ret, hdoc_exit))
-			return (clean_tokenstream(&hdoc_ret),
+			return (clean_tokenstream(&hdoc_ret), ft_vec_free(&hdoc_ret),
 				clean_tokenstream(hdoc_exit), default_prompt(data)
 				, true);
 		else
@@ -147,13 +148,13 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 	if (!hdoc_exit.size
 		&& ((((t_tok *)ft_vec_peek_last(tokv))->type == TOK_HDOC)
 			|| (((t_tok *)ft_vec_get(tokv, idx)) + 1)->type != TOK_IDENT))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "
+		return (ft_vec_free(&hdoc_exit), ft_fprintf(2, ANSI_RED"syntax error: "
 				ANSI_RESET"no hdoc terminator\n"), false);
 	else if (!hdoc_exit.size)
-		return (true);
+		return (ft_vec_free(&hdoc_exit), true);
 	if (data->debug)
 		dump_tokenstream("HDOC RETURN SEQ", &hdoc_exit);
 	hdoc_prompt(data);
 	hdoc_loop(&hdoc_exit, idx, tokv, data);
-	return (true);
+	return (ft_vec_free(&hdoc_exit), true);
 }

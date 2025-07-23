@@ -56,33 +56,14 @@ bool	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 	if (!line.len || !line.data)
 	{
 		ft_tstr_free(&line);
-		*tokv = (t_vec){0};
+		clean_tokenstream(tokv);
 		return (true);
 	}
 	if (*line.data && addhist)
 		add_history(line.data);
-	*tokv = lex(&line);
+	lex(&line, tokv);
 	ft_tstr_free(&line);
 	return (true);
-}
-
-void	read_l_raw(t_data *data, t_vec *tokv, bool addhist)
-{
-	t_string	line;
-
-	line = ft_readline(&data->prompt, false);
-	ft_tstr_trim(&line, " \t\n\r");
-	ft_readline(&data->prompt, true);
-	if (!line.len || !line.data)
-	{
-		ft_tstr_free(&line);
-		*tokv = (t_vec){0};
-		return ;
-	}
-	if (*line.data && addhist)
-		add_history(line.data);
-	*tokv = lex(&line);
-	ft_tstr_free(&line);
 }
 
 /*

@@ -32,6 +32,7 @@ typedef struct s_data
 	bool		under_valgrind;
 	char		*invocation;
 	t_string	oneliner_s;
+	t_vec		tokv;
 	t_vec		env;
 	t_string	*path;
 	t_string	*username;
