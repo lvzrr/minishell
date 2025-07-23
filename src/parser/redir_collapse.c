@@ -17,7 +17,9 @@
  *	propagar errores en este archivo, basicamente
  *	si no se cumple la primera condicion de cada
  *	función, error + descartar input, lo hago
- *	mañana que es muy tarde ya
+ *	mañana que es muy tarde ya.
+ *
+ *	TL;DR: hacer que el parser pueda devolver errores
  */
 
 bool	rr(t_tok *t, t_vec *tokv, size_t i)
