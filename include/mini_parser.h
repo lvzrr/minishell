@@ -18,9 +18,6 @@
 
 typedef struct s_node	t_node;
 
-// TODO: llenar las variables de acceso frecuente
-// para evitar buscarlas todo el rato
-
 typedef struct s_data
 {
 	t_string	prompt;
