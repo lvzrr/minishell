@@ -55,7 +55,7 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 
 	t = (t_tok *)ft_vec_get(tokv, idx);
 	if (t->type == TOK_HDOC && idx + 1 < tokv->size
-		&& (t + 1)->type == TOK_IDENT)
+		&& isstringtoken(t + 1))
 	{
 		tokenseq_end = ft_vec(tokv->size - idx, sizeof(t_tok));
 		vec_push_tokens_from(&tokenseq_end, tokv, idx);
