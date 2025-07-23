@@ -35,6 +35,7 @@ typedef enum e_toktype
 	TOK_HDOC,
 	TOK_RR,
 	TOK_AND,
+	TOK_AMPER,
 	TOK_PIPE,
 	TOK_EQ,
 	TOK_OR,

@@ -43,6 +43,8 @@ const char	*get_token_pretty_1(t_toktype t)
 {
 	if (t == TOK_LR)
 		return ("TOK_LR");
+	if (t == TOK_AMPER)
+		return ("TOK_AMPER");
 	else if (t == TOK_RAPPEND)
 		return ("TOK_RAPPEND");
 	else if (t == TOK_REDIR)

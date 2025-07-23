@@ -21,7 +21,7 @@ t_toktype	get_token_type_1(t_string *s)
 	else if (*s->data == '>')
 		return (TOK_RR);
 	else if (*s->data == '&')
-		return (TOK_AND);
+		return (TOK_AMPER);
 	else if (*s->data == '|')
 		return (TOK_PIPE);
 	else if (*s->data == '(')
