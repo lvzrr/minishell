@@ -24,9 +24,9 @@
 
 bool	rr(t_tok *t, t_vec *tokv, size_t i)
 {
-	ft_tstr_clear(&t->s);
 	if (i + 1 < tokv->size && isstringtoken(t + 1))
 	{
+		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 		collapse_at(tokv, i + 1);
 	}
@@ -47,9 +47,9 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i)
 
 bool	rl(t_tok *t, t_vec *tokv, size_t i)
 {
-	ft_tstr_clear(&t->s);
 	if (i + 1 < tokv->size && isstringtoken(t + 1))
 	{
+		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 		collapse_at(tokv, i + 1);
 	}
@@ -62,9 +62,9 @@ bool	rl(t_tok *t, t_vec *tokv, size_t i)
 
 bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 {
-	ft_tstr_clear(&t->s);
 	if (i + 1 < tokv->size && isstringtoken(t + 1))
 	{
+		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
 		collapse_at(tokv, i + 1);
 	}
@@ -85,11 +85,11 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 {
-	ft_tstr_clear(&t->s);
 	if (i + 1 < tokv->size && isstringtoken(t + 1)
 		&& i > 0 && isstringtoken(t - 1)
 		&& ft_isnumeric((t - 1)->s.data) && ft_isnumeric((t + 1)->s.data))
 	{
+		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, (t - 1)->s.data, (t - 1)->s.len);
 		ft_tstr_push(&t->s, ':');
 		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
