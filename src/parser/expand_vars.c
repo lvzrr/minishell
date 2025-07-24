@@ -76,12 +76,8 @@ ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset)
 			*offset = i++;
 		else if (i > 0 && t->s.data[i] == '$' && t->s.data[i - 1] != '\\')
 			return (i);
-		else if (i >= 1 && t->s.data[i] == '$' && t->s.data[i - 1] == '\\')
-		{
-			remove_char(&t->s, i - 1);
-			*offset = i++;
-			continue ;
-		}
+		else if (i == 0 && t->s.data[i] == '$' && !ft_isspace(t->s.data[i + 1]))
+			return (i);
 		i++;
 	}
 	return (-1);
@@ -102,7 +98,7 @@ static void	expand_string(t_tok *t, t_data *data)
 		l = 0;
 		while (pos + l < t->s.len && !ft_isspace(t->s.data[pos + l])
 			&& t->s.data[pos + l] != '\\' && t->s.data[pos + l] != '$'
-			&& t->s.data[pos + l] != '\'' && t->s.data[pos + l] != '\"')
+			&& t->s.data[pos + l] != '\'')
 			++l;
 		vname = ft_tstr_from_slice(t->s.data + (size_t)pos, l);
 		while (l-- > 0)

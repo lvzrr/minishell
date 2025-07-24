@@ -22,7 +22,7 @@ bool	catch_forbidden(t_vec *tokv)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
 		if (t && t->type == TOK_IDENT && (!ft_strcmp(t->s.data, "if")
-			|| !ft_strcmp(t->s.data, "for")))
+				|| !ft_strcmp(t->s.data, "for")))
 		{
 			ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"control "
 				"expressions aren't supported\n");
@@ -33,7 +33,7 @@ bool	catch_forbidden(t_vec *tokv)
 	if (!isstringtoken(t) && !isredirect(t->type))
 	{
 		ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-			 "expected identifier or redirect as last token\n");
+			"expected identifier or redirect as last token\n");
 		return (false);
 	}
 	return (true);
