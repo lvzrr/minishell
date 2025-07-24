@@ -152,6 +152,8 @@ void	delete_subs(t_vec *tokv, size_t start);
 bool	manage_redirs(t_vec *tokv);
 bool	isstringtoken(t_tok	*t);
 bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i);
+bool	catch_forbidden(t_vec *tokv);
+bool	isredirect(t_toktype t);
 bool	rr(t_tok *t, t_vec *tokv, size_t i);
 bool	rl(t_tok *t, t_vec *tokv, size_t i);
 bool	rapp(t_tok *t, t_vec *tokv, size_t i);

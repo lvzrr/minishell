@@ -143,23 +143,3 @@ void	detect_vars(t_vec *tokv, t_data *data)
 *	hay le cambia el tipo a un identificador para que so
 *	corra otro heredoc a partir de él.
 */
-
-void	omit_hdoc(t_vec *tokv)
-{
-	size_t		i;
-	t_tok		*t;
-
-	i = 0;
-	while (i < tokv->size)
-	{
-		t = (t_tok *)ft_vec_get(tokv, i);
-		if (!t || !t->s.data || !t->s.len)
-		{
-			i++;
-			continue ;
-		}
-		if (t->type == TOK_HDOC)
-			t->type = TOK_IDENT;
-		i++;
-	}
-}

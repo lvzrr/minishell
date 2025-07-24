@@ -135,5 +135,5 @@ bool	post_process(t_vec *tokv, t_data *data)
 		}
 		i++;
 	}
-	return (redirs_and_clean(tokv));
+	return (redirs_and_clean(tokv) && catch_forbidden(tokv));
 }

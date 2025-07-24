@@ -12,7 +12,7 @@
 
 #include "mini_parser.h"
 
-static bool	isredirect(t_toktype t)
+bool	isredirect(t_toktype t)
 {
 	return (t == TOK_REDIR_NN || t == TOK_REDIR_IN
 		|| t == TOK_REDIR_TO || t == TOK_APPEND_TO || t == TOK_REDIR_FROM_FD
