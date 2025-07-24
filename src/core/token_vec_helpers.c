@@ -44,7 +44,7 @@ bool	check_vec_eq(t_vec *a, t_vec *b)
 *	Copia los tokens y sus strings de un vector a otro
 */
 
-static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
+void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 {
 	size_t	i;
 	t_tok	t;
@@ -87,7 +87,7 @@ static void	vec_deep_copy(t_vec *a, t_vec *b, size_t s)
 *   nuevo.
 */
 
-static void	copy_helper(t_vec *a, t_vec *b, t_vec *c, size_t idx)
+void	copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx)
 {
 	size_t	i;
 	t_tok	t;
@@ -100,34 +100,30 @@ static void	copy_helper(t_vec *a, t_vec *b, t_vec *c, size_t idx)
 		ft_vec_push(c, &t, 1);
 		i++;
 	}
-	i = 0;
-	while (i < b->size)
-	{
-		t = *((t_tok *)ft_vec_get(b, i));
-		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(b, i))->s);
-		ft_vec_push(c, &t, 1);
-		i++;
-	}
+	ft_vec_push(c, b, 1);
 }
 
-void	vec_push_tokens(t_vec *a, t_vec *b, size_t *idx)
+void	vec_push_hdoc(t_vec *a, t_string *b, size_t *idx)
 {
-	t_vec			c;
+	t_tok			newtok;
+	t_tok			*old;
 
+	ft_tstr_push(b, '\n');
 	if (*idx == a->size)
 	{
-		vec_deep_copy(a, b, 0);
-		*idx += b->size;
-		clean_tokenstream(b);
+		old = ((t_tok *)ft_vec_peek_last(a));
+		if (old && old->type == TOK_WRITE_IN)
+			ft_tstr_pushslice(&old->s, b->data, b->len);
+		else
+		{
+			newtok = (t_tok){.type = TOK_WRITE_IN, .s = ft_tstr_clone(b)};
+			ft_vec_push(a, &newtok, 1);
+			(*idx)++;
+		}
+		ft_tstr_free(b);
 		return ;
 	}
-	c = ft_vec(a->size + b->size, sizeof(t_tok));
-	copy_helper(a, b, &c, *idx);
-	vec_deep_copy(&c, a, (*idx)++);
-	clean_tokenstream(a);
-	ft_vec_free(a);
-	clean_tokenstream(b);
-	*a = c;
+	vec_push_indexed(a, b, idx);
 }
 
 /*

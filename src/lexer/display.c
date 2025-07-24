@@ -105,6 +105,8 @@ const char	*get_token_pretty_3(t_toktype t)
 		return ("TOK_REDIR_FROM_FD");
 	else if (t == TOK_APPEND_FROM_FD)
 		return ("TOK_APPEND_FROM_FD");
+	else if (t == TOK_WRITE_IN)
+		return ("TOK_WRITE_IN");
 	else
 		return ("TOK_UNKNOWN");
 }

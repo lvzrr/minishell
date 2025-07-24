@@ -84,28 +84,25 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	t_vec *tokv, t_data *data)
 {
-	t_vec	hdoc_ret;
+	t_string	hdoc_ret;
 
-	hdoc_ret = ft_vec(10, sizeof(t_tok));
 	while (1)
 	{
-		read_l(&data->prompt, &hdoc_ret, false);
-		omit_hdoc(&hdoc_ret);
+		hdoc_ret = read_l_hdoc(&data->prompt);
 		if (data->hdoc_terminate)
-			return (clean_tokenstream(&hdoc_ret), ft_vec_free(&hdoc_ret),
-				clean_tokenstream(hdoc_exit), default_prompt(data), false);
-		if (!hdoc_ret.size && !hdoc_ret.data)
+			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
+				default_prompt(data), false);
+		if (!hdoc_ret.len && !hdoc_ret.data)
 		{
-			clean_tokenstream(&hdoc_ret);
+			ft_tstr_clear(&hdoc_ret);
 			continue ;
 		}
-		post_process(&hdoc_ret, data);
-		if (check_vec_eq(&hdoc_ret, hdoc_exit))
-			return (clean_tokenstream(&hdoc_ret), ft_vec_free(&hdoc_ret),
-				clean_tokenstream(hdoc_exit), default_prompt(data)
-				, true);
+		if (hdoc_ret.len == ((t_tok *)hdoc_exit->data)[0].s.len
+			&& !ft_strcmp(hdoc_ret.data, ((t_tok *)hdoc_exit->data)[0].s.data))
+			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
+				default_prompt(data), true);
 		else
-			vec_push_tokens(tokv, &hdoc_ret, &idx);
+			vec_push_hdoc(tokv, &hdoc_ret, &idx);
 	}
 }
 
