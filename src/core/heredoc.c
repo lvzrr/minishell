@@ -74,10 +74,12 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 *	la posición correspondiente.
 *
 *	lo voy a volver a comentar por si vuelve a pasar,
-*	hdoc_ret se libera FUERA de vec_push_tokens,
-*	actuando como actua tokv en este scope, y cada vez
-*	que tokv cambia (dentro de vec_push_tokens puede cambiar)
-*	se libera el viejo vector.
+*	hdoc_ret se libera FUERA de vec_push_hdoc.
+*
+*	hdoc_ret es una GLOBAL EN ESTE SCOPE.
+*
+*	TODAS LAS LINEAS QUE ENTREN AL HEREDOC SE ALMACENAN
+*	EN HDOC_RET. Para ahorrar memoria y ganar accesso rapido
 *
 */
 
