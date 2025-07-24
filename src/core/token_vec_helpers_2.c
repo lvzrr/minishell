@@ -12,7 +12,7 @@
 
 #include "core.h"
 
-void	copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx)
+bool	copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx)
 {
 	size_t	i;
 	t_tok	*t2;
@@ -31,9 +31,11 @@ void	copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx)
 	{
 		ft_tstr_pushslice(&t2->s, b->s.data, b->s.len);
 		free_tok(b);
+		return (true);
 	}
 	else
 		ft_vec_push(c, b, 1);
+	return (false);
 }
 
 void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
@@ -43,8 +45,10 @@ void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
 
 	newtok = (t_tok){.type = TOK_WRITE_IN, .s = ft_tstr_clone(b)};
 	c = ft_vec(a->size + 1, sizeof(t_tok));
-	copy_helper(a, &newtok, &c, *idx);
-	vec_deep_copy(&c, a, (*idx)++);
+	if (copy_helper(a, &newtok, &c, *idx))
+		vec_deep_copy(&c, a, *idx);
+	else
+		vec_deep_copy(&c, a, (*idx)++);
 	clean_tokenstream(a);
 	ft_vec_free(a);
 	ft_tstr_clear(b);
