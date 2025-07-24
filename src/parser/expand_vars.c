@@ -121,6 +121,8 @@ void	expand_vars(t_vec *tokv, t_data *data)
 		t = ft_vec_get_mut(tokv, i++);
 		if (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION)
 			delete_subs(tokv, --i);
+		// if (t->type == TOK_EQ)
+		// 	loader(t, tokv, data, i - 1);
 		else if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
 			continue ;
 		if (t->type == TOK_VAR)

@@ -29,4 +29,5 @@ void	load_hot_vars(t_data *data);
 t_var	*getvar(char *name, t_vec *env);
 void	load_invocation_helper(t_data *data, t_var oldvar);
 void	set_shell_var(t_data *data);
+void	load_var(t_string *name, t_string *value, t_vec *env);
 #endif

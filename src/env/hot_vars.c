@@ -12,25 +12,6 @@
 
 #include "env.h"
 
-/*
-*	Funcion que busca variables en el entorno
-*/
-
-t_var	*getvar(char *name, t_vec *env)
-{
-	t_var		*v;
-	size_t		i;
-
-	i = 0;
-	while (i < env->size)
-	{
-		v = ft_vec_get_mut(env, i++);
-		if (v && !ft_strcmp(name, v->name.data))
-			return (v);
-	}
-	return (NULL);
-}
-
 static void	check_valgrind(t_data *data)
 {
 	t_var	*tmp;
