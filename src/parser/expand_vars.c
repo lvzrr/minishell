@@ -102,7 +102,7 @@ static void	expand_string(t_tok *t, t_data *data)
 		l = 0;
 		while (pos + l < t->s.len && !ft_isspace(t->s.data[pos + l])
 			&& t->s.data[pos + l] != '\\' && t->s.data[pos + l] != '$'
-			&& t->s.data[pos + l] != '\'')
+			&& t->s.data[pos + l] != '\'' && t->s.data[pos + l] != '\"')
 			++l;
 		vname = ft_tstr_from_slice(t->s.data + (size_t)pos, l);
 		while (l-- > 0)
