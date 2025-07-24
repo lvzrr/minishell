@@ -72,6 +72,13 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 *	si lo es, limpia la condicion y sale,
 *	si no, añade al stream los tokens en
 *	la posición correspondiente.
+*
+*	lo voy a volver a comentar por si vuelve a pasar,
+*	hdoc_ret se libera FUERA de vec_push_tokens,
+*	actuando como actua tokv en este scope, y cada vez
+*	que tokv cambia (dentro de vec_push_tokens puede cambiar)
+*	se libera el viejo vector.
+*
 */
 
 static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
