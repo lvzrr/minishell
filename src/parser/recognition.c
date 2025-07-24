@@ -135,11 +135,3 @@ void	detect_vars(t_vec *tokv, t_data *data)
 		dump_tokenstream("PRE_EXPANSION", tokv);
 	expand_vars(tokv, data);
 }
-
-/*
-*	Cuando estamos dentro de un heredoc y se introduce la
-*	secuencia '<<', hay que interpretarla como un string
-*	normal, asi que recorre todo en busca de ese token y si lo
-*	hay le cambia el tipo a un identificador para que so
-*	corra otro heredoc a partir de él.
-*/
