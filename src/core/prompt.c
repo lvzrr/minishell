@@ -33,7 +33,7 @@ void	default_prompt(t_data *data)
 		ft_tstr_pushslice(&data->prompt, data->username->data,
 			data->username->len);
 		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
-		ft_tstr_push(&data->prompt, '@');
+		ft_tstr_pushslice(&data->prompt, " @ .../", 7);
 		append_path_currdir(&data->prompt, data->pwd);
 	}
 	else
