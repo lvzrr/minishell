@@ -54,7 +54,7 @@ bool		heredoc(t_vec *tokv, t_data *data);
 void		hdoc_prompt(t_data *data);
 void		default_prompt(t_data *data);
 void		*flag_updater(t_data *datap);
-t_string	read_l_hdoc(t_string *prompt);
+void		read_l_hdoc(t_string *prompt, t_string *line);
 void		hdoc_signal_setup(void);
 void		phelp(void);
 void		s_handler(int signal);

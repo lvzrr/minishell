@@ -120,7 +120,7 @@ void	vec_push_hdoc(t_vec *a, t_string *b, size_t *idx)
 			ft_vec_push(a, &newtok, 1);
 			(*idx)++;
 		}
-		ft_tstr_free(b);
+		ft_tstr_clear(b);
 		return ;
 	}
 	vec_push_indexed(a, b, idx);

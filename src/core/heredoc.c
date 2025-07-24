@@ -86,9 +86,10 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 {
 	t_string	hdoc_ret;
 
+	hdoc_ret = ft_tstr_new(100);
 	while (1)
 	{
-		hdoc_ret = read_l_hdoc(&data->prompt);
+		read_l_hdoc(&data->prompt, &hdoc_ret);
 		if (data->hdoc_terminate)
 			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
 				default_prompt(data), false);

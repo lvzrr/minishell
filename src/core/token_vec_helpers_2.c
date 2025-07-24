@@ -23,6 +23,6 @@ void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
 	vec_deep_copy(&c, a, (*idx)++);
 	clean_tokenstream(a);
 	ft_vec_free(a);
-	ft_tstr_free(b);
+	ft_tstr_clear(b);
 	*a = c;
 }
