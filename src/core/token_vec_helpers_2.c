@@ -12,6 +12,30 @@
 
 #include "core.h"
 
+void	copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx)
+{
+	size_t	i;
+	t_tok	*t2;
+	t_tok	t;
+
+	i = 0;
+	while (i < idx)
+	{
+		t = *((t_tok *)ft_vec_get(a, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(a, i))->s);
+		ft_vec_push(c, &t, 1);
+		i++;
+	}
+	t2 = ft_vec_peek_last(c);
+	if (t2 && t2->type == TOK_WRITE_IN)
+	{
+		ft_tstr_pushslice(&t2->s, b->s.data, b->s.len);
+		free_tok(b);
+	}
+	else
+		ft_vec_push(c, b, 1);
+}
+
 void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
 {
 	t_vec			c;
