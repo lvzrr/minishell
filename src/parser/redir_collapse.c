@@ -109,6 +109,9 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 	if ((i > 0 && !is_preceded_by_ident(t - 1)) || i == 0)
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' must be"
 				" preceded by an identifier\n"), false);
+	if (i + 1 < tokv->size && isstringtoken(t))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' must be"
+				" followed by a delimeter or a newline\n"), false);
 	(t - 1)->type = TOK_REDIR_NN;
 	return (true);
 }
