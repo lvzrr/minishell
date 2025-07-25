@@ -26,7 +26,6 @@ void	varexp_parser(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 
 	(void)tokv;
 	(void)data;
-	dump_tokenstream("hello", tokv);
 	if ((i > 0 && !isstringtoken(t - 1)) || i == 0)
 		t->type = TOK_IDENT;
 	exported = isexported(t, i);
