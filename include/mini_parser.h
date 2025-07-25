@@ -163,4 +163,5 @@ bool	is_preceded_by_ident(t_tok *t);
 bool	delete_redundant(t_vec *tokv, size_t i);
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i);
 void	clean_operators(t_vec *tokv);
+bool	isoperator(t_tok *t);
 #endif

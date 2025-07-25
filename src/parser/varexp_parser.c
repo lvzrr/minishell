@@ -12,6 +12,14 @@
 
 #include "mini_parser.h"
 
+/*
+ *	export hello = world	expresion invalida
+ *
+ *	export hello=world		expresion valida
+ *	export hello= world		expresion valida, pero la asignacion esta
+ *	                                          vacía.
+ */
+
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
 {
 	t_string	empty;
@@ -44,6 +52,15 @@ static bool	isexported(t_tok *t, size_t i)
 		return (true);
 	return (false);
 }
+
+/*
+*	Los numeros magicos son básicamente un
+*	rewind, por que al limpiar del stream la
+*	expresion del export, el puntero 't', se
+*	queda en una región invalida del vector,
+*	y hay que llevarlo al indice que le corresponde
+*	cuando la seccion ha sido borrada.
+*/
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 {
