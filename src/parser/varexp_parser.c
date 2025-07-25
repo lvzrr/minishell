@@ -87,6 +87,23 @@ static bool	isexported(t_tok *t, size_t i)
 *	borran el '&&' para que no tire error de 'operador en token
 *	terminador', ya que no es culpa del usuario.
 *
+*
+*	ADEMAS:
+*	esta secuencia no la admito.
+*
+*	$ export hello= algo
+*
+*	igual que las shells canonicas no admiten
+*
+*	$ export hello=world hola
+*
+*	al interpretar el espacio de hello como la
+*	variable en este caso:
+*
+*	$ export hello= algo
+*
+* 	'algo' seria en este caso lo que hola al
+* 	anterior, por lo tanto no es válido.
 */
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
