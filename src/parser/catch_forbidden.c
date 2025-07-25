@@ -31,7 +31,7 @@ bool	catch_forbidden(t_vec *tokv)
 		}
 		i++;
 	}
-	if (!isstringtoken(t) && !isredirect(t->type))
+	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
 	{
 		ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
 			"expected identifier or redirect as last token\n");

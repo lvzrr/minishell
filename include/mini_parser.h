@@ -16,6 +16,7 @@
 # include "mini_lexer.h"
 # include "core.h"
 # include "conv.h"
+# include "env.h"
 
 typedef struct s_node	t_node;
 
@@ -142,10 +143,10 @@ typedef struct s_opnode
 void	collapse_at(t_vec *tokv, size_t i);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
 bool	post_process(t_vec *tokv, t_data *data);
-void	detect_vars(t_vec *tokv, t_data *data);
+bool	detect_vars(t_vec *tokv, t_data *data);
 void	del_unused(t_vec *tokv, size_t idx);
 void	omit_hdoc(t_vec *tokv);
-void	expand_vars(t_vec *tokv, t_data *data);
+bool	expand_vars(t_vec *tokv, t_data *data);
 ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset);
 void	remove_scaping_singledollar(t_tok *t);
 void	delete_subs(t_vec *tokv, size_t start);
@@ -160,5 +161,6 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i);
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i);
 bool	is_preceded_by_ident(t_tok *t);
 bool	delete_redundant(t_vec *tokv, size_t i);
-void	varexp_parser(t_tok *t, t_vec *tokv, t_data *data, size_t i);
+size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i);
+void	clean_operators(t_vec *tokv);
 #endif

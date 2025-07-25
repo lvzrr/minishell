@@ -12,22 +12,54 @@
 
 #include "mini_parser.h"
 
+static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
+{
+	t_string	empty;
+
+	if (i + 1 >= tokv->size || (t + 1)->type == TOK_SPACE)
+	{
+		empty = ft_tstr_new(1);
+		load_var(&(t - 1)->s, &empty, &data->env);
+		ft_tstr_free(&empty);
+	}
+	else if (i + 1 < tokv->size && isstringtoken(t + 1))
+	{
+		ft_tstr_trim(&(t - 1)->s, "$");
+		load_var(&(t - 1)->s, &(t + 1)->s, &data->env);
+	}
+	collapse_at(tokv, i - 3);
+	collapse_at(tokv, i - 3);
+	collapse_at(tokv, i - 3);
+	collapse_at(tokv, i - 3);
+	collapse_at(tokv, i - 3);
+}
+
 static bool	isexported(t_tok *t, size_t i)
 {
 	if (i > 2 && (t - 3)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 3)->s.data))
 		return (true);
+	else if (i > 3 && (t - 4)->type == TOK_IDENT
+		&& !ft_strcmp("export", (t - 4)->s.data))
+		return (true);
 	return (false);
 }
 
-void	varexp_parser(t_tok *t, t_vec *tokv, t_data *data, size_t i)
+size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 {
 	bool	exported;
 
-	(void)tokv;
-	(void)data;
-	if ((i > 0 && !isstringtoken(t - 1)) || i == 0)
-		t->type = TOK_IDENT;
-	exported = isexported(t, i);
-	(void)exported;
+	exported = isexported(*t, i);
+	if ((i > 0 && ((*t) - 1)->type != TOK_IDENT) || i == 0)
+	{
+		(*t)->type = TOK_IDENT;
+		if (exported)
+			return ((*t) -= 1, false);
+	}
+	if (exported)
+	{
+		load_exported(*t, data, tokv, i);
+		return ((*t) -= 3, true);
+	}
+	return ((*t) -= 1, true);
 }

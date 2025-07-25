@@ -110,7 +110,18 @@ static void	expand_string(t_tok *t, t_data *data)
 	t->type = TOK_STRING_DQ;
 }
 
-void	expand_vars(t_vec *tokv, t_data *data)
+/*
+ *	Tenemos que manejar export DURANTE EL PARSING, por que si no,
+ *	cosas como:
+ *
+ *	$ export miau="miau miau" && "$miau"
+ *
+ *	no se expandría, se quedarían como dos nodos en el arbol,
+ *	en el cual hay un nodo con una string vacia, y habría que
+ *	pasar el comando dos veces, cosa que no queremos.
+*/
+
+bool	expand_vars(t_vec *tokv, t_data *data)
 {
 	size_t	i;
 	t_tok	*t;
@@ -122,10 +133,9 @@ void	expand_vars(t_vec *tokv, t_data *data)
 		if (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION)
 			delete_subs(tokv, --i);
 		else if (t->type == TOK_EQ)
-		{
-			varexp_parser(t, tokv, data, i - 1);
-			continue ;
-		}
+			if(!varexp_parser(&t, tokv, data, i-- - 1))
+				return (ft_fprintf(2, ANSI_RED"error: "
+					   ANSI_RESET"bad assignment\n"), false);
 		if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
 			continue ;
 		if (t->type == TOK_VAR)
@@ -136,4 +146,5 @@ void	expand_vars(t_vec *tokv, t_data *data)
 			remove_scaping_singledollar(t);
 		}
 	}
+	return (true);
 }

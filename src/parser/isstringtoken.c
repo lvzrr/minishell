@@ -18,5 +18,5 @@ bool	isstringtoken(t_tok	*t)
 
 	ty = t->type;
 	return (ty == TOK_STRING_SQ || ty == TOK_STRING_DQ
-		|| ty == TOK_STRING || ty == TOK_IDENT);
+		|| ty == TOK_STRING || ty == TOK_IDENT || ty == TOK_STRING_EMPTY);
 }
