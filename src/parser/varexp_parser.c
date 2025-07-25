@@ -60,6 +60,16 @@ static bool	isexported(t_tok *t, size_t i)
 *	queda en una región invalida del vector,
 *	y hay que llevarlo al indice que le corresponde
 *	cuando la seccion ha sido borrada.
+*
+*
+*	los checks y colapsos de salida son para cuando
+*	el export es parte de una secuencia como:
+*
+*	$ miau && export ...
+*
+*	borran el '&&' para que no tire error de 'operador en token
+*	terminador', ya que no es culpa del usuario.
+*
 */
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
@@ -76,6 +86,10 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	if (exported)
 	{
 		load_exported(*t, data, tokv, i);
+		if (tokv->size > 1 && isoperator((t_tok *)ft_vec_peek_last(tokv) - 1))
+			collapse_at(tokv, tokv->size - 1);
+		else if (tokv->size && isoperator((t_tok *)ft_vec_peek_last(tokv)))
+			collapse_at(tokv, tokv->size);
 		return ((*t) -= 3, true);
 	}
 	return ((*t) -= 1, true);
