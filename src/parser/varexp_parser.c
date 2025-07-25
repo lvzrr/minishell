@@ -30,10 +30,10 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
 
 /*
  *	export hello = world	expresion invalida
+ *	export hello= world		expresion invalida
  *
  *	export hello=world		expresion valida
- *	export hello= world		expresion valida, pero la asignacion esta
- *	                                          vacía.
+ *	export hello= && world	expresion valida
  */
 
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
