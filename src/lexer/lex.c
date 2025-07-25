@@ -43,7 +43,7 @@ static void	clean_err(char *str, t_vec *out)
 *	cerrados.
 */
 
-static void	manage_paren(t_tok *t, size_t *paren_l)
+static void	manage_paren(t_tok *t, size_t *paren_l, bool *plev)
 {
 	if (!t || !t->s.data || !t->s.len)
 		return ;
@@ -51,6 +51,8 @@ static void	manage_paren(t_tok *t, size_t *paren_l)
 		(*paren_l)++;
 	else if (t->type == TOK_RPAREN)
 		(*paren_l)--;
+	if ((*(ssize_t *)paren_l) < 0)
+		*plev = false;
 }
 
 /*
@@ -67,10 +69,12 @@ bool	lex(t_string *s, t_vec *tokv)
 {
 	size_t	offst;
 	size_t	paren_l;
+	bool	parenl;
 
 	if (!s || !s->len)
 		return (false);
 	paren_l = 0;
+	parenl = true;
 	offst = 0;
 	while (offst < s->len)
 	{
@@ -82,9 +86,9 @@ bool	lex(t_string *s, t_vec *tokv)
 		try_lexas_ident(s, tokv, &offst);
 		try_lexas_comment(s, &offst);
 		try_lexas_op(s, tokv, &offst);
-		manage_paren((t_tok *)ft_vec_peek_last(tokv), &paren_l);
+		manage_paren((t_tok *)ft_vec_peek_last(tokv), &paren_l, &parenl);
 	}
-	if (paren_l != 0)
+	if (paren_l != 0 || !parenl)
 		return (clean_err(ANSI_RED"error: "ANSI_RESET"unclosed paren\n", tokv),
 			false);
 	return (true);
