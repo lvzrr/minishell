@@ -133,9 +133,9 @@ bool	expand_vars(t_vec *tokv, t_data *data)
 		if (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION)
 			delete_subs(tokv, --i);
 		else if (t->type == TOK_EQ)
-			if(!varexp_parser(&t, tokv, data, i-- - 1))
+			if (!varexp_parser(&t, tokv, data, i-- -1))
 				return (ft_fprintf(2, ANSI_RED"error: "
-					   ANSI_RESET"bad assignment\n"), false);
+						ANSI_RESET"bad assignment\n"), false);
 		if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
 			continue ;
 		if (t->type == TOK_VAR)

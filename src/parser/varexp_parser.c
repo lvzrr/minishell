@@ -12,6 +12,22 @@
 
 #include "mini_parser.h"
 
+static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
+{
+	size_t	i2;
+
+	i2 = 2;
+	while (i + i2 < tokv->size)
+	{
+		if (isstringtoken(t + i2))
+			return (false);
+		else if (isoperator(t + i2))
+			return (true);
+		++i2;
+	}
+	return (true);
+}
+
 /*
  *	export hello = world	expresion invalida
  *
@@ -66,6 +82,7 @@ static bool	isexported(t_tok *t, size_t i)
 *	el export es parte de una secuencia como:
 *
 *	$ miau && export ...
+*	$ miau &&export ...
 *
 *	borran el '&&' para que no tire error de 'operador en token
 *	terminador', ya que no es culpa del usuario.
@@ -85,6 +102,8 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	}
 	if (exported)
 	{
+		if (!opbeforeident(*t, tokv, i))
+			return (false);
 		load_exported(*t, data, tokv, i);
 		if (tokv->size > 1 && isoperator((t_tok *)ft_vec_peek_last(tokv) - 1))
 			collapse_at(tokv, tokv->size - 1);
