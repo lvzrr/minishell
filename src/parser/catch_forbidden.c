@@ -47,7 +47,7 @@ bool	catch_forbidden(t_vec *tokv)
 		else if (t && i + 1 < tokv->size && isredirect(t->type)
 			&& isstringtoken(t + 1))
 			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"redirects "
-					"must be followed by another or an operator\n"), false);
+					"must be followed by redirects or an operator\n"), false);
 		i++;
 	}
 	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
