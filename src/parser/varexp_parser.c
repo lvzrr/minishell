@@ -166,6 +166,8 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
 {
 	bool	exported;
 
+	if (*i == 1)
+		return ((*t)->type = TOK_IDENT, true);
 	exported = isexported(*t, *i - 1);
 	if ((exported && check_interpret(*t, *i - 1)) || !exported)
 		return ((*t)->type = TOK_IDENT, (*t) -= 1, true);

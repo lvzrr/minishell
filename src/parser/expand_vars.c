@@ -130,9 +130,9 @@ bool	expand_vars(t_vec *tokv, t_data *data)
 	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i++);
-		if (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION)
+		if (t && (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION))
 			delete_subs(tokv, --i);
-		else if (t->type == TOK_EQ)
+		else if (t && t->type == TOK_EQ)
 			if (!varexp_parser(&t, tokv, data, &i))
 				return (ft_fprintf(2, ANSI_RED"error: "
 						ANSI_RESET"bad assignment\n"), false);
