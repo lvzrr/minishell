@@ -199,7 +199,7 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
 		load_exported(*t, data, tokv, *i - 1);
 		tmp = ft_tstr_from_cstr("__builtin_export");
 		tok_push_indexed(tokv, &tmp, *i - 4);
-		*t = ft_vec_get_mut(tokv, *i - 2);
+		*t = ft_vec_get_mut(tokv, *i - 4);
 		return (ft_tstr_free(&tmp), (*i) -= 3, true);
 	}
 	return (true);
