@@ -27,6 +27,22 @@ static bool	check_invalid_export(t_tok *t, size_t i)
 				&& !ft_strcmp(t->s.data, "export"))));
 }
 
+bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
+{
+	if (check_invalid_export(t, i))
+		return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"export "
+				"not valid in this context\n"), false);
+	else if (t && i + 1 < tokv->size && isredirect(t->type)
+		&& isstringtoken(t + 1))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"redirects "
+				"must be followed by redirects or an operator\n"), false);
+	else if (t && ((i > 1 && t->type == TOK_HDOC && isoperator(t - 1))
+			|| (i == 0 && t->type == TOK_HDOC)))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
+				"heredoc must be preceded by a command or redirect\n"), false);
+	return (true);
+}
+
 bool	catch_forbidden(t_vec *tokv)
 {
 	size_t		i;
@@ -41,13 +57,8 @@ bool	catch_forbidden(t_vec *tokv)
 				|| !ft_strcmp(t->s.data, "while")))
 			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"control "
 					"expressions aren't supported\n"), false);
-		else if (check_invalid_export(t, i))
-			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"export "
-					"not valid in this context\n"), false);
-		else if (t && i + 1 < tokv->size && isredirect(t->type)
-			&& isstringtoken(t + 1))
-			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"redirects "
-					"must be followed by redirects or an operator\n"), false);
+		else if (!extra_checks(t, tokv, i))
+			return (false);
 		i++;
 	}
 	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))

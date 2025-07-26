@@ -54,6 +54,11 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 	t_vec	tokenseq_end;
 
 	t = (t_tok *)ft_vec_get(tokv, idx);
+	if (t->type == TOK_HDOC && idx > 0
+		&& isoperator(t - 1))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
+				"heredoc must be preceded by a command or redirect\n"),
+			(t_vec){0});
 	if (t->type == TOK_HDOC && idx + 1 < tokv->size
 		&& isstringtoken(t + 1))
 	{
@@ -61,6 +66,10 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 		vec_push_tokens_from(&tokenseq_end, tokv, idx);
 		return (tokenseq_end);
 	}
+	else if (t->type == TOK_HDOC && idx + 1 < tokv->size
+		&& !isstringtoken(t + 1))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "
+				ANSI_RESET"no hdoc terminator\n"), (t_vec){0});
 	return ((t_vec){0});
 }
 
@@ -152,8 +161,7 @@ bool	heredoc_routine(t_vec *tokv, t_data *data, size_t idx)
 	hdoc_signal_setup();
 	hdoc_exit = check_heredoc(tokv, idx);
 	if (!hdoc_exit.alloc_size)
-		return (ft_fprintf(2, ANSI_RED"syntax error: "
-				ANSI_RESET"no hdoc terminator\n"), false);
+		return (false);
 	else if (!hdoc_exit.size)
 		return (ft_vec_free(&hdoc_exit), true);
 	if (data->debug)
