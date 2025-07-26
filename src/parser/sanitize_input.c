@@ -16,7 +16,8 @@ bool	isoperator(t_tok *t)
 {
 	if (!t)
 		return (false);
-	return (t->type == TOK_AND || t->type == TOK_OR || t->type == TOK_SCOLON);
+	return (t->type == TOK_AND || t->type == TOK_OR || t->type == TOK_SCOLON
+		|| t->type == TOK_PIPE || t->type == TOK_AMPER);
 }
 
 void	clean_operators(t_vec *tokv)
