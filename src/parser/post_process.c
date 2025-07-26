@@ -94,11 +94,7 @@ static bool	redirs_and_clean(t_vec *tokv)
 *	colapsa secuencias de tokens y reconoce (y expande)
 *	variables en principio,
 *
-*	TODO: hacer una funcion antes
-*	de esta que encuentre asignaciones "inline", aunque
-*	se puede dejar asi por ahora.
-*
-*	El reconocimento de variables deberá ser greedy,
+*	El reconocimento de variables es greedy,
 *	es decir, si tenemos
 *
 *	$hola
@@ -110,6 +106,12 @@ static bool	redirs_and_clean(t_vec *tokv)
 *	las secuencias $hola\mundo
 *	se marcan como TOK_STRING_TOEXPAND
 *	así que podemos identificarlas después
+*	
+*	en detect_vars() automaticamente se quitan
+*	los espacios que no rompen el sentido semantico,
+*	ademas de detectar y asignar variables antes de
+*	colapsar las strings.
+*
 */
 
 bool	post_process(t_vec *tokv, t_data *data)
@@ -139,3 +141,10 @@ bool	post_process(t_vec *tokv, t_data *data)
 	}
 	return (redirs_and_clean(tokv) && catch_forbidden(tokv));
 }
+
+/*
+最後のダンス 二人だけの思い消したなら
+あこがれを 彼方へとつれて
+最後のダンス 気にいりのステップをふみながら
+今だけは そう このままでいた
+*/
