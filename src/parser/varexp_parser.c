@@ -40,6 +40,23 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
  *
  *	export hello=world		expresion valida
  *	export hello= && world	expresion valida
+ *
+ *	las secuencias que quita son de:
+ *	"export hello=world "
+ *
+ *	deja
+ *
+ *	" "
+ *
+ *	es decir, borra hasta justo el valor de despues.
+ *
+ *	además, acepta asignaciones del tipo:
+ *
+ *	export hello="$USER"
+ *
+ *	y expande el usuario antes de guardar la variable
+ *	al entorno.
+ *
  */
 
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
