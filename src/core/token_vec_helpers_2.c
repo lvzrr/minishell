@@ -54,3 +54,34 @@ void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
 	ft_tstr_clear(b);
 	*a = c;
 }
+
+static void	copy_helper_nocollapse(t_vec *a, t_tok *b, t_vec *c, size_t idx)
+{
+	size_t	i;
+	t_tok	t;
+
+	i = 0;
+	while (i < idx)
+	{
+		t = *((t_tok *)ft_vec_get(a, i));
+		t.s = ft_tstr_clone(&((t_tok *)ft_vec_get(a, i))->s);
+		ft_vec_push(c, &t, 1);
+		i++;
+	}
+	ft_vec_push(c, b, 1);
+}
+
+void	tok_push_indexed(t_vec *a, t_string *b, size_t idx)
+{
+	t_vec			c;
+	t_tok			newtok;
+
+	newtok = (t_tok){.type = TOK_IDENT, .s = ft_tstr_clone(b)};
+	c = ft_vec(a->size + 1, sizeof(t_tok));
+	copy_helper_nocollapse(a, &newtok, &c, idx);
+	vec_deep_copy(&c, a, idx);
+	clean_tokenstream(a);
+	ft_vec_free(a);
+	ft_tstr_clear(b);
+	*a = c;
+}

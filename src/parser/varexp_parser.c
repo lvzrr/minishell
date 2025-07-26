@@ -70,19 +70,6 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
  *
  *	Es mas larga la descripcion que la funcion XD
  *
- *	por ahora:
- *
- *	echo hello && export hello=world || miau
- *
- *	se convierte en:
- *
- *	echo hello && miau
- *
- *	tengo que buscar una manera de que se coma el miau,
- *	estoy incluso pensando en
- *
- *	TODO: eat_to_and()
- *
  */
 
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
@@ -178,7 +165,8 @@ static bool	isexported(t_tok *t, size_t i)
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
 {
-	bool	exported;
+	bool		exported;
+	t_string	tmp;
 
 	if (*i == 1)
 		return ((*t)->type = TOK_IDENT, true);
@@ -196,11 +184,10 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
 		if (!opbeforeident(*t, tokv, *i - 1))
 			return (false);
 		load_exported(*t, data, tokv, *i - 1);
-		if (*i - 5 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, *i - 5)))
-			collapse_at(tokv, tokv->size);
-		if (*i - 6 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, *i - 6)))
-			collapse_at(tokv, *i - 5);
-		return ((*t) -= 3, (*i) -= 4, true);
+		tmp = ft_tstr_from_cstr("__builtin_export");
+		tok_push_indexed(tokv, &tmp, *i - 4);
+		*t = ft_vec_get_mut(tokv, *i - 2);
+		return (ft_tstr_free(&tmp), (*i) -= 3, true);
 	}
 	return (true);
 }

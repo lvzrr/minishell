@@ -58,4 +58,5 @@ bool		read_l_hdoc(t_string *prompt, t_string *line);
 void		hdoc_signal_setup(void);
 void		phelp(void);
 void		s_handler(int signal);
+void		tok_push_indexed(t_vec *a, t_string *b, size_t idx);
 #endif
