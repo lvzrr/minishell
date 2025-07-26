@@ -90,11 +90,6 @@ static bool	redirs_and_clean(t_vec *tokv)
 }
 
 /*
-*	Lo que el usuario mas probablemente quiera es la
-*	primera, asi que ignoro la segunda.
-*
-*	dicho esto:
-*
 *	Funcion principal del 'parser'
 *	colapsa secuencias de tokens y reconoce (y expande)
 *	variables en principio,
