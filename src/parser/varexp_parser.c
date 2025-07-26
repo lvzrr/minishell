@@ -97,8 +97,6 @@ static bool	isexported(t_tok *t, size_t i)
 }
 
 /*
- *	TODO: manejar casos 'export hello=world&&miau'
- *
 *	Los numeros magicos son básicamente un
 *	rewind, por que al limpiar del stream la
 *	expresion del export, el puntero 't', se
