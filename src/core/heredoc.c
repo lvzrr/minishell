@@ -95,7 +95,7 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 		if (data->hdoc_terminate)
 			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
 				default_prompt(data), false);
-		if (!hdoc_ret.len && !hdoc_ret.data)
+		if (!hdoc_ret.data)
 		{
 			ft_tstr_clear(&hdoc_ret);
 			continue ;
@@ -121,6 +121,9 @@ bool	heredoc(t_vec *tokv, t_data *data)
 	size_t	idx;
 
 	idx = look4hdoc(tokv);
+	if (idx == 0)
+		return (ft_fprintf(2, ANSI_RED"syntax error: "
+				ANSI_RESET"no command to pipe heredoc\n"), false);
 	while (idx != SIZE_MAX)
 	{
 		if (!heredoc_routine(tokv, data, idx) || data->hdoc_terminate)

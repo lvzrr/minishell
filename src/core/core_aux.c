@@ -75,8 +75,7 @@ void	read_l_hdoc(t_string *prompt, t_string *line)
 		return ;
 	ft_tstr_pushstr(line, s);
 	free(s);
-	ft_tstr_trim(line, " \t\n\r");
-	if (!line->len || !line->data)
+	if (!line->data)
 		ft_tstr_free(line);
 }
 
