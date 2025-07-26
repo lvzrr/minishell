@@ -161,12 +161,19 @@ static bool	isexported(t_tok *t, size_t i)
 *	si la asignacion es 'blah=blah', sin export, se va a volver
 *	literalmente una string
 *
+*	WARNING:
+*
+*	 IMPORTANTE IMPORTANTE IMPORTANTE:
 *
 *	si encuentra un export, lo borra y lo sustituye por un
 *	identificador o comando: __builtin_export, en el arbol
 *	lo identificaremos y lo ignoramos como comando con return 0
 *	para que no rompa el control flow.
 *
+*	La asignacion a *t del final es importantisima, el puntero
+*	t de el loop donde se llama a varexp_parser mantiene
+*	un puntero que libera la funcion tok_push_indexed, asi que
+*	hay que cambiarlo al nuevo vector.
 */
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
