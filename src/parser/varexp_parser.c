@@ -134,10 +134,10 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		if (!opbeforeident(*t, tokv, i))
 			return (false);
 		load_exported(*t, data, tokv, i);
-		if (tokv->size > 1 && isoperator((t_tok *)ft_vec_peek_last(tokv) - 1))
-			collapse_at(tokv, tokv->size - 1);
-		else if (tokv->size && isoperator((t_tok *)ft_vec_peek_last(tokv)))
+		if (i - 3 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 3)))
 			collapse_at(tokv, tokv->size);
+		if (i - 4 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 4)))
+			collapse_at(tokv, i - 4);
 		return ((*t) -= 3, true);
 	}
 	return ((*t) -= 1, true);
