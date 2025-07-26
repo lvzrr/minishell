@@ -93,7 +93,7 @@ static bool	isexported(t_tok *t, size_t i)
 	else if (i > 3 && (t - 4)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 4)->s.data))
 		return (true);
-	return (false);
+	return (true);
 }
 
 /*
@@ -133,6 +133,16 @@ static bool	isexported(t_tok *t, size_t i)
 *
 * 	'algo' seria en este caso lo que hola al
 * 	anterior, por lo tanto no es válido.
+*
+*
+*	NOTA IMPORTANTE 2:
+*
+*	si tenemos
+*	echo export hello=world,
+*	NO PASAMOS EL PARSER, tanto export como hello=world
+*	pasan a ser identificadores, mientras que
+*	echo && export hello=world SI que se parsea como tal
+*
 */
 
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
@@ -140,6 +150,8 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	bool	exported;
 
 	exported = isexported(*t, i);
+	if (exported && check_interpret(*t, i))
+		return ((*t)->type = TOK_IDENT, (*t) -= 1, true);
 	if ((i > 0 && ((*t) - 1)->type != TOK_IDENT) || i == 0)
 	{
 		(*t)->type = TOK_IDENT;
@@ -151,11 +163,12 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		if (!opbeforeident(*t, tokv, i))
 			return (false);
 		load_exported(*t, data, tokv, i);
-		if (i - 3 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 3)))
-			collapse_at(tokv, tokv->size);
+		dump_tokenstream("pre", tokv);
 		if (i - 4 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 4)))
+			collapse_at(tokv, tokv->size);
+		if (i - 5 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 5)))
 			collapse_at(tokv, i - 4);
 		return ((*t) -= 3, true);
 	}
-	return ((*t) -= 1, true);
+	return (true);
 }
