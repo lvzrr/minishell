@@ -12,6 +12,21 @@
 
 #include "mini_parser.h"
 
+/*
+*	esto nos deja interpretar export como
+*	identificador Y redireccion, pero evitando
+*	que se use como comando, por que ya deberia
+*	haberlo interpretado post_process.
+*/
+
+static bool	check_invalid_export(t_tok *t, size_t i)
+{
+	return (t && ((i > 0 && isstringtoken(t)
+				&& !ft_strcmp("export", t->s.data) && isoperator(t - 1))
+			|| (i == 0 && isstringtoken(t)
+				&& !ft_strcmp(t->s.data, "export"))));
+}
+
 bool	catch_forbidden(t_vec *tokv)
 {
 	size_t		i;
@@ -26,16 +41,17 @@ bool	catch_forbidden(t_vec *tokv)
 				|| !ft_strcmp(t->s.data, "while")))
 			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"control "
 					"expressions aren't supported\n"), false);
-		else if (t && t->type == TOK_IDENT && !ft_strcmp("export", t->s.data))
+		else if (check_invalid_export(t, i))
 			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"export "
 					"not valid in this context\n"), false);
+		else if (t && i + 1 < tokv->size && isredirect(t->type)
+			&& isstringtoken(t + 1))
+			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"redirects "
+					"must be followed by another or an operator\n"), false);
 		i++;
 	}
 	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
-	{
-		ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-			"expected identifier or redirect as last token\n");
-		return (false);
-	}
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
+				"expected identifier or redirect as last token\n"), false);
 	return (true);
 }
