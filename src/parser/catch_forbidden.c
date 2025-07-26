@@ -39,14 +39,14 @@ bool	catch_forbidden(t_vec *tokv)
 		if (t && t->type == TOK_IDENT && (!ft_strcmp(t->s.data, "if")
 				|| !ft_strcmp(t->s.data, "for")
 				|| !ft_strcmp(t->s.data, "while")))
-			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"control "
+			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"control "
 					"expressions aren't supported\n"), false);
 		else if (check_invalid_export(t, i))
 			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"export "
 					"not valid in this context\n"), false);
 		else if (t && i + 1 < tokv->size && isredirect(t->type)
 			&& isstringtoken(t + 1))
-			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"redirects "
+			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"redirects "
 					"must be followed by another or an operator\n"), false);
 		i++;
 	}
