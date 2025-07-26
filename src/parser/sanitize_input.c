@@ -19,21 +19,3 @@ bool	isoperator(t_tok *t)
 	return (t->type == TOK_AND || t->type == TOK_OR || t->type == TOK_SCOLON
 		|| t->type == TOK_PIPE || t->type == TOK_AMPER);
 }
-
-void	clean_operators(t_vec *tokv)
-{
-	size_t	i;
-	t_tok	*t;
-
-	i = 0;
-	while (i < tokv->size)
-	{
-		t = ft_vec_get_mut(tokv, i++);
-		if (t && i > 1 && i < tokv->size && isoperator(t) && isoperator(t - 1))
-			collapse_at(tokv, i-- - 1);
-		else if (i == 1 && isoperator(t))
-			collapse_at(tokv, i-- - 1);
-		else if (i == tokv->size && isoperator(t))
-			collapse_at(tokv, i - 1);
-	}
-}

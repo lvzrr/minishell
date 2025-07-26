@@ -85,7 +85,6 @@ static bool	redirs_and_clean(t_vec *tokv)
 	if (!manage_redirs(tokv))
 		return (false);
 	clean_spaces(tokv);
-	clean_operators(tokv);
 	return (true);
 }
 
