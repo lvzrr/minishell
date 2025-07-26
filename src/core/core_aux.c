@@ -66,17 +66,24 @@ bool	read_l(t_string *prompt, t_vec *tokv, bool addhist)
 	return (true);
 }
 
-void	read_l_hdoc(t_string *prompt, t_string *line)
+bool	read_l_hdoc(t_string *prompt, t_string *line)
 {
 	char		*s;
 
 	s = readline(prompt->data);
 	if (s == NULL)
-		return ;
+	{
+		ft_tstr_clear(line);
+		return (false);
+	}
 	ft_tstr_pushstr(line, s);
 	free(s);
 	if (!line->data)
-		ft_tstr_free(line);
+	{
+		ft_tstr_clear(line);
+		return (false);
+	}
+	return (true);
 }
 
 /*

@@ -91,15 +91,11 @@ static bool	hdoc_loop(t_vec *hdoc_exit, size_t idx,
 	hdoc_ret = ft_tstr_new(100);
 	while (1)
 	{
-		read_l_hdoc(&data->prompt, &hdoc_ret);
+		if (!read_l_hdoc(&data->prompt, &hdoc_ret))
+			continue ;
 		if (data->hdoc_terminate)
 			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
 				default_prompt(data), false);
-		if (!hdoc_ret.data)
-		{
-			ft_tstr_clear(&hdoc_ret);
-			continue ;
-		}
 		if (hdoc_ret.len == ((t_tok *)hdoc_exit->data)[0].s.len
 			&& !ft_strcmp(hdoc_ret.data, ((t_tok *)hdoc_exit->data)[0].s.data))
 			return (ft_tstr_free(&hdoc_ret), clean_tokenstream(hdoc_exit),
