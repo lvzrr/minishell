@@ -91,9 +91,7 @@ bool	read_l_hdoc(t_string *prompt, t_string *line)
 *	que sea exit, para salir del shell, si es "exit" o 'exit'
 *	no vale.
 *
-*	TODO:
-*	cambiar y devolver la posicion del exit, por si 
-*	alguen hace cat "hello" && exit, que no termine inmediatamente
+*	TODO: cambiar y devolver la posicion del exit, por si alguen hace cat "hello" && exit, que no termine inmediatamente
 */
 
 bool	check_exit(t_vec *tokv)

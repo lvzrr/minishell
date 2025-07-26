@@ -69,6 +69,20 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
  *	pero en el momento que tenga algo detras olvidate.
  *
  *	Es mas larga la descripcion que la funcion XD
+ *
+ *	por ahora:
+ *
+ *	echo hello && export hello=world || miau
+ *
+ *	se convierte en:
+ *
+ *	echo hello && miau
+ *
+ *	tengo que buscar una manera de que se coma el miau,
+ *	estoy incluso pensando en
+ *
+ *	TODO: eat_to_and()
+ *
  */
 
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
