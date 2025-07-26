@@ -87,7 +87,9 @@ static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
 
 static bool	isexported(t_tok *t, size_t i)
 {
-	if (i > 2 && (t - 3)->type == TOK_IDENT
+	if (i > 1 && (t - 2)->type != TOK_SPACE)
+		return (false);
+	else if (i > 2 && (t - 3)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 3)->s.data))
 		return (true);
 	else if (i > 3 && (t - 4)->type == TOK_IDENT
@@ -140,6 +142,11 @@ static bool	isexported(t_tok *t, size_t i)
 *	NO PASAMOS EL PARSER, tanto export como hello=world
 *	pasan a ser identificadores, mientras que
 *	echo && export hello=world SI que se parsea como tal
+*
+*	OTRA NOTA:
+*
+*	si la asignacion es 'blah=blah', sin export, se va a volver
+*	literalmente una string
 *
 */
 

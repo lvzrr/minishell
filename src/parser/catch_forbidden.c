@@ -24,11 +24,11 @@ bool	catch_forbidden(t_vec *tokv)
 		if (t && t->type == TOK_IDENT && (!ft_strcmp(t->s.data, "if")
 				|| !ft_strcmp(t->s.data, "for")
 				|| !ft_strcmp(t->s.data, "while")))
-		{
-			ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"control "
-				"expressions aren't supported\n");
-			return (false);
-		}
+			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"control "
+					"expressions aren't supported\n"), false);
+		else if (t && t->type == TOK_IDENT && !ft_strcmp("export", t->s.data))
+			return (ft_fprintf(2, ANSI_RED"error: "ANSI_RESET"export "
+					"not valid in this context\n"), false);
 		i++;
 	}
 	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
