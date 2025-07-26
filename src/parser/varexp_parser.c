@@ -93,7 +93,7 @@ static bool	isexported(t_tok *t, size_t i)
 	else if (i > 3 && (t - 4)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 4)->s.data))
 		return (true);
-	return (true);
+	return (false);
 }
 
 /*
@@ -143,14 +143,14 @@ static bool	isexported(t_tok *t, size_t i)
 *
 */
 
-size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
+size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i)
 {
 	bool	exported;
 
-	exported = isexported(*t, i);
-	if (exported && check_interpret(*t, i))
+	exported = isexported(*t, *i - 1);
+	if ((exported && check_interpret(*t, *i - 1)) || !exported)
 		return ((*t)->type = TOK_IDENT, (*t) -= 1, true);
-	if ((i > 0 && ((*t) - 1)->type != TOK_IDENT) || i == 0)
+	if ((*i - 1 > 0 && ((*t) - 1)->type != TOK_IDENT) || *i - 1 == 0)
 	{
 		(*t)->type = TOK_IDENT;
 		if (exported)
@@ -158,15 +158,14 @@ size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	}
 	if (exported)
 	{
-		if (!opbeforeident(*t, tokv, i))
+		if (!opbeforeident(*t, tokv, *i - 1))
 			return (false);
-		load_exported(*t, data, tokv, i);
-		dump_tokenstream("pre", tokv);
-		if (i - 4 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 4)))
+		load_exported(*t, data, tokv, *i - 1);
+		if (*i - 5 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, *i - 5)))
 			collapse_at(tokv, tokv->size);
-		if (i - 5 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, i - 5)))
-			collapse_at(tokv, i - 4);
-		return ((*t) -= 3, true);
+		if (*i - 6 >= 0 && isoperator((t_tok *)ft_vec_get_mut(tokv, *i - 6)))
+			collapse_at(tokv, *i - 5);
+		return ((*t) -= 3, (*i) -= 4, true);
 	}
 	return (true);
 }

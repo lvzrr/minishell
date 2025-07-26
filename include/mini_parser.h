@@ -161,7 +161,7 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i);
 bool	rd_nn(t_tok *t, t_vec *tokv, size_t i);
 bool	is_preceded_by_ident(t_tok *t);
 bool	delete_redundant(t_vec *tokv, size_t i);
-size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i);
+size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t *i);
 void	clean_operators(t_vec *tokv);
 bool	isoperator(t_tok *t);
 void	expand_string(t_tok *t, t_data *data);
