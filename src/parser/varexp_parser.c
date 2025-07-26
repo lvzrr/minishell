@@ -57,6 +57,18 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
  *	y expande el usuario antes de guardar la variable
  *	al entorno.
  *
+ *	otro quirk que he pillado es que si quieres asignar
+ *	una variable vacia, e.g 'export hello=', NO puedes
+ *	poner NADA detras, tienes que dejarlo EXPLICITAMENTE
+ *	vacio.
+ *
+ *	puedes hacer:
+ *
+ *	'echo "hola" && export hello='
+ *
+ *	pero en el momento que tenga algo detras olvidate.
+ *
+ *	Es mas larga la descripcion que la funcion XD
  */
 
 static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
