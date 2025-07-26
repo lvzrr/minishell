@@ -40,6 +40,9 @@ bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
 			|| (i == 0 && t->type == TOK_HDOC)))
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
 				"heredoc must be preceded by a command or redirect\n"), false);
+	else if (t && !i && isoperator(t))
+		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
+				"operators must be preceded by identifiers\n"), false);
 	return (true);
 }
 
