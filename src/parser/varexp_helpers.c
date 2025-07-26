@@ -27,6 +27,10 @@ bool	pre_clean(t_vec *tokv)
 			collapse_at(tokv, i);
 			continue ;
 		}
+		if (t && ((isoperator(t) && isoperator(t + 1))
+				|| (i > 0 && isoperator(t) && isoperator(t - 1))))
+			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
+					"consecutive operators are not allowed\n"), false);
 		i++;
 	}
 	return (true);

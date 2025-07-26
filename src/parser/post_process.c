@@ -90,12 +90,6 @@ static bool	redirs_and_clean(t_vec *tokv)
 }
 
 /*
-*
-*	He decidido que si hay dos operadores seguidos, i.e:
-*
-*	&&&&
-*	&&||
-*
 *	Lo que el usuario mas probablemente quiera es la
 *	primera, asi que ignoro la segunda.
 *
@@ -131,7 +125,7 @@ bool	post_process(t_vec *tokv, t_data *data)
 	t_tok	*t;
 
 	i = 0;
-	if (pre_clean(tokv) && !detect_vars(tokv, data))
+	if (!pre_clean(tokv) || !detect_vars(tokv, data))
 		return (false);
 	while (i + 1 < tokv->size)
 	{
