@@ -59,7 +59,7 @@ t_vec	check_heredoc(t_vec *tokv, size_t idx)
 		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
 				"heredoc must be preceded by a command or redirect\n"),
 			(t_vec){0});
-	if (t->type == TOK_HDOC && idx + 1 < tokv->size
+	else if (t->type == TOK_HDOC && idx + 1 < tokv->size
 		&& isstringtoken(t + 1))
 	{
 		tokenseq_end = ft_vec(tokv->size - idx, sizeof(t_tok));
