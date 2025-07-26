@@ -12,6 +12,12 @@
 
 #include "mini_parser.h"
 
+void	expand_instr_wrapper(t_tok *t, t_data *data)
+{
+	expand_string(t, data);
+	remove_scaping_singledollar(t);
+}
+
 static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
 {
 	size_t	i2;
@@ -19,7 +25,7 @@ static bool	opbeforeident(t_tok *t, t_vec *tokv, size_t i)
 	i2 = 2;
 	while (i + i2 < tokv->size)
 	{
-		if (isstringtoken(t + i2))
+		if (isstringtoken(t + i2) || (t + i2)->type == TOK_VAR)
 			return (false);
 		else if (isoperator(t + i2))
 			return (true);
@@ -46,9 +52,13 @@ static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
 		load_var(&(t - 1)->s, &empty, &data->env);
 		ft_tstr_free(&empty);
 	}
-	else if (i + 1 < tokv->size && isstringtoken(t + 1))
+	else if (i + 1 < tokv->size
+		&& (isstringtoken(t + 1) || (t + 1)->type == TOK_VAR))
 	{
-		ft_tstr_trim(&(t - 1)->s, "$");
+		if ((t + 1)->type == TOK_STRING_TOEXPAND)
+			expand_instr_wrapper(t + 1, data);
+		else if ((t + 1)->type == TOK_VAR)
+			expand_var(t + 1, data);
 		load_var(&(t - 1)->s, &(t + 1)->s, &data->env);
 	}
 	collapse_at(tokv, i - 3);

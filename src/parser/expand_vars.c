@@ -13,7 +13,7 @@
 #include "mini_parser.h"
 #include "env.h"
 
-static void	expand_var(t_tok *t, t_data *data)
+void	expand_var(t_tok *t, t_data *data)
 {
 	t_var	*v;
 
@@ -39,7 +39,7 @@ static void	expand_var(t_tok *t, t_data *data)
 	}
 }
 
-static void	look_and_insert(t_tok *t, size_t pos,
+void	look_and_insert(t_tok *t, size_t pos,
 	t_string *vname, t_data *data)
 {
 	t_var		*var;
@@ -83,7 +83,7 @@ ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset)
 	return (-1);
 }
 
-static void	expand_string(t_tok *t, t_data *data)
+void	expand_string(t_tok *t, t_data *data)
 {
 	ssize_t		pos;
 	size_t		l;

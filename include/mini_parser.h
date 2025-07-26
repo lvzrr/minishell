@@ -164,4 +164,8 @@ bool	delete_redundant(t_vec *tokv, size_t i);
 size_t	varexp_parser(t_tok **t, t_vec *tokv, t_data *data, size_t i);
 void	clean_operators(t_vec *tokv);
 bool	isoperator(t_tok *t);
+void	expand_string(t_tok *t, t_data *data);
+void	expand_var(t_tok *t, t_data *data);
+void	look_and_insert(t_tok *t, size_t pos,
+			t_string *vname, t_data *data);
 #endif
