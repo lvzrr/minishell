@@ -46,6 +46,8 @@ t_toktype	get_token_type_1_2(t_string *s)
 		return (0xff);
 	if (*s->data == '=')
 		return (TOK_EQ);
+	else if (*s->data == '~')
+		return (TOK_TILDE);
 	else
 		return (0xff);
 }

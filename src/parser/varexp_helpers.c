@@ -12,25 +12,35 @@
 
 #include "mini_parser.h"
 
+void	change_tilde(t_tok *t)
+{
+	ft_tstr_clear(&t->s);
+	ft_tstr_pushslice(&t->s, "$HOME", 5);
+	t->type = TOK_STRING_DQ;
+}
+
 bool	pre_clean(t_vec *tokv)
 {
 	size_t	i;
 	t_tok	*t;
 
 	i = 0;
-	while (i + 1 < tokv->size)
+	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (t && t->type == TOK_SPACE && (isoperator(t + 1)
-				|| (i > 0 && isoperator(t - 1) && isstringtoken(t + 1))))
+		if (i + 1 < tokv->size && t && t->type == TOK_SPACE
+			&& (isoperator(t + 1) || (i > 0 && isoperator(t - 1)
+					&& isstringtoken(t + 1))))
 		{
 			collapse_at(tokv, i);
 			continue ;
 		}
-		if (t && ((isoperator(t) && isoperator(t + 1))
+		if (i + 1 < tokv->size && t && ((isoperator(t) && isoperator(t + 1))
 				|| (i > 0 && isoperator(t) && isoperator(t - 1))))
 			return (syntax_err("consecutive operators are not allowed\n"),
 				false);
+		if (t && t->type == TOK_TILDE)
+			change_tilde(t);
 		i++;
 	}
 	return (true);
