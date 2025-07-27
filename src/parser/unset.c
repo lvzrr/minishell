@@ -81,10 +81,12 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 			return (err("cannot unset $PATH, variable is protected\n"), false);
 		++i;
 	}
-	if (!hasident)
+	if (idx + i < tokv->size && (isstringtoken(t + i)
+			|| (t + i)->type == TOK_VAR))
+		return (syntax_err("unset statement can contain identifiers only\n"),
+			false);
+	else if (!hasident)
 		return (syntax_err("unset statement cannot be empty\n"), false);
-	else if (idx + i < tokv->size && isstringtoken(t + i))
-		return (syntax_err("unset statement cannot end in a string\n"), false);
 	else if (idx + i < tokv->size && !isoperator(t + i))
 		return (syntax_err("cannot redirect input to unset\n"), false);
 	return (true);
