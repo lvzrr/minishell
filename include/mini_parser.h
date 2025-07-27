@@ -111,7 +111,8 @@ typedef struct s_redir
 typedef struct s_cmd
 {
 	t_vec		redir_v;
-	char		**cmd;
+	char		**argv;
+	size_t		argc;
 }	t_cmd;
 
 /*

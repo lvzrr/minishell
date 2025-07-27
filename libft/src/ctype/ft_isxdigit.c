@@ -1,22 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minish.h                                           :+:      :+:    :+:   */
+/*   ft_isxdigit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 17:13:56 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/16 17:14:02 by jaicastr         ###   ########.fr       */
+/*   Created: 2025/07/28 00:46:25 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/28 00:47:54 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISH_H
-# define MINISH_H
+#include "ctype.h"
 
-# include "lft.h"
-# include "mini_lexer.h"
-# include "core.h"
-# include "env.h"
-# include "builtin.h"
-
-#endif
+bool	ft_isxdigit(int c)
+{
+	return ((c >= 'a' && c <= 'f') || (c >= '0' && c <= '9')
+		|| (c >= 'A' && c <= 'F'));
+}
