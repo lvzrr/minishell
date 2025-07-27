@@ -47,8 +47,6 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t i)
 	while (i < tokv->size && ((t + i)->type == TOK_IDENT
 			|| (t + i)->type == TOK_SPACE))
 		++i;
-	dump_tokenstream("look4", tokv);
-	ft_printf("i: %u\n", i);
 	if (i < tokv->size && isstringtoken(t + i))
 		return (syntax_err("unset statement cannot end in a string\n"), false);
 	else if (i < tokv->size && !isoperator(t + i))
