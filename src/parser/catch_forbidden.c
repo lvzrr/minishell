@@ -34,15 +34,15 @@ bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
 				"not valid in this context\n"), false);
 	else if (t && i + 1 < tokv->size && isredirect(t->type)
 		&& isstringtoken(t + 1))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"redirects "
-				"must be followed by redirects or an operator\n"), false);
+		return (syntax_err("redirects must be followed by "
+				"redirects or operators\n"), false);
 	else if (t && ((i > 1 && t->type == TOK_HDOC && isoperator(t - 1))
 			|| (i == 0 && t->type == TOK_HDOC)))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-				"heredoc must be preceded by a command or redirect\n"), false);
+		return (syntax_err("heredoc must be preceded by "
+				"a command or redirect\n"), false);
 	else if (t && !i && isoperator(t))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-				"operators must be preceded by identifiers\n"), false);
+		return (syntax_err("operators must be preceded by identifiers\n"),
+			false);
 	return (true);
 }
 
@@ -58,14 +58,14 @@ bool	catch_forbidden(t_vec *tokv)
 		if (t && t->type == TOK_IDENT && (!ft_strcmp(t->s.data, "if")
 				|| !ft_strcmp(t->s.data, "for")
 				|| !ft_strcmp(t->s.data, "while")))
-			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"control "
-					"expressions aren't supported\n"), false);
+			return (syntax_err("control expressions aren't supported\n"),
+				false);
 		else if (!extra_checks(t, tokv, i))
 			return (false);
 		i++;
 	}
 	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-				"expected identifier or redirect as last token\n"), false);
+		return (syntax_err("expected identifier or redirect as last token\n"),
+			false);
 	return (true);
 }

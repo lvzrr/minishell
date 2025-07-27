@@ -29,8 +29,8 @@ bool	pre_clean(t_vec *tokv)
 		}
 		if (t && ((isoperator(t) && isoperator(t + 1))
 				|| (i > 0 && isoperator(t) && isoperator(t - 1))))
-			return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-					"consecutive operators are not allowed\n"), false);
+			return (syntax_err("consecutive operators are not allowed\n"),
+				false);
 		i++;
 	}
 	return (true);

@@ -170,4 +170,6 @@ void	look_and_insert(t_tok *t, size_t pos,
 			t_string *vname, t_data *data);
 bool	check_interpret(t_tok *t, size_t i);
 bool	pre_clean(t_vec *tokv);
+bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i);
+void	syntax_err(char *msg);
 #endif

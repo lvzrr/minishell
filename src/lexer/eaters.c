@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "mini_lexer.h"
-
+#include "mini_parser.h"
 /*
 *	esta funcion se traga los espacios entre palabras,
 *	teniendo en cuenta los escapes.
@@ -39,16 +39,8 @@ size_t	goto_next(t_string *s, size_t offst)
 
 size_t	eat_string_sq(t_string *s, size_t offst)
 {
-	static char		*errmsg;
-	static size_t	errl;
-
 	if (!s || !s->data)
 		return (offst);
-	if (!errmsg)
-	{
-		errmsg = ANSI_RED"syntax error: "ANSI_RESET"unclosed \'\n";
-		errl = ft_strlen(errmsg);
-	}
 	++offst;
 	while (offst < s->len - 1 && s->data[offst] != '\'')
 	{
@@ -59,8 +51,7 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 	}
 	if (offst < s->len && s->data[offst] == '\'')
 		return (++offst);
-	write(2, errmsg, errl);
-	return (SIZE_MAX);
+	return (syntax_err("unclosed '"), SIZE_MAX);
 }
 
 /*
@@ -70,16 +61,8 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 
 size_t	eat_string_dq(t_string *s, size_t offst)
 {
-	static char		*errmsg;
-	static size_t	errl;
-
 	if (!s || !s->data)
 		return (offst);
-	if (!errmsg)
-	{
-		errmsg = ANSI_RED"syntax error: "ANSI_RESET"unclosed \"\n";
-		errl = ft_strlen(errmsg);
-	}
 	++offst;
 	while (offst < s->len - 1 && s->data[offst] != '\"')
 	{
@@ -90,8 +73,7 @@ size_t	eat_string_dq(t_string *s, size_t offst)
 	}
 	if (offst < s->len && s->data[offst] == '\"')
 		return (++offst);
-	write(2, errmsg, errl);
-	return (SIZE_MAX);
+	return (syntax_err("unclosed \""), SIZE_MAX);
 }
 
 /*

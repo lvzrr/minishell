@@ -21,8 +21,8 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i + 1);
 	}
 	else
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>' must be"
-				" followed by an identifier\n"), false);
+		return (syntax_err("'>' must be followed by an identifier\n"),
+			false);
 	if (i > 0 && isstringtoken(t - 1) && ft_isnumeric((t - 1)->s.data))
 	{
 		ft_tstr_push(&t->s, ':');
@@ -32,8 +32,8 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i)
 		return (true);
 	}
 	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>' must be"
-				" preceded by an identifier\n"), false);
+		return (syntax_err("'>' must be preceded by an identifier\n"),
+			false);
 	t->type = TOK_REDIR_TO;
 	return (true);
 }
@@ -47,11 +47,9 @@ bool	rl(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i + 1);
 	}
 	else
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'<' must be"
-				" followed by an identifier\n"), false);
+		return (syntax_err("'<' must be followed by an identifier\n"), false);
 	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'<' must be"
-				" preceded by an identifier\n"), false);
+		return (syntax_err("'<' must be preceded by an identifier\n"), false);
 	t->type = TOK_REDIR_IN;
 	return (true);
 }
@@ -65,8 +63,8 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i + 1);
 	}
 	else
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>>' must be"
-				" followed by an identifier\n"), false);
+		return (syntax_err("'>>' must be followed by an identifier\n"),
+			false);
 	if (i > 0 && isstringtoken(t - 1) && ft_isnumeric((t - 1)->s.data))
 	{
 		ft_tstr_push(&t->s, ':');
@@ -76,8 +74,7 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 		return (true);
 	}
 	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>>' must be"
-				" preceded by an identifier\n"), false);
+		return (syntax_err("'>>' must be preceded by an identifier\n"), false);
 	t->type = TOK_APPEND_TO;
 	return (true);
 }
@@ -104,14 +101,13 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i--);
 	}
 	else
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' should be"
-				" wrapped in numbers, like this: [spc]N>&N[spc]\n"), false);
+		return (syntax_err("'>&' should be wrapped in numbers, "
+				"like this: [spc]N>&N[spc]\n"), false);
 	if ((i > 0 && !is_preceded_by_ident(t - 1)) || i == 0)
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' must be"
-				" preceded by an identifier\n"), false);
+		return (syntax_err("'>&' must be preceded by an identifier\n"), false);
 	if (i + 1 < tokv->size && isstringtoken(t))
-		return (ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET"'>&' must be"
-				" followed by a delimeter or a newline\n"), false);
+		return (syntax_err("'>&' must be followed by a delimeter or a newline\n"
+			), false);
 	(t - 1)->type = TOK_REDIR_NN;
 	return (true);
 }

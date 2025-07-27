@@ -30,7 +30,7 @@ void	expand_var(t_tok *t, t_data *data)
 	}
 	else
 	{
-		v = getvar(t->s.data, &data->env);
+		v = getvar(t->s.data, &data->env, NULL);
 		ft_tstr_clear(&t->s);
 		if (!v)
 			t->type = TOK_STRING_EMPTY;
@@ -48,7 +48,7 @@ void	look_and_insert(t_tok *t, size_t pos,
 	if (t->s.data[pos] == '\\' && !(pos + 1 < t->s.len
 			&& t->s.data[pos + 1] == '$'))
 		remove_char(&t->s, pos);
-	var = getvar(vname->data, &data->env);
+	var = getvar(vname->data, &data->env, NULL);
 	if (!var)
 	{
 		if (!t->s.len)
@@ -132,15 +132,14 @@ bool	expand_vars(t_vec *tokv, t_data *data)
 		t = ft_vec_get_mut(tokv, i++);
 		if (t && (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION))
 			delete_subs(tokv, --i);
-		else if (t && t->type == TOK_EQ)
-			if (!varexp_parser(&t, tokv, data, &i))
-				return (ft_fprintf(2, ANSI_RED"error: "
-						ANSI_RESET"bad assignment\n"), false);
-		if (!t || (t->type != TOK_VAR && t->type != TOK_STRING_TOEXPAND))
-			continue ;
+		else if (t && t->type == TOK_EQ && !varexp_parser(&t, tokv, data, &i))
+			return (syntax_err("bad assignment\n"), false);
+		else if (t && t->type == TOK_IDENT && !ft_strncmp(t->s.data, "unset", 5)
+			&& !unset_builtin(t, tokv, data, i))
+			return (false);
 		if (t->type == TOK_VAR)
 			expand_var(t, data);
-		else
+		else if (t->type == TOK_STRING_TOEXPAND)
 		{
 			expand_string(t, data);
 			remove_scaping_singledollar(t);

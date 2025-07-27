@@ -13,10 +13,14 @@
 #include "env.h"
 
 /*
-*	Funcion que busca variables en el entorno
+*	Funcion que busca variables en el entorno,
+*	si le pasamos un puntero a un entero lo llena
+*	con la primera posicion existente pero vaciada
+*	por unset, evita que el algoritmo se nos vaya a O(n^2),
+*	y aunque O(n) ya no es lo mejor, menos da una piedra.
 */
 
-t_var	*getvar(char *name, t_vec *env)
+t_var	*getvar(char *name, t_vec *env, size_t *empty)
 {
 	t_var		*v;
 	size_t		i;
@@ -25,6 +29,8 @@ t_var	*getvar(char *name, t_vec *env)
 	while (i < env->size)
 	{
 		v = ft_vec_get_mut(env, i++);
+		if (empty && v && !v->name.len)
+			*empty = i;
 		if (v && !ft_strcmp(name, v->name.data))
 			return (v);
 	}
@@ -36,20 +42,37 @@ t_var	*getvar(char *name, t_vec *env)
 *	de tokens, asi que se clonan, ya que el stream de tokens
 *	se libera por su cuenta, y al pasarlas al env, este también
 *	se libera solo al final del programa.
+*
+*
+*	el builtin unset deja huecos vacios en el vector, pero no
+*	liberados, para reusarlos, entonces, si no existe la variable
+*	que estamos intentando cargar, vamos a intentar ahorrar allocs
+*	buscando un hueco vacío de unset, si no encontramos directamente
+*	la ponemos al final del vector.
 */
 
 void	load_var(t_string *name, t_string *value, t_vec *env)
 {
 	t_var		*v;
 	t_var		newv;
+	size_t		i;
 
-	v = getvar(name->data, env);
+	i = SIZE_MAX;
+	v = getvar(name->data, env, &i);
 	if (v)
 	{
 		ft_tstr_clear(&v->value);
 		ft_tstr_pushslice(&v->value, value->data, value->len);
 		return ;
 	}
-	newv = (t_var){.name = ft_tstr_clone(name), .value = ft_tstr_clone(value)};
-	ft_vec_push(env, &newv, 1);
+	if (i == SIZE_MAX)
+	{
+		newv = (t_var){.name = ft_tstr_clone(name),
+			.value = ft_tstr_clone(value)};
+		ft_vec_push(env, &newv, 1);
+		return ;
+	}
+	v = ft_vec_get_mut(env, i);
+	ft_tstr_pushslice(&v->name, name->data, name->len);
+	ft_tstr_pushslice(&v->value, value->data, value->len);
 }
