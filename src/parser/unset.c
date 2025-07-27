@@ -42,17 +42,67 @@ void	unset_var(t_string *name, t_data *data)
 	}
 }
 
+/*
+*
+*	el statement tiene que ser:
+*
+*	unset[]ident[]ident[]ident[FIN]
+*
+*	unset no puede no tener argumentos, es decir
+*
+*	$ unset
+*	$ unset && ...
+*	& ...&& unset
+*
+* 	NO SON VALIDOS.
+*
+*	en el final no puede haber:
+*		- strings con espacios (las variables no tienen espacios)
+*		- redirecciones (¿para que quieres usar stdin en unset?)
+*
+*	esta funcion va al final del statement y comprueba estas normas.
+*/
+
 bool	look4err(t_tok *t, t_vec *tokv, size_t i)
 {
+	bool	hasident;
+
+	hasident = false;
 	while (i < tokv->size && ((t + i)->type == TOK_IDENT
 			|| (t + i)->type == TOK_SPACE))
+	{
+		if ((t + i)->type == TOK_IDENT)
+			hasident = true;
 		++i;
-	if (i < tokv->size && isstringtoken(t + i))
+	}
+	if (!hasident)
+		return (syntax_err("unset statement cannot be empty\n"), false);
+	else if (i < tokv->size && isstringtoken(t + i))
 		return (syntax_err("unset statement cannot end in a string\n"), false);
 	else if (i < tokv->size && !isoperator(t + i))
 		return (syntax_err("cannot redirect input to unset\n"), false);
 	return (true);
 }
+
+/*
+*	NOTA:
+*		i empieza en el token SIGUIENTE a t.
+*
+*	- comprueba que la secuencia no sea:
+*		echo unset,
+*	por que en ese caso no se interpreta como comando
+*	despues busca errores con look4err, si no los hay
+*	colapsa el vector en el token siguiente al unset,
+*	hasta que en dicho elemento no haya ni un espacio ni
+*	un identificador, y despues cambia el identificador
+*	'unset' por '__builtin_unset'.
+*
+*	es decir, que puede borrar varias variables de una vez,
+*
+*	$unset hello world
+*
+*	borraria tanto '$hello' como '$world'
+*/
 
 bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 {
