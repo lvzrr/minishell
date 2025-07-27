@@ -20,7 +20,7 @@
 *	y aunque O(n) ya no es lo mejor, menos da una piedra.
 */
 
-t_var	*getvar(char *name, t_vec *env, size_t *empty)
+t_var	*getvar(char *name, t_vec *env)
 {
 	t_var		*v;
 	size_t		i;
@@ -29,8 +29,6 @@ t_var	*getvar(char *name, t_vec *env, size_t *empty)
 	while (i < env->size)
 	{
 		v = ft_vec_get_mut(env, i++);
-		if (empty && v && !v->name.len)
-			*empty = i;
 		if (v && !ft_strcmp(name, v->name.data))
 			return (v);
 	}
@@ -43,36 +41,21 @@ t_var	*getvar(char *name, t_vec *env, size_t *empty)
 *	se libera por su cuenta, y al pasarlas al env, este también
 *	se libera solo al final del programa.
 *
-*
-*	el builtin unset deja huecos vacios en el vector, pero no
-*	liberados, para reusarlos, entonces, si no existe la variable
-*	que estamos intentando cargar, vamos a intentar ahorrar allocs
-*	buscando un hueco vacío de unset, si no encontramos directamente
-*	la ponemos al final del vector.
 */
 
 void	load_var(t_string *name, t_string *value, t_vec *env)
 {
 	t_var		*v;
 	t_var		newv;
-	size_t		i;
 
-	i = SIZE_MAX;
-	v = getvar(name->data, env, &i);
+	v = getvar(name->data, env);
 	if (v)
 	{
 		ft_tstr_clear(&v->value);
 		ft_tstr_pushslice(&v->value, value->data, value->len);
 		return ;
 	}
-	if (i == SIZE_MAX)
-	{
-		newv = (t_var){.name = ft_tstr_clone(name),
-			.value = ft_tstr_clone(value)};
-		ft_vec_push(env, &newv, 1);
-		return ;
-	}
-	v = ft_vec_get_mut(env, i);
-	ft_tstr_pushslice(&v->name, name->data, name->len);
-	ft_tstr_pushslice(&v->value, value->data, value->len);
+	newv = (t_var){.name = ft_tstr_clone(name),
+		.value = ft_tstr_clone(value)};
+	ft_vec_push(env, &newv, 1);
 }

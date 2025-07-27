@@ -30,7 +30,7 @@ void	expand_var(t_tok *t, t_data *data)
 	}
 	else
 	{
-		v = getvar(t->s.data, &data->env, NULL);
+		v = getvar(t->s.data, &data->env);
 		ft_tstr_clear(&t->s);
 		if (!v)
 			t->type = TOK_STRING_EMPTY;
@@ -48,7 +48,7 @@ void	look_and_insert(t_tok *t, size_t pos,
 	if (t->s.data[pos] == '\\' && !(pos + 1 < t->s.len
 			&& t->s.data[pos + 1] == '$'))
 		remove_char(&t->s, pos);
-	var = getvar(vname->data, &data->env, NULL);
+	var = getvar(vname->data, &data->env);
 	if (!var)
 	{
 		if (!t->s.len)

@@ -27,7 +27,7 @@ static void	set_shell_noenv(t_data *data)
 	char	*dot;
 
 	new.name = ft_tstr_from_cstr("SHELL");
-	var = getvar("_", &data->env, NULL);
+	var = getvar("_", &data->env);
 	if (var)
 	{
 		new.value = ft_tstr_from_cstr(var->value.data);
@@ -49,13 +49,13 @@ void	set_shell_var(t_data *data)
 	t_var	new;
 	char	*dot;
 
-	var = getvar("SHELL", &data->env, NULL);
+	var = getvar("SHELL", &data->env);
 	if (var)
 	{
 		ft_tstr_clear(&var->name);
 		ft_tstr_pushstr(&var->name, "PARENTSHELL");
 		new.name = ft_tstr_from_cstr("SHELL");
-		var = getvar("_", &data->env, NULL);
+		var = getvar("_", &data->env);
 		new.value = ft_tstr_clone(&var->value);
 		dot = ft_strrchr(new.value.data, '.');
 		if (dot)
