@@ -64,7 +64,8 @@ bool	catch_forbidden(t_vec *tokv)
 			return (false);
 		i++;
 	}
-	if (tokv->size && !isstringtoken(t) && !isredirect(t->type))
+	if (tokv->size && !isstringtoken(t) && !isredirect(t->type)
+		&& t->type != TOK_RPAREN)
 		return (syntax_err("expected identifier or redirect as last token\n"),
 			false);
 	return (true);
