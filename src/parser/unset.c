@@ -65,25 +65,27 @@ void	unset_var(t_string *name, t_data *data)
 *	esta funcion va al final del statement y comprueba estas normas.
 */
 
-bool	look4err(t_tok *t, t_vec *tokv, size_t i)
+bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 {
 	bool	hasident;
+	size_t	i;
 
+	i = 1;
 	hasident = false;
-	while (i < tokv->size && ((t + i)->type == TOK_IDENT
+	while (idx + i < tokv->size && ((t + i)->type == TOK_IDENT
 			|| (t + i)->type == TOK_SPACE))
 	{
 		if ((t + i)->type == TOK_IDENT)
 			hasident = true;
-		if (!ft_strncmp((t + i)->s.data, "PATH", 4))
+		if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PATH"))
 			return (err("cannot unset $PATH, variable is protected\n"), false);
 		++i;
 	}
 	if (!hasident)
 		return (syntax_err("unset statement cannot be empty\n"), false);
-	else if (i < tokv->size && isstringtoken(t + i))
+	else if (idx + i < tokv->size && isstringtoken(t + i))
 		return (syntax_err("unset statement cannot end in a string\n"), false);
-	else if (i < tokv->size && !isoperator(t + i))
+	else if (idx + i < tokv->size && !isoperator(t + i))
 		return (syntax_err("cannot redirect input to unset\n"), false);
 	return (true);
 }
@@ -112,7 +114,7 @@ bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 {
 	if (i > 1 && !isoperator(t - 1))
 		return (true);
-	if (!look4err(t, tokv, i))
+	if (!look4err(t, tokv, i - 1))
 		return (false);
 	while (i < tokv->size && ((t + 1)->type == TOK_IDENT
 			|| (t + 1)->type == TOK_SPACE))
