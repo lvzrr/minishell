@@ -17,3 +17,9 @@ void	syntax_err(char *msg)
 	ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
 		"%s", msg);
 }
+
+void	err(char *msg)
+{
+	ft_fprintf(2, ANSI_RED"error: "ANSI_RESET
+		"%s", msg);
+}

@@ -56,6 +56,8 @@ void	unset_var(t_string *name, t_data *data)
 *
 * 	NO SON VALIDOS.
 *
+*	tampoco se pude borrar el PATH, lo demás si.
+*
 *	en el final no puede haber:
 *		- strings con espacios (las variables no tienen espacios)
 *		- redirecciones (¿para que quieres usar stdin en unset?)
@@ -73,6 +75,8 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t i)
 	{
 		if ((t + i)->type == TOK_IDENT)
 			hasident = true;
+		if (!ft_strncmp((t + i)->s.data, "PATH", 4))
+			return (err("cannot unset $PATH, variable is protected\n"), false);
 		++i;
 	}
 	if (!hasident)
