@@ -37,7 +37,13 @@ void	default_prompt(t_data *data)
 		append_path_currdir(&data->prompt, data->pwd);
 	}
 	else
-		ft_tstr_pushslice(&data->prompt, data->pwd->data, data->pwd->len);
+	{
+		ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002");
+		ft_tstr_pushslice(&data->prompt, "?????", 5);
+		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
+		ft_tstr_pushslice(&data->prompt, " @ ../", 6);
+		append_path_currdir(&data->prompt, data->pwd);
+	}
 	ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002"" $ "
 		"\001"ANSI_RESET"\002");
 }
