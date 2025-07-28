@@ -17,6 +17,7 @@
 # include "vec.h"
 # include "mini_parser.h"
 # include "mini_lexer.h"
+# include "builtin.h"
 # include <stdio.h>
 # include <sys/ioctl.h>
 # include <signal.h>
