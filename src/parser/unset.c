@@ -137,7 +137,7 @@ bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 		unset_var(&(t + 1)->s, data);
 		collapse_at(tokv, i);
 		ft_tstr_clear(&t->s);
-		ft_tstr_pushslice(&t->s, "__builtin_unset", 15);
+		ft_tstr_pushslice(&t->s, "_sh__builtin_unset", 15);
 	}
 	return (true);
 }
