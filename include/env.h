@@ -25,7 +25,7 @@ typedef struct s_data	t_data;
 
 void	*load_env(t_data *data, char **envp, char *invocation);
 void	clean_env(t_vec *env);
-void	print_env(t_data *data);
+void	print_env(t_data *data, bool print_fast);
 void	load_hot_vars(t_data *data);
 t_var	*getvar(char *name, t_vec *env);
 void	load_invocation_helper(t_data *data, t_var oldvar);

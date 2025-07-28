@@ -42,6 +42,12 @@ void	unset_var(t_string *name, t_data *data)
 	}
 }
 
+static bool	catch_flags(size_t i, t_tok *t)
+{
+	return (i == 2 && (!ft_strcmp((t + i)->s.data, "-f")
+			|| !ft_strcmp((t + i)->s.data, "-v")));
+}
+
 /*
 *
 *	el statement tiene que ser:
@@ -79,6 +85,8 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 			hasident = true;
 		if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PATH"))
 			return (err("cannot unset $PATH, variable is protected\n"), false);
+		if (catch_flags(i, t))
+			return (err("unset doesn't support flags\n"), false);
 		++i;
 	}
 	if (idx + i < tokv->size && (isstringtoken(t + i)

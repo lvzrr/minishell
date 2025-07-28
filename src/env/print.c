@@ -12,7 +12,7 @@
 
 #include "env.h"
 
-void	print_env(t_data *data)
+void	print_env(t_data *data, bool print_fast)
 {
 	const t_var	*var;
 	size_t		i;
@@ -25,6 +25,8 @@ void	print_env(t_data *data)
 		ft_fprintf(2, ANSI_MAGENTA"%s"ANSI_RESET"=\"%s\"\n",
 			var->name.data, var->value.data);
 	}
+	if (!print_fast)
+		return ;
 	ft_fprintf(2, ANSI_MAGENTA"==END OF ENV==\n"ANSI_RESET);
 	ft_fprintf(2, ANSI_MAGENTA"==FAST ACCESS ENV=="ANSI_RESET"\n");
 	ft_fprintf(2, ANSI_MAGENTA"PWD="ANSI_RESET"%s\n", data->pwd->data);

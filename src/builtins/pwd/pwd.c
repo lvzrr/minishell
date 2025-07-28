@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 17:13:42 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/16 17:13:49 by jaicastr         ###   ########.fr       */
+/*   Created: 2025/07/28 01:21:26 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/28 01:22:47 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "builtin.h"
 
-int	main(int argc, char **argv, char **envp)
+int	_sh__builtin_pwd(int argc, char **argv, t_data *data)
 {
-	t_data	data;
-
-	signal_setup();
-	(void)flag_updater(&data);
-	data = getopts(argc, argv, envp);
-	if (data.debug)
-		print_env(&data, true);
-	if (data.phelp)
-	{
-		phelp();
-		return (clean_data(&data), EXIT_SUCCESS);
-	}
-	if (!data.oneliner)
-		core_loop(&data);
+	(void)argv;
+	if (argc)
+		return (ft_fprintf(2, ANSI_RED"pwd: too many arguments\n"
+				ANSI_RESET), EXIT_FAILURE);
+	if (!data->pwd || !data->pwd->data)
+		return (ft_fprintf(2, ANSI_RED"pwd: pwd not found\n"
+				ANSI_RESET), EXIT_FAILURE);
 	else
-		handle_oneliner(&data);
-	return (clean_data(&data), EXIT_SUCCESS);
+	{
+		write(1, data->pwd->data, data->pwd->len);
+		write(1, "\n", 1);
+	}
+	return (EXIT_SUCCESS);
 }

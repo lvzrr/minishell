@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/16 17:13:42 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/16 17:13:49 by jaicastr         ###   ########.fr       */
+/*   Created: 2025/07/28 01:36:49 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/28 01:42:15 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minish.h"
+#include "builtin.h"
 
-int	main(int argc, char **argv, char **envp)
+#define NO_FAST_ACCESS false
+
+int	_sh__builtin_env(int argc, char **argv, t_data *data)
 {
-	t_data	data;
-
-	signal_setup();
-	(void)flag_updater(&data);
-	data = getopts(argc, argv, envp);
-	if (data.debug)
-		print_env(&data, true);
-	if (data.phelp)
-	{
-		phelp();
-		return (clean_data(&data), EXIT_SUCCESS);
-	}
-	if (!data.oneliner)
-		core_loop(&data);
-	else
-		handle_oneliner(&data);
-	return (clean_data(&data), EXIT_SUCCESS);
+	(void)argv;
+	if (!data)
+		return (EXIT_FAILURE);
+	if (argc == 0)
+		return (print_env(data, NO_FAST_ACCESS), EXIT_SUCCESS);
+	ft_fprintf(2, ANSI_RED"env error:"ANSI_RESET"invalid option or usage\n");
+	return (EXIT_FAILURE);
 }

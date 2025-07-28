@@ -97,7 +97,7 @@ int	_sh__builtin_echo(int argc, char **argv, t_data *data)
 	com_n = false;
 	com_e = false;
 	if (!argc || !argv)
-		return (write(1, "\n", 1), 0);
+		return (write(1, "\n", 1), EXIT_SUCCESS);
 	i = 0;
 	while (i < argc && argv[i][0] == '-' && argv[i][1])
 		setflags(argv[i++], &com_n, &com_e);
@@ -107,8 +107,8 @@ int	_sh__builtin_echo(int argc, char **argv, t_data *data)
 		write_normal(argc, argv);
 	else
 		if (write_e(argc, argv))
-			return (0);
+			return (EXIT_SUCCESS);
 	if (!com_n)
-		return (write(1, "\n", 1), 0);
-	return (0);
+		return (write(1, "\n", 1), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
