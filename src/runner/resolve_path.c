@@ -99,6 +99,8 @@ bool	resolve_path(t_vec *tokv, t_data *data)
 		else if (t && (i == 0 || (i > 1 && isstringtoken(t)
 					&& isoperator(t - 1))) && !resolve(t, data))
 			return (false);
+		if (t && t->type == TOK_REDIR_IN && !check_redir(t))
+			return (false);
 		++i;
 	}
 	if (data->debug)
