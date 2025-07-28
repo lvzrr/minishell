@@ -19,6 +19,8 @@
 # include <unistd.h>
 # include <stdbool.h>
 
+typedef struct s_data	t_data;
+
 int		_sh__builtin_cd(int argc, char **argv, t_data *data);
 int		_sh__builtin_echo(int argc, char **argv, t_data *data);
 int		_sh__builtin_pwd(int argc, char **argv, t_data *data);
