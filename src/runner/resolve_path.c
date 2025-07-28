@@ -53,7 +53,7 @@ static bool	resolve(t_tok *t, t_data *data)
 
 	if (!t->s.data || !*t->s.data)
 		return (err("'' not a command\n"), false);
-	if (!ft_strncmp(t->s.data, "./", 2))
+	if (!ft_strncmp(t->s.data, "./", 2) || *t->s.data == '/')
 		return (exists_executable(t));
 	path_lookup = look4bin(t->s.data, data);
 	if (!path_lookup)
