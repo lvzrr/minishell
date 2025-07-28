@@ -145,5 +145,7 @@ bool	expand_vars(t_vec *tokv, t_data *data)
 			remove_scaping_singledollar(t);
 		}
 	}
+	if (data->debug)
+		dump_tokenstream("POST EXPANSION", tokv);
 	return (true);
 }
