@@ -34,7 +34,7 @@ int	_sh__builtin_cd(int argc, char **argv, t_data *data)
 				"no such file or directory\n"), EXIT_FAILURE);
 	new = getcwd(NULL, 0);
 	if (!new)
-		return (ft_fprintf(2, "cd: getcwd"), EXIT_FAILURE);
+		return (ft_fprintf(2, "cd: getcwd\n"), EXIT_FAILURE);
 	ft_tstr_clear(data->pwd);
 	ft_tstr_pushstr(data->pwd, new);
 	free(new);
