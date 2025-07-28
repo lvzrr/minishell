@@ -30,6 +30,7 @@ typedef struct s_data
 	bool		phelp;
 	bool		hdoc_terminate;
 	bool		under_valgrind;
+	bool		exit;
 	bool		segfault;
 	char		*invocation;
 	t_string	oneliner_s;

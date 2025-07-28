@@ -80,7 +80,7 @@ static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
 
 void	core_loop(t_data *data)
 {
-	while (1)
+	while (!data->exit)
 	{
 		(default_prompt(data), clean_tokenstream(&data->tokv));
 		if (check_clean_and_exit(read_l(&data->prompt, &data->tokv, true),
@@ -94,12 +94,14 @@ void	core_loop(t_data *data)
 			continue ;
 		if (data->debug)
 			dump_tokenstream("PARSER", &data->tokv);
-		if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
-			return ;
 		if (opt_clean(heredoc(&data->tokv, data), false, &data->tokv))
 			continue ;
 		resolve_path(&data->tokv, data);
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
+	
+		// temporal, exit lo deberá manejar el ejecutor
+		if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
+			return ;
 	}
 }

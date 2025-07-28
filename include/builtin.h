@@ -28,6 +28,7 @@ int		_sh__builtin_export(int argc, char **argv, t_data *data);
 int		_sh__builtin_unset(int argc, char **argv, t_data *data);
 int		_sh__builtin_env(int argc, char **argv, t_data *data);
 int		_sh__builtin_exit(int argc, char **argv, t_data *data);
+int		_sh__builtin_exit(int argc, char **argv, t_data *data);
 
 // helpers echo
 

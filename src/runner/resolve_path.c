@@ -71,6 +71,7 @@ bool	manage_builtin(t_tok *t)
 		return (true);
 	if (!ft_strcmp(t->s.data, "echo")
 		|| !ft_strcmp(t->s.data, "cd")
+		|| !ft_strcmp(t->s.data, "exit")
 		|| !ft_strcmp(t->s.data, "pwd")
 		|| !ft_strcmp(t->s.data, "env"))
 	{

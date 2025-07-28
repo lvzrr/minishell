@@ -104,7 +104,8 @@ bool	check_exit(t_vec *tokv)
 	{
 		tok = ft_vec_get(tokv, i);
 		if (tok && tok->s.data && tok->s.len
-			&& !ft_strcmp(tok->s.data, "exit") && tok->type == TOK_IDENT)
+			&& !ft_strcmp(tok->s.data, "_sh__builtin_exit")
+			&& tok->type == TOK_IDENT)
 			return (true);
 		i++;
 	}
