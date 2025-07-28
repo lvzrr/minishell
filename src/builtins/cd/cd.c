@@ -37,5 +37,5 @@ int	_sh__builtin_cd(int argc, char **argv, t_data *data)
 	if (!new)
 		return (ft_fprintf(2, "cd: getcwd\n"), EXIT_FAILURE);
 	(ft_tstr_clear(data->pwd), ft_tstr_pushstr(data->pwd, new));
-	return (free(new), default_prompt(data), EXIT_SUCCESS);
+	return (free(new), EXIT_SUCCESS);
 }
