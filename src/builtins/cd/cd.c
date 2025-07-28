@@ -25,7 +25,8 @@ int	_sh__builtin_cd(int argc, char **argv, t_data *data)
 	{
 		new = getenv("HOME");
 		if (!new)
-			return (ft_fprintf(2, "error: no $HOME\n"), EXIT_FAILURE);
+			return (ft_fprintf(2, ANSI_RED"cd error: "ANSI_RESET
+					"no $HOME\n"), EXIT_FAILURE);
 		argv = &new;
 		argc = 1;
 	}
@@ -35,8 +36,6 @@ int	_sh__builtin_cd(int argc, char **argv, t_data *data)
 	new = getcwd(NULL, 0);
 	if (!new)
 		return (ft_fprintf(2, "cd: getcwd\n"), EXIT_FAILURE);
-	ft_tstr_clear(data->pwd);
-	ft_tstr_pushstr(data->pwd, new);
-	free(new);
-	return (default_prompt(data), EXIT_SUCCESS);
+	(ft_tstr_clear(data->pwd), ft_tstr_pushstr(data->pwd, new));
+	return (free(new), default_prompt(data), EXIT_SUCCESS);
 }
