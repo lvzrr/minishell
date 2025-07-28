@@ -82,7 +82,7 @@ void	core_loop(t_data *data)
 {
 	while (1)
 	{
-		clean_tokenstream(&data->tokv);
+		(default_prompt(data), clean_tokenstream(&data->tokv));
 		if (check_clean_and_exit(read_l(&data->prompt, &data->tokv, true),
 				false, &data->tokv))
 			return ;
