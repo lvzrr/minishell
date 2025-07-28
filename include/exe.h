@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   exe.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/27 14:04:51 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/27 14:06:14 by jaicastr         ###   ########.fr       */
+/*   Created: 2025/07/28 22:13:25 by jaicastr          #+#    #+#             */
+/*   Updated: 2025/07/28 22:14:01 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mini_parser.h"
+#ifndef EXE_H
+# define EXE_H
 
-void	syntax_err(char *msg)
-{
-	ft_fprintf(2, ANSI_RED"syntax error: "ANSI_RESET
-		"%s", msg);
-}
+# include "mini_parser.h"
 
-void	err(char *msg)
-{
-	ft_fprintf(2, ANSI_RED"error: "ANSI_RESET
-		"%s", msg);
-}
+void	free_split(char **split);
+bool	resolve_path(t_vec *tokv, t_data *data);
 
-void	err_file(char *msg, char *fname)
-{
-	ft_fprintf(2, ANSI_RED"error: "ANSI_RESET
-		"'%s': %s", fname, msg);
-}
+#endif

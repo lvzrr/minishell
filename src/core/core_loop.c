@@ -98,6 +98,7 @@ void	core_loop(t_data *data)
 			return ;
 		if (opt_clean(heredoc(&data->tokv, data), false, &data->tokv))
 			continue ;
+		resolve_path(&data->tokv, data);
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
 	}

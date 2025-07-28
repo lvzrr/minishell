@@ -34,7 +34,7 @@ static void	increase_shell_lvl(t_vec *env)
 	}
 }
 
-static void	free_split(char **split)
+void	free_split(char **split)
 {
 	size_t	i;
 

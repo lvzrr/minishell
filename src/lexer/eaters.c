@@ -51,7 +51,7 @@ size_t	eat_string_sq(t_string *s, size_t offst)
 	}
 	if (offst < s->len && s->data[offst] == '\'')
 		return (++offst);
-	return (syntax_err("unclosed '"), SIZE_MAX);
+	return (syntax_err("unclosed '\n"), SIZE_MAX);
 }
 
 /*
@@ -73,7 +73,7 @@ size_t	eat_string_dq(t_string *s, size_t offst)
 	}
 	if (offst < s->len && s->data[offst] == '\"')
 		return (++offst);
-	return (syntax_err("unclosed \""), SIZE_MAX);
+	return (syntax_err("unclosed \"\n"), SIZE_MAX);
 }
 
 /*

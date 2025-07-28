@@ -175,5 +175,6 @@ bool	pre_clean(t_vec *tokv);
 bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i);
 void	syntax_err(char *msg);
 bool	expand_wildcard(t_tok *t, t_vec *tokv, size_t i);
+void	err_file(char *msg, char *fname);
 void	err(char *msg);
 #endif
