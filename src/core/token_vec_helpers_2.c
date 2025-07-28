@@ -85,3 +85,17 @@ void	tok_push_indexed(t_vec *a, t_string *b, size_t idx)
 	ft_tstr_clear(b);
 	*a = c;
 }
+
+void	tok_push_space(t_vec *a, size_t idx)
+{
+	t_vec			c;
+	t_tok			newtok;
+
+	newtok = (t_tok){.type = TOK_SPACE, .s = ft_tstr_from_cstr(" ")};
+	c = ft_vec(a->size + 1, sizeof(t_tok));
+	copy_helper_nocollapse(a, &newtok, &c, idx);
+	vec_deep_copy(&c, a, idx);
+	clean_tokenstream(a);
+	ft_vec_free(a);
+	*a = c;
+}

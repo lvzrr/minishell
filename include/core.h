@@ -46,6 +46,7 @@ void		ctrl_c(int s);
 bool		check_vec_eq(t_vec *a, t_vec *b);
 void		vec_push_hdoc(t_vec *a, t_string *b, size_t *idx);
 void		vec_push_tokens_from(t_vec *a, t_vec *b, size_t w);
+void		tok_push_space(t_vec *a, size_t idx);
 void		vec_push_indexed(t_vec *a, t_string *b, size_t *idx);
 void		vec_deep_copy(t_vec *a, t_vec *b, size_t s);
 bool		copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx);

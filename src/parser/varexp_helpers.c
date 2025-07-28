@@ -19,6 +19,22 @@ void	change_tilde(t_tok *t)
 	t->type = TOK_STRING_DQ;
 }
 
+void	clean_last_space(t_vec *tokv)
+{
+	t_tok	*t;
+
+	t = ft_vec_peek_last(tokv);
+	if (!t || t->type != TOK_SPACE)
+		return ;
+	collapse_at(tokv, tokv->size - 1);
+}
+
+static bool	wildcard_condition(t_tok *t, t_vec *tokv, size_t i)
+{
+	return (t && t->type == TOK_IDENT && t->s.len == 1 && *t->s.data == '*'
+		&& !expand_wildcard(t, tokv, i));
+}
+
 bool	pre_clean(t_vec *tokv)
 {
 	size_t	i;
@@ -41,9 +57,11 @@ bool	pre_clean(t_vec *tokv)
 				false);
 		if (t && t->type == TOK_TILDE)
 			change_tilde(t);
+		if (wildcard_condition(t, tokv, i))
+			return (err("no matches found\n"), false);
 		i++;
 	}
-	return (true);
+	return (clean_last_space(tokv), true);
 }
 
 bool	check_interpret(t_tok *t, size_t i)
