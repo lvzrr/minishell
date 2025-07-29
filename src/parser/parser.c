@@ -22,7 +22,7 @@ t_node	*parse(t_vec *tokv, t_data *data)
 				"be wrapped in parenthesis\n"), NULL);
 	if (data->debug)
 	{
-		ft_fprintf(2, ANSI_MAGENTA"\n\n==TREE==\n\n"
+		ft_fprintf(2, ANSI_MAGENTA"==TREE==\n"
 			ANSI_RESET);
 		print_tree(tree, 0);
 	}
