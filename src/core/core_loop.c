@@ -14,6 +14,8 @@
 
 void	handle_oneliner(t_data *data)
 {
+	t_node	*tree;
+
 	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
 	if (!data->oneliner_s.len || !data->oneliner_s.data
 		|| !*data->oneliner_s.data)
@@ -31,9 +33,14 @@ void	handle_oneliner(t_data *data)
 		clean_tokenstream(&data->tokv);
 		return ;
 	}
-	// TODO: aqui pasarle al constructor del AST
-	// tokv antes de limpiarla
-	clean_tokenstream(&data->tokv);
+	if (!resolve_path(&data->tokv, data))
+	{
+		clean_tokenstream(&data->tokv);
+		return ;
+	}
+	check_exit(&data->tokv, data);
+	tree = parse(&data->tokv, data);
+	(free_tree(tree), clean_tokenstream(&data->tokv));
 }
 
 /*
