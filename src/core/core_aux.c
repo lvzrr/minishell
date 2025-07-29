@@ -86,15 +86,7 @@ bool	read_l_hdoc(t_string *prompt, t_string *line)
 	return (true);
 }
 
-/*
-*	Mira que en el stream haya un token, identificador,
-*	que sea exit, para salir del shell, si es "exit" o 'exit'
-*	no vale.
-*
-*	TODO: cambiar y devolver la posicion del exit, por si alguen hace cat "hello" && exit, que no termine inmediatamente
-*/
-
-bool	check_exit(t_vec *tokv)
+void	check_exit(t_vec *tokv, t_data *data)
 {
 	const t_tok	*tok;
 	size_t		i;
@@ -106,8 +98,7 @@ bool	check_exit(t_vec *tokv)
 		if (tok && tok->s.data && tok->s.len
 			&& !ft_strcmp(tok->s.data, "_sh__builtin_exit")
 			&& tok->type == TOK_IDENT)
-			return (true);
+			data->exit = true;
 		i++;
 	}
-	return (false);
 }

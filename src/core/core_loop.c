@@ -80,6 +80,9 @@ static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
 
 void	core_loop(t_data *data)
 {
+	t_node	*tree;
+
+	tree = NULL;
 	while (!data->exit)
 	{
 		(default_prompt(data), clean_tokenstream(&data->tokv));
@@ -96,14 +99,12 @@ void	core_loop(t_data *data)
 			dump_tokenstream("POST PROCESSED", &data->tokv);
 		if (opt_clean(heredoc(&data->tokv, data), false, &data->tokv))
 			continue ;
-		resolve_path(&data->tokv, data);
-		// TODO: aqui pasarle al constructor del AST
-		// tokv antes de limpiarla
-		t_node *n = parse_expr(&data->tokv);
-		print_tree(n, 0);
-		free_tree(n);
-		// temporal, exit lo deberá manejar el ejecutor
-		// if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
-			return ;
+		if (!resolve_path(&data->tokv, data))
+			continue ;
+		check_exit(&data->tokv, data);
+		tree = parse(&data->tokv, data);
+		if (!tree)
+			continue ;
+		free_tree(tree);
 	}
 }

@@ -156,5 +156,6 @@ t_node	*parse_paren_expr(t_vec *tokv);
 t_node	*parse_expr(t_vec *tokv);
 void	free_tree(t_node *node);
 void	print_tree(t_node *node, int depth);
+t_node	*parse(t_vec *tokv, t_data *data);
 void	err(char *msg);
 #endif
