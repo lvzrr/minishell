@@ -58,7 +58,7 @@ static bool	resolve(t_tok *t, t_data *data)
 	path_lookup = look4bin(t->s.data, data);
 	if (!path_lookup)
 		return (ft_free((void **)&path_lookup),
-			err_file("no such file or directory\n", t->s.data), false);
+			err_file("not a command\n", t->s.data), false);
 	(ft_tstr_clear(&t->s), ft_tstr_pushstr(&t->s, path_lookup));
 	return (ft_free((void **)&path_lookup), true);
 }
