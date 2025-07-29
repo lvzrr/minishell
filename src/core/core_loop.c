@@ -96,7 +96,7 @@ void	core_loop(t_data *data)
 		if (opt_clean(pre_process(&data->tokv, data), false, &data->tokv))
 			continue ;
 		if (data->debug)
-			dump_tokenstream("POST PROCESSED", &data->tokv);
+			dump_tokenstream("PREPROCESSED DATA", &data->tokv);
 		if (opt_clean(heredoc(&data->tokv, data), false, &data->tokv))
 			continue ;
 		if (!resolve_path(&data->tokv, data))
