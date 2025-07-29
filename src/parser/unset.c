@@ -126,7 +126,7 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 
 bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 {
-	if (i > 1 && !isoperator(t - 1))
+	if (i > 1 && !isoperator(t - 1) && (t - 1)->type != TOK_LPAREN)
 		return (true);
 	if (!look4err(t, tokv, i - 1))
 		return (false);

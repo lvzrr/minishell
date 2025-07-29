@@ -22,9 +22,9 @@
 static bool	check_invalid_export(t_tok *t, size_t i)
 {
 	return (t && ((i > 0 && isstringtoken(t)
-				&& !ft_strcmp("export", t->s.data) && isoperator(t - 1))
-			|| (i == 0 && isstringtoken(t)
-				&& !ft_strcmp(t->s.data, "export"))));
+				&& !ft_strcmp("export", t->s.data) && (isoperator(t - 1)
+					|| (t - 1)->type == TOK_LPAREN)) || (i == 0
+				&& isstringtoken(t) && !ft_strcmp(t->s.data, "export"))));
 }
 
 bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
