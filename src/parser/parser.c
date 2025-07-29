@@ -17,12 +17,14 @@ t_node	*parse(t_vec *tokv, t_data *data)
 	t_node	*tree;
 
 	tree = parse_expr(tokv);
+	if (tokv->size && tree)
+		return (free_tree(tree), err("operators '&&' and '||' MUST "
+				"be wrapped in parenthesis\n"), NULL);
 	if (data->debug)
 	{
 		ft_fprintf(2, ANSI_MAGENTA"\n\n==TREE==\n\n"
 			ANSI_RESET);
 		print_tree(tree, 0);
 	}
-	clean_tokenstream(tokv);
 	return (tree);
 }

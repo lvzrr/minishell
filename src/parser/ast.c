@@ -40,19 +40,6 @@ t_node	*parse_cmd(t_vec *tokv)
 	return (node);
 }
 
-static bool	check_valid(t_vec *tokv)
-{
-	t_tok	*t;
-
-	if (tokv && !tokv->size)
-		return (true);
-	t = ft_vec_get_mut(tokv, 0);
-	if (t && isoperator(t) && t->type != TOK_PIPE)
-		return (err("'&&' and '||' have to be in parenthesis\n"),
-			false);
-	return (true);
-}
-
 t_node	*parse_pipe_expr(t_vec *tokv)
 {
 	t_node	*lhs;
@@ -62,8 +49,6 @@ t_node	*parse_pipe_expr(t_vec *tokv)
 	lhs = parse_cmd(tokv);
 	if (!lhs)
 		return (NULL);
-	if (!check_valid(tokv))
-		return (free_tree(lhs), NULL);
 	while (tokv->size
 		&& ((t_tok *)ft_vec_get_mut(tokv, 0))->type == TOK_PIPE)
 	{
