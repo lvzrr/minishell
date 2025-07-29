@@ -43,6 +43,9 @@ bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
 	else if (t && !i && isoperator(t))
 		return (syntax_err("operators must be preceded by identifiers\n"),
 			false);
+	else if (t && i >= 1 && isstringtoken(t) && (t - 1)->type == TOK_RPAREN)
+		return (syntax_err("commands must be preceded by operators\n"),
+			false);
 	return (true);
 }
 

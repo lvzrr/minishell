@@ -98,11 +98,13 @@ bool	resolve_path(t_vec *tokv, t_data *data)
 	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i);
-		if (t && (i == 0 || (i > 1 && isstringtoken(t) && isoperator(t - 1)))
-			&& manage_builtin(t))
+		if (t && ((i == 0 && t->type != TOK_LPAREN) || (i >= 1
+					&& isstringtoken(t) && (isoperator(t - 1)
+						|| (t - 1)->type == TOK_LPAREN))) && manage_builtin(t))
 			;
-		else if (t && (i == 0 || (i > 1 && isstringtoken(t)
-					&& isoperator(t - 1))) && !resolve(t, data))
+		else if (t && ((i == 0 && t->type != TOK_LPAREN) || (i >= 1
+					&& isstringtoken(t) && (isoperator(t - 1)
+						|| (t - 1)->type == TOK_LPAREN))) && !resolve(t, data))
 			return (false);
 		if (t && t->type == TOK_REDIR_IN && !check_redir(t))
 			return (false);

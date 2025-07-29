@@ -45,7 +45,6 @@ typedef enum e_nodetype
 {
 	NODE_OP,
 	NODE_CMD,
-	NODE_SUBSH,
 }	t_nodetype;
 
 typedef struct s_node	t_node;
@@ -75,35 +74,8 @@ typedef struct s_cmd	t_cmd;
 typedef union u_node
 {
 	t_cmd		*cmd;
-	t_node		*subsh;
 	t_opnode	*op;
 }	t_u;
-
-/*
- *	El tipo de redireccion y la
- *	union con ellos, primero se
- *	mira de qué tipo es, o si es
- *	0xff (no hay redireccion), y
- *	se accede a la union acto seguido.
- *
- *	tener en cuenta que el parser
- *	colapsa:
- *
- *	2>&1		->	{TOK_REDIR_nn, "2:1"}
- *	1>&2		->	{TOK_REDIR_nn, "1:2"}
- *	< name		->	{TOK_REDIR_IN, name}
- *	> name		->	{TOK_REDIR_TO, name}
- *	>> name		->	{TOK_APPEND_TO, name}
- *	2> name		->	{TOK_STDERR_TO, name}
- *	2>> name	->	{TOK_STDERR_APPEND, name}
- *
- */
-
-typedef struct s_redir
-{
-	t_toktype		type;
-	char			*fr;
-}	t_redir;
 
 /*
  *	el comando y sus respectivas
@@ -145,7 +117,7 @@ typedef struct s_opnode
 
 void	collapse_at(t_vec *tokv, size_t i);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
-bool	post_process(t_vec *tokv, t_data *data);
+bool	pre_process(t_vec *tokv, t_data *data);
 bool	detect_vars(t_vec *tokv, t_data *data);
 void	del_unused(t_vec *tokv, size_t idx);
 void	omit_hdoc(t_vec *tokv);
@@ -177,5 +149,12 @@ bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i);
 void	syntax_err(char *msg);
 bool	expand_wildcard(t_tok *t, t_vec *tokv, size_t i);
 void	err_file(char *msg, char *fname);
+size_t	getcmdlen(t_vec *tokv);
+t_vec	create_redirs(t_tok *t, t_vec *tokv);
+t_node	*parse_cmd(t_vec *tokv);
+t_node	*parse_paren_expr(t_vec *tokv);
+t_node	*parse_expr(t_vec *tokv);
+void	free_tree(t_node *node);
+void	print_tree(t_node *node, int depth);
 void	err(char *msg);
 #endif

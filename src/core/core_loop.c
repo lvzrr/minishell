@@ -23,7 +23,7 @@ void	handle_oneliner(t_data *data)
 		clean_tokenstream(&data->tokv);
 	if (data->debug)
 		dump_tokenstream("LEXER", &data->tokv);
-	post_process(&data->tokv, data);
+	pre_process(&data->tokv, data);
 	if (data->debug)
 		dump_tokenstream("PARSER", &data->tokv);
 	if (!heredoc(&data->tokv, data))
@@ -90,7 +90,7 @@ void	core_loop(t_data *data)
 			continue ;
 		if (data->debug)
 			dump_tokenstream("LEXER", &data->tokv);
-		if (opt_clean(post_process(&data->tokv, data), false, &data->tokv))
+		if (opt_clean(pre_process(&data->tokv, data), false, &data->tokv))
 			continue ;
 		if (data->debug)
 			dump_tokenstream("POST PROCESSED", &data->tokv);
@@ -99,9 +99,11 @@ void	core_loop(t_data *data)
 		resolve_path(&data->tokv, data);
 		// TODO: aqui pasarle al constructor del AST
 		// tokv antes de limpiarla
-	
+		t_node *n = parse_expr(&data->tokv);
+		print_tree(n, 0);
+		free_tree(n);
 		// temporal, exit lo deberá manejar el ejecutor
-		if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
+		// if (check_clean_and_exit(check_exit(&data->tokv), true, &data->tokv))
 			return ;
 	}
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   post_process.c                                     :+:      :+:    :+:   */
+/*   pre_process.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaicastr <jaicastr@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 20:39:55 by jaicastr          #+#    #+#             */
-/*   Updated: 2025/07/19 20:41:00 by jaicastr         ###   ########.fr       */
+/*   Updated: 2025/07/29 20:00:28 by jaicastr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static bool	redirs_and_clean(t_vec *tokv)
 *
 */
 
-bool	post_process(t_vec *tokv, t_data *data)
+bool	pre_process(t_vec *tokv, t_data *data)
 {
 	size_t	i;
 	t_tok	*t;

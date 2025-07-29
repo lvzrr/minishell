@@ -42,10 +42,14 @@ void	unset_var(t_string *name, t_data *data)
 	}
 }
 
-static bool	catch_flags(size_t i, t_tok *t)
+static bool	flags_last_cond(size_t i, t_tok *t, size_t x, t_vec *tokv)
 {
-	return (i == 2 && (!ft_strcmp((t + i)->s.data, "-f")
-			|| !ft_strcmp((t + i)->s.data, "-v")));
+	if (x == SIZE_MAX)
+		return (i == 2 && (!ft_strcmp((t + i)->s.data, "-f")
+				|| !ft_strcmp((t + i)->s.data, "-v")));
+	else
+		return (x + i < tokv->size && !isoperator(t + i)
+			&& (t + i)->type != TOK_RPAREN);
 }
 
 /*
@@ -85,7 +89,7 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 			hasident = true;
 		if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PATH"))
 			return (err("cannot unset $PATH, variable is protected\n"), false);
-		if (catch_flags(i, t))
+		if (flags_last_cond(i, t, SIZE_MAX, tokv))
 			return (err("unset doesn't support flags\n"), false);
 		++i;
 	}
@@ -95,7 +99,7 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 			false);
 	else if (!hasident)
 		return (syntax_err("unset statement cannot be empty\n"), false);
-	else if (idx + i < tokv->size && !isoperator(t + i))
+	else if (flags_last_cond(i, t, idx, tokv))
 		return (syntax_err("cannot redirect input to unset\n"), false);
 	return (true);
 }
