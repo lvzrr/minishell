@@ -18,6 +18,8 @@ bool	exists_executable(t_tok *t)
 		return (err("no such file or directory\n"), false);
 	if (access(t->s.data, X_OK) == -1)
 		return (err("not an executable or not enough perms\n"), false);
+	if (is_dir(t->s.data))
+		return (err("is a directory\n"), false);
 	return (true);
 }
 

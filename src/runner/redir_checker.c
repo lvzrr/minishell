@@ -12,6 +12,15 @@
 
 #include "exe.h"
 
+bool	is_dir(const char *path)
+{
+	struct stat	s;
+
+	if (stat(path, &s) != 0)
+		return (false);
+	return ((s.st_mode & S_IFMT) == S_IFDIR);
+}
+
 bool	check_redir(t_tok *t)
 {
 	if (access(t->s.data, F_OK) == -1)

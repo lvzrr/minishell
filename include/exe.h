@@ -18,5 +18,6 @@
 void	free_split(char **split);
 bool	resolve_path(t_vec *tokv, t_data *data);
 bool	check_redir(t_tok *t);
+bool	is_dir(const char *path);
 
 #endif
