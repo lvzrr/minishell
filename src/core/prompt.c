@@ -25,7 +25,7 @@ void	append_path_currdir(t_string *prompt, t_string *pwd)
 
 void	pushcolor(t_string *toput, t_data *data)
 {
-	if (!data || !toput || !data->lastcommand_res
+	if (!data || !toput || !data->lastcommand_res.alloc_size
 		|| !data->lastcommand_res.value.data)
 		return ;
 	if (!ft_strcmp(data->lastcommand_res.value.data, "0"))
