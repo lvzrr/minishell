@@ -65,6 +65,7 @@ bool	run_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 	{
 		ret = _sh__builtin_cd(tree->u.cmd->argc - 1,
 				tree->u.cmd->argv + 1, data);
+		load_last_result(ret, data);
 		if (ret == EXIT_FAILURE)
 			return (false);
 	}
