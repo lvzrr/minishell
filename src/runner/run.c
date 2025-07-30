@@ -12,8 +12,6 @@
 
 #include "exe.h"
 
-// TODO: REDIRS
-
 bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 {
 	int		ret;

@@ -13,22 +13,15 @@
 #include "exe.h"
 
 /*
-*	me acabo de dar cuenta de que en el
-*	delirio lo he escrito en ingles, no lo
-*	voy a cambiar, un beso.
-*
-*	echo hello 2> hello.txt
-*
-*	tok:
-*	"hello:2"
-*
-*	THESE WORK BC ATOI STOPS
-*	AT NON-NUMERIC VALUES
-*
-*	so 1:2 we read 2 first to the end,
-*	then the fist part, in the case
-*	of 1>&2, in case is file:N, then
-*	we zero the : making it a fake terminator
+*	  A ver, estas se van al
+*	  último ':', que es el que
+*	  inyectamos en el encoding,
+*	  entonces, si lo de antes es
+*	  un número lo dejamos (atoi para solo),
+*	  pero si no, hay que terminar la
+*	  string el el ':' artificial,
+*	  ya que si no no leeriamos el
+*	  archivo que toca.
 */
 
 void	redir_to_fd(t_tok *t)
