@@ -66,7 +66,9 @@ bool	pre_clean(t_vec *tokv)
 
 bool	check_interpret(t_tok *t, size_t i)
 {
-	if (i > 0 && (t - 1)->type == TOK_SPACE && i > 5 && isoperator(t - 5))
+	if (i > 3 && (t - 4)->type == TOK_LPAREN)
+		return (false);
+	else if (i > 0 && (t - 1)->type == TOK_SPACE && i > 5 && isoperator(t - 5))
 		return (false);
 	else if (i > 3 && isoperator(t - 4))
 		return (false);

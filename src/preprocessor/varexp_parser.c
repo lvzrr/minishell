@@ -105,6 +105,9 @@ static bool	isexported(t_tok *t, size_t i)
 	else if (i > 2 && (t - 3)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 3)->s.data))
 		return (true);
+	else if (i > 3 && (t - 4)->type == TOK_LPAREN
+			&& !ft_strcmp("export", (t - 3)->s.data))
+		return (true);
 	else if (i > 3 && (t - 4)->type == TOK_IDENT
 		&& !ft_strcmp("export", (t - 4)->s.data))
 		return (true);
