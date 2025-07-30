@@ -22,7 +22,7 @@ t_string	get_hostname(void)
 		return (ft_tstr_from_cstr("????"));
 	hostname = get_next_line(fd);
 	ft_tstr_trim(&hostname, "\n");
-	ft_fgetc(fd, true);
+	(ft_fgetc(fd, true), close(fd));
 	return (hostname);
 }
 
