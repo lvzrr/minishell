@@ -14,12 +14,15 @@
 
 void	*match(char *s)
 {
-	if (!ft_strncmp(s + 13, "echo", 4))
-		return (_sh__builtin_echo);
-	if (!ft_strncmp(s + 13, "pwd", 3))
-		return (_sh__builtin_pwd);
-	if (!ft_strncmp(s + 13, "env", 3))
-		return (_sh__builtin_env);
+	if (ft_strlen(s) > 13)
+	{
+		if (!ft_strncmp(s + 13, "echo", 4))
+			return (_sh__builtin_echo);
+		if (!ft_strncmp(s + 13, "pwd", 3))
+			return (_sh__builtin_pwd);
+		if (!ft_strncmp(s + 13, "env", 3))
+			return (_sh__builtin_env);
+	}
 	return (NULL);
 }
 
