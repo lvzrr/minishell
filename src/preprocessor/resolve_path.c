@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exe.h"
+#include "mini_parser.h"
 
 bool	exists_executable(t_tok *t)
 {

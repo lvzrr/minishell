@@ -15,9 +15,8 @@
 
 # include "mini_parser.h"
 
-void	free_split(char **split);
-bool	resolve_path(t_vec *tokv, t_data *data);
-bool	check_redir(t_tok *t);
-bool	is_dir(const char *path);
+typedef struct s_node	t_node;
+
+bool	run(t_node *tree, t_data *data, t_node *tree_head);
 
 #endif
