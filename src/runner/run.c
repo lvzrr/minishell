@@ -78,8 +78,7 @@ bool	run_pipeline(t_node *tree, t_data *data, t_node *head, int _stdin)
 	int		status_right;
 
 	p.stdin_fd = _stdin;
-	pipe(p.pipefd);
-	if (p.pipefd[0] == -1 || p.pipefd[1] == -1)
+	if (pipe(p.pipefd) == -1)
 		return (err("pipe failed\n"), false);
 	left_pid = fork_left(tree, data, head, &p);
 	if (left_pid == -1)

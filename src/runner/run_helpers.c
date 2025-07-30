@@ -59,4 +59,5 @@ bool	run_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 	}
 	else
 		return (run_normal_builtin(tree, data, head, _stdin));
+	return (true);
 }

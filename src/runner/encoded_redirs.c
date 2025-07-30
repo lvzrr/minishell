@@ -87,5 +87,4 @@ void	_redir_nn(t_tok *t)
 	fd = ft_atoi(colon + 1);
 	fd2 = ft_atoi(t->s.data);
 	dup2(fd2, fd);
-	close(fd2);
 }
