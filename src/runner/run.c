@@ -85,12 +85,10 @@ bool	run_pipeline(t_node *tree, t_data *data, t_node *head, int _stdin)
 	right_pid = fork_right(tree, data, head, &p);
 	if (right_pid == -1)
 		return (err("fork failed\n"), false);
-	close(p.pipefd[0]);
-	close(p.pipefd[1]);
+	(close(p.pipefd[0]), close(p.pipefd[1]));
 	if (p.stdin_fd != -1)
 		close(p.stdin_fd);
-	waitpid(left_pid, &status_left, 0);
-	waitpid(right_pid, &status_right, 0);
+	(waitpid(left_pid, &status_left, 0), waitpid(right_pid, &status_right, 0));
 	return (WIFEXITED(status_left) && !WEXITSTATUS(status_left)
 		&& WIFEXITED(status_right) && !WEXITSTATUS(status_right));
 }
