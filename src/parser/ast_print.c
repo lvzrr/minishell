@@ -15,7 +15,10 @@
 void	print_indent(int depth)
 {
 	while (depth-- > 0)
+	{
+		ft_fprintf(2, ANSI_MAGENTA"|"ANSI_RESET);
 		write(2, "  ", 2);
+	}
 }
 
 void	print_argv(char **argv)
