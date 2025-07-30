@@ -27,7 +27,7 @@ bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 		if (_stdin != -1)
 			(dup2(_stdin, STDIN_FILENO), close(_stdin));
 		make_redirs(&tree->u.cmd->redir_v, _stdin);
-		ret = EXIT_FAILURE;
+		ret = EXIT_SUCCESS;
 		f = match(tree->u.cmd->argv[0]);
 		if (f)
 			ret = f(tree->u.cmd->argc - 1, tree->u.cmd->argv + 1, data);
