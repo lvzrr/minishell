@@ -18,8 +18,7 @@ size_t	getcmdlen(t_vec *tokv)
 	t_tok	*t;
 
 	i = 0;
-	t = ft_vec_get_mut(tokv, i);
-	while (i < tokv->size && isstringtoken(t))
+	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i);
 		if (!isstringtoken(t))
