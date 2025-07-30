@@ -111,7 +111,7 @@ void	core_loop(t_data *data)
 		tree = parse(&data->tokv, data);
 		if (!tree)
 			continue ;
-		run(tree, data, tree);
+		run(tree, data, tree, -1);
 		free_tree(tree);
 	}
 }

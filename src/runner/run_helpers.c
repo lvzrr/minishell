@@ -23,7 +23,24 @@ void	*match(char *s)
 	return (NULL);
 }
 
-bool	run_builtin(t_node *tree, t_data *data, t_node *head)
+int	ft_ternary(bool x)
+{
+	if (x)
+		return (0);
+	return (1);
+}
+
+void	child_cleanup(t_node *tree, t_data *data, char **envp)
+{
+	if (tree)
+		free_tree(tree);
+	if (data)
+		clean_data(data);
+	if (envp)
+		free_split(envp);
+}
+
+bool	run_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 {
 	int	ret;
 
@@ -38,10 +55,9 @@ bool	run_builtin(t_node *tree, t_data *data, t_node *head)
 	{
 		ret = _sh__builtin_exit(tree->u.cmd->argc - 1,
 				tree->u.cmd->argv + 1, data);
-		if (ret == EXIT_FAILURE)
-			return (false);
+		return (false);
 	}
 	else
-		run_normal_builtin(tree, data, head);
+		run_normal_builtin(tree, data, head, _stdin);
 	return (true);
 }

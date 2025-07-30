@@ -18,8 +18,18 @@
 
 typedef struct s_node	t_node;
 
-bool	run(t_node *tree, t_data *data, t_node *tree_head);
+typedef struct s_pipes
+{
+	int		stdin_fd;
+	int		pipefd[2];
+}	t_pipes;
+
+bool	run(t_node *tree, t_data *data, t_node *tree_head, int f);
 void	*match(char *s);
-bool	run_builtin(t_node *tree, t_data *data, t_node *head);
-bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head);
+bool	run_builtin(t_node *tree, t_data *data, t_node *head, int f);
+bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head, int f);
+int		ft_ternary(bool x);
+void	child_cleanup(t_node *tree, t_data *data, char **envp);
+pid_t	fork_left(t_node *tree, t_data *data, t_node *head, t_pipes *p);
+pid_t	fork_right(t_node *tree, t_data *data, t_node *head, t_pipes *p);
 #endif
