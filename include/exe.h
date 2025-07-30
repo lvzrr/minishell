@@ -14,6 +14,7 @@
 # define EXE_H
 
 # include "mini_parser.h"
+# include "core.h"
 
 typedef struct s_node	t_node;
 

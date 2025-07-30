@@ -108,7 +108,6 @@ void	core_loop(t_data *data)
 			continue ;
 		if (!resolve_path(&data->tokv, data))
 			continue ;
-		check_exit(&data->tokv, data);
 		tree = parse(&data->tokv, data);
 		if (!tree)
 			continue ;

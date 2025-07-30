@@ -33,3 +33,10 @@ void	s_handler(int signal)
 	clean_data(data);
 	exit(EXIT_FAILURE);
 }
+
+void	signal_child_running(void)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGSEGV, SIG_IGN);
+}

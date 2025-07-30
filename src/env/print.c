@@ -18,7 +18,8 @@ void	print_env(t_data *data, bool print_fast)
 	size_t		i;
 
 	i = 0;
-	ft_fprintf(2, ANSI_MAGENTA"==ENV=="ANSI_RESET"\n");
+	if (print_fast)
+		ft_fprintf(2, ANSI_MAGENTA"==ENV=="ANSI_RESET"\n");
 	while (i < data->env.size)
 	{
 		var = ft_vec_get(&data->env, i++);
