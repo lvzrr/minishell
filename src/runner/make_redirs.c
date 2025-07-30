@@ -71,6 +71,23 @@ void	append(t_tok *t)
 	close(fd);
 }
 
+void	write_from(t_tok *t, int _stdin)
+{
+	int		pipefd[2];
+
+	if (!t || !t->s.data)
+		return ;
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe failed");
+		exit(1);
+	}
+	(write(pipefd[1], t->s.data, t->s.len), close(pipefd[1]));
+	(dup2(pipefd[0], STDIN_FILENO), close(pipefd[0]));
+	if (_stdin != -1)
+		close(_stdin);
+}
+
 void	make_redirs(t_vec *redir_v, int _stdin)
 {
 	size_t	i;
@@ -92,6 +109,8 @@ void	make_redirs(t_vec *redir_v, int _stdin)
 			append_from(t);
 		else if (t->type == TOK_REDIR_IN)
 			redir_from(t, _stdin);
+		else if (t->type == TOK_WRITE_IN)
+			write_from(t, _stdin);
 		else if (t->type == TOK_REDIR_NN)
 			_redir_nn(t);
 		++i;
