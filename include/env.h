@@ -32,4 +32,5 @@ void	load_invocation_helper(t_data *data, t_var oldvar);
 void	set_shell_var(t_data *data);
 void	load_var(t_string *name, t_string *value, t_vec *env);
 void	free_var(t_var *var);
+char	**env2envp(t_vec *env);
 #endif
