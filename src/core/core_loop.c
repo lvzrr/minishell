@@ -14,8 +14,6 @@
 
 void	handle_oneliner(t_data *data)
 {
-	t_node	*tree;
-
 	ft_tstr_trim(&data->oneliner_s, " \t\n\r");
 	if (!data->oneliner_s.len || !data->oneliner_s.data
 		|| !*data->oneliner_s.data)
@@ -38,9 +36,7 @@ void	handle_oneliner(t_data *data)
 		clean_tokenstream(&data->tokv);
 		return ;
 	}
-	check_exit(&data->tokv, data);
-	tree = parse(&data->tokv, data);
-	(free_tree(tree), clean_tokenstream(&data->tokv));
+	(parse_and_run(data), clean_tokenstream(&data->tokv));
 }
 
 /*
@@ -87,9 +83,6 @@ static bool	opt_clean(bool ret, bool trigger, t_vec *tokv)
 
 void	core_loop(t_data *data)
 {
-	t_node	*tree;
-
-	tree = NULL;
 	while (!data->exit)
 	{
 		(default_prompt(data), clean_tokenstream(&data->tokv));
@@ -108,10 +101,6 @@ void	core_loop(t_data *data)
 			continue ;
 		if (!resolve_path(&data->tokv, data))
 			continue ;
-		tree = parse(&data->tokv, data);
-		if (!tree)
-			continue ;
-		run(tree, data, tree, -1);
-		free_tree(tree);
+		parse_and_run(data);
 	}
 }
