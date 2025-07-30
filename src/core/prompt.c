@@ -23,13 +23,24 @@ void	append_path_currdir(t_string *prompt, t_string *pwd)
 		ft_tstr_pushslice(prompt, pwd->data, pwd->len);
 }
 
+void	pushcolor(t_string *toput, t_data *data)
+{
+	if (!data || !toput || !data->lastcommand_res
+		|| !data->lastcommand_res.value.data)
+		return ;
+	if (!ft_strcmp(data->lastcommand_res.value.data, "0"))
+		ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002");
+	else
+		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RED"\002");
+}
+
 void	default_prompt(t_data *data)
 {
 	if (data->prompt.len)
 		ft_tstr_clear(&data->prompt);
 	if (data->username && data->pwd)
 	{
-		ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002");
+		pushcolor(&data->prompt, data);
 		ft_tstr_pushslice(&data->prompt, data->username->data,
 			data->username->len);
 		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
@@ -40,7 +51,7 @@ void	default_prompt(t_data *data)
 	}
 	else
 	{
-		ft_tstr_pushstr(&data->prompt, "\001"ANSI_MAGENTA"\002");
+		pushcolor(&data->prompt, data);
 		ft_tstr_pushslice(&data->prompt, "?????", 5);
 		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
 		(ft_tstr_push(&data->prompt, '@'), ft_tstr_pushslice(&data->prompt,
