@@ -33,7 +33,7 @@ int	ft_fgetc(int fd, bool clean)
 
 	if (fd < 0)
 		return (EOF);
-	if (clean && store.len)
+	if (clean && store.alloc_size)
 		return (ft_tstr_free(&store), offset = 0, EOF);
 	if (!store.alloc_size)
 	{
