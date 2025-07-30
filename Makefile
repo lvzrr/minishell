@@ -119,7 +119,7 @@ OBJ         := build/core/signals.o\
 			build/builtins/echo/builtin_echo_helpers.o\
 			build/builtins/echo/builtin_echo.o\
 			build/builtins/pwd/pwd.o
-CC          := clang
+CC          := cc
 CFLAGS      := -Wall -Wextra -Werror -I./include -I./libft/include
 LDFLAGS     := libft/libft.a -lreadline -lhistory
 
