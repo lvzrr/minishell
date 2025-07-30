@@ -28,6 +28,7 @@ bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 	{
 		if (_stdin != -1)
 			(dup2(_stdin, STDIN_FILENO), close(_stdin));
+		make_redirs(&tree->u.cmd->redir_v, _stdin);
 		ret = EXIT_FAILURE;
 		f = match(tree->u.cmd->argv[0]);
 		if (f)
@@ -56,6 +57,7 @@ bool	run_cmd(t_node *tree, t_data *data, t_node *head, int _stdin)
 	{
 		if (_stdin != -1)
 			(dup2(_stdin, STDIN_FILENO), close(_stdin));
+		make_redirs(&tree->u.cmd->redir_v, _stdin);
 		execve(tree->u.cmd->argv[0], tree->u.cmd->argv,
 			envp);
 		(child_cleanup(head, data, envp), exit(1));

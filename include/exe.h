@@ -32,4 +32,8 @@ int		ft_ternary(bool x);
 void	child_cleanup(t_node *tree, t_data *data, char **envp);
 pid_t	fork_left(t_node *tree, t_data *data, t_node *head, t_pipes *p);
 pid_t	fork_right(t_node *tree, t_data *data, t_node *head, t_pipes *p);
+void	make_redirs(t_vec *redir_v, int _stdin);
+void	redir_to_fd(t_tok *t);
+void	append_from(t_tok *t);
+void	_redir_nn(t_tok *t);
 #endif
