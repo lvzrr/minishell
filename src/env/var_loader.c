@@ -20,12 +20,14 @@
 *	y aunque O(n) ya no es lo mejor, menos da una piedra.
 */
 
-t_var	*getvar(char *name, t_vec *env)
+t_var	*getvar(char *name, t_vec *env, t_data *data)
 {
 	t_var		*v;
 	size_t		i;
 
 	i = 0;
+	if (!ft_strcmp("?", name))
+		return (&data->lastcommand_res);
 	while (i < env->size)
 	{
 		v = ft_vec_get_mut(env, i++);
@@ -43,12 +45,14 @@ t_var	*getvar(char *name, t_vec *env)
 *
 */
 
-void	load_var(t_string *name, t_string *value, t_vec *env)
+void	load_var(t_string *name, t_string *value, t_data *data)
 {
 	t_var		*v;
 	t_var		newv;
 
-	v = getvar(name->data, env);
+	if (name && name->data && !ft_strcmp(name->data, "?"))
+		return ;
+	v = getvar(name->data, &data->env, data);
 	if (v)
 	{
 		ft_tstr_clear(&v->value);
@@ -57,5 +61,5 @@ void	load_var(t_string *name, t_string *value, t_vec *env)
 	}
 	newv = (t_var){.name = ft_tstr_clone(name),
 		.value = ft_tstr_clone(value)};
-	ft_vec_push(env, &newv, 1);
+	ft_vec_push(&data->env, &newv, 1);
 }

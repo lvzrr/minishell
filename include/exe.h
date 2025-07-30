@@ -36,4 +36,5 @@ void	make_redirs(t_vec *redir_v, int _stdin);
 void	redir_to_fd(t_tok *t);
 void	append_from(t_tok *t);
 void	_redir_nn(t_tok *t);
+void	load_last_result(int result, t_data *data);
 #endif

@@ -79,7 +79,7 @@ static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
 	if (i + 1 >= tokv->size || (t + 1)->type == TOK_SPACE)
 	{
 		empty = ft_tstr_new(1);
-		load_var(&(t - 1)->s, &empty, &data->env);
+		load_var(&(t - 1)->s, &empty, data);
 		ft_tstr_free(&empty);
 	}
 	else if (i + 1 < tokv->size
@@ -89,7 +89,7 @@ static void	load_exported(t_tok *t, t_data *data, t_vec *tokv, size_t i)
 			expand_instr_wrapper(t + 1, data);
 		else if ((t + 1)->type == TOK_VAR)
 			expand_var(t + 1, data);
-		load_var(&(t - 1)->s, &(t + 1)->s, &data->env);
+		load_var(&(t - 1)->s, &(t + 1)->s, data);
 	}
 	collapse_at(tokv, i - 3);
 	collapse_at(tokv, i - 3);

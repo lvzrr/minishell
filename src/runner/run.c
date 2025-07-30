@@ -36,6 +36,7 @@ bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 	signal_child_running();
 	if (waitpid(pid, &status, 0) == -1)
 		return (signal_setup(), err("waitpid failed\n"), false);
+	load_last_result(WEXITSTATUS(status), data);
 	return (signal_setup(), WIFEXITED(status) && !WEXITSTATUS(status));
 }
 
@@ -63,6 +64,7 @@ bool	run_cmd(t_node *tree, t_data *data, t_node *head, int _stdin)
 	signal_child_running();
 	if (waitpid(pid, &status, 0) == -1)
 		return (signal_setup(), free_split(envp), err("waitpid\n"), false);
+	load_last_result(WEXITSTATUS(status), data);
 	return (signal_setup(), free_split(envp),
 		WIFEXITED(status) && !WEXITSTATUS(status));
 }
@@ -88,6 +90,7 @@ bool	run_pipeline(t_node *tree, t_data *data, t_node *head, int _stdin)
 	if (p.stdin_fd != -1)
 		close(p.stdin_fd);
 	(waitpid(left_pid, &status_left, 0), waitpid(right_pid, &status_right, 0));
+	load_last_result(WEXITSTATUS(status_right), data);
 	return (WIFEXITED(status_left) && !WEXITSTATUS(status_left)
 		&& WIFEXITED(status_right) && !WEXITSTATUS(status_right));
 }

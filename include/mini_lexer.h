@@ -20,6 +20,12 @@
 # include "ctype.h"
 # include "vec.h"
 
+typedef struct s_var
+{
+	t_string	name;
+	t_string	value;
+}	t_var;
+
 typedef enum e_toktype
 {
 	TOK_IDENT,

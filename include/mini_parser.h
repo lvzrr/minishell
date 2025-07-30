@@ -34,6 +34,7 @@ typedef struct s_data
 	bool		segfault;
 	char		*invocation;
 	t_string	oneliner_s;
+	t_var		lastcommand_res;
 	t_vec		tokv;
 	t_vec		env;
 	t_string	*path;

@@ -43,6 +43,20 @@ void	child_cleanup(t_node *tree, t_data *data, char **envp)
 		free_split(envp);
 }
 
+void	load_last_result(int result, t_data *data)
+{
+	char	*new;
+
+	if (!data)
+		return ;
+	new = ft_itoa(result);
+	if (!new)
+		return ;
+	ft_tstr_clear(&data->lastcommand_res.value);
+	ft_tstr_pushstr(&data->lastcommand_res.value, new);
+	ft_free((void **)&new);
+}
+
 bool	run_builtin(t_node *tree, t_data *data, t_node *head, int _stdin)
 {
 	int	ret;

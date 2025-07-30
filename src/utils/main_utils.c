@@ -56,4 +56,5 @@ void	clean_data(t_data *data)
 		clean_env(&data->env);
 	clean_tokenstream(&data->tokv);
 	ft_vec_free(&data->tokv);
+	free_var(&data->lastcommand_res);
 }

@@ -16,7 +16,7 @@ static void	check_valgrind(t_data *data)
 {
 	t_var	*tmp;
 
-	tmp = getvar("_", &data->env);
+	tmp = getvar("_", &data->env, data);
 	if (tmp && ft_tstr_instr(&tmp->value, "valgrind") > 0)
 	{
 		ft_fprintf(2, ANSI_YELLOW"(˶°ㅁ°)!! Valgrind-chan? pls don't look"
@@ -45,17 +45,17 @@ void	load_hot_vars(t_data *data)
 {
 	t_var	*tmp;
 
-	tmp = getvar("PWD", &data->env);
+	tmp = getvar("PWD", &data->env, data);
 	if (tmp)
 		data->pwd = &tmp->value;
 	else
 		data->pwd = NULL;
-	tmp = getvar("PATH", &data->env);
+	tmp = getvar("PATH", &data->env, data);
 	if (tmp)
 		data->path = &tmp->value;
 	else
 		data->path = NULL;
-	tmp = getvar("USER", &data->env);
+	tmp = getvar("USER", &data->env, data);
 	if (tmp)
 		data->username = &tmp->value;
 	else
