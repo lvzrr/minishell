@@ -12,6 +12,11 @@
 
 #include "minish.h"
 
+/*
+*	llamamos a gnl otra vez para que devuelva eof,
+*	y se libere el buffer interno.
+*/
+
 t_string	get_hostname(void)
 {
 	t_string	hostname;
@@ -21,6 +26,7 @@ t_string	get_hostname(void)
 	if (fd == -1)
 		return (ft_tstr_from_cstr("????"));
 	hostname = get_next_line(fd);
+	get_next_line(fd);
 	ft_tstr_trim(&hostname, "\n");
 	(ft_fgetc(fd, true), close(fd));
 	return (hostname);
