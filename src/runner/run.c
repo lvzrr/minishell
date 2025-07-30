@@ -12,16 +12,7 @@
 
 #include "exe.h"
 
-static void	*match(char *s)
-{
-	if (!ft_strncmp(s + 13, "echo", 4))
-		return (_sh__builtin_echo);
-	if (!ft_strncmp(s + 13, "pwd", 3))
-		return (_sh__builtin_pwd);
-	if (!ft_strncmp(s + 13, "env", 3))
-		return (_sh__builtin_env);
-	return (NULL);
-}
+// TODO: PIPES AND REDIRS
 
 bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head)
 {
@@ -46,29 +37,6 @@ bool	run_normal_builtin(t_node *tree, t_data *data, t_node *head)
 	if (waitpid(pid, &status, 0) == -1)
 		return (signal_setup(), err("waitpid failed\n"), false);
 	return (signal_setup(), WIFEXITED(status) && !WEXITSTATUS(status));
-}
-
-bool	run_builtin(t_node *tree, t_data *data, t_node *head)
-{
-	int	ret;
-
-	if (!ft_strncmp(tree->u.cmd->argv[0] + 13, "cd", 2))
-	{
-		ret = _sh__builtin_cd(tree->u.cmd->argc - 1,
-				tree->u.cmd->argv + 1, data);
-		if (ret == EXIT_FAILURE)
-			return (false);
-	}
-	else if (!ft_strncmp(tree->u.cmd->argv[0] + 13, "exit", 4))
-	{
-		ret = _sh__builtin_exit(tree->u.cmd->argc - 1,
-				tree->u.cmd->argv + 1, data);
-		if (ret == EXIT_FAILURE)
-			return (false);
-	}
-	else
-		run_normal_builtin(tree, data, head);
-	return (true);
 }
 
 bool	run_cmd(t_node *tree, t_data *data, t_node *head)
