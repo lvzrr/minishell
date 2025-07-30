@@ -21,6 +21,7 @@ int	main(int argc, char **argv, char **envp)
 	data = getopts(argc, argv, envp);
 	data.lastcommand_res = (t_var){.name = ft_tstr_from_cstr("?"),
 		.value = ft_tstr_from_cstr("0")};
+	data.hostname = get_hostname();
 	if (data.debug)
 		print_env(&data, true);
 	if (data.phelp)

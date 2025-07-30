@@ -12,6 +12,20 @@
 
 #include "minish.h"
 
+t_string	get_hostname(void)
+{
+	t_string	hostname;
+	int			fd;
+
+	fd = open("/etc/hostname", O_RDONLY);
+	if (fd == -1)
+		return (ft_tstr_from_cstr("????"));
+	hostname = get_next_line(fd);
+	ft_tstr_trim(&hostname, "\n");
+	ft_fgetc(fd, true);
+	return (hostname);
+}
+
 t_data	getopts(int argc, char **argv, char **envp)
 {
 	int		i;
@@ -57,4 +71,5 @@ void	clean_data(t_data *data)
 	clean_tokenstream(&data->tokv);
 	ft_vec_free(&data->tokv);
 	free_var(&data->lastcommand_res);
+	ft_tstr_free(&data->hostname);
 }
