@@ -1,10 +1,9 @@
 NAME		:=	libft.a
-CC			:=	clang
+CC			:=	cc
 FLAGS		:=	-Wall -Wextra -Werror -Wpedantic
 AR			:=	ar rcs
 OBJDIR		:=	build
 DIRS		:=	math map vec tstr cstr alloc ctype mem conv io lst mem/mem_helpers
-
 SRCS		:=	$(foreach dir, $(DIRS), $(wildcard src/$(dir)/*.c))
 OBJS		:=	$(patsubst %.c, $(OBJDIR)/%.o, $(SRCS))
 

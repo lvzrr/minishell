@@ -143,3 +143,4 @@ re: fclean all
 
 all: $(NAME)
 .PHONY: all re fclean clean
+MAKEFLAGS += --no-print-directory
