@@ -26,7 +26,11 @@ void	setflags(char *flag, bool *com_n, bool *com_e)
 		else if (*flag == 'E')
 			*com_e = false;
 		else
+		{
+			*com_e = false;
+			*com_n = false;
 			break ;
+		}
 		flag++;
 	}
 }
