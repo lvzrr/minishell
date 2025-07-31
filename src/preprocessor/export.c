@@ -64,13 +64,12 @@ bool	check_and_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		if ((*t)->type == TOK_SPACE)
 			collapse_at(tokv, i);
 		collapse_extra(t, tokv, i);
-		dump_tokenstream("aaa", tokv);
 		return (true);
 	}
 	else if (i + 1 < tokv->size && (*t + 1)->type == TOK_SPACE
 		&& i + 2 < tokv->size && (*t + 2)->type == TOK_EQ)
 		return (syntax_err("bad assignment\n"), false);
-	return (false);
+	return (syntax_err("nothing to assign\n"), false);
 }
 
 bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
@@ -80,6 +79,8 @@ bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	c = 0;
 	while (tokv->size && i < tokv->size && (*t)->type == TOK_IDENT)
 	{
+		collapse_extra(t, tokv, i);
+		dump_tokenstream("hello", tokv);
 		if (check_and_export(t, tokv, data, i))
 			++c;
 		else if (isoperator(*t))

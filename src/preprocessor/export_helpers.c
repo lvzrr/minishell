@@ -20,4 +20,8 @@ void	collapse_extra(t_tok **t, t_vec *tokv, size_t i)
 		&& (*t + 1)->type == TOK_SPACE && (*t + 2)->type == TOK_IDENT
 		&& (*t + 3)->type == TOK_EQ)
 		(collapse_at(tokv, i), collapse_at(tokv, i));
+	if ((*t)->type == TOK_IDENT
+		&& i + 2 < tokv->size && (*t + 1)->type == TOK_SPACE
+		&& (*t + 2)->type == TOK_IDENT)
+		(collapse_at(tokv, i), collapse_at(tokv, i));
 }
