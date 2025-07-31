@@ -21,3 +21,8 @@ bool	isstringtoken(t_tok	*t)
 		|| ty == TOK_STRING || ty == TOK_IDENT || ty == TOK_STRING_TOEXPAND
 		|| ty == TOK_STRING_EMPTY);
 }
+
+bool	isassignable(t_tok **t)
+{
+	return (isstringtoken(*t + 2) || (*t + 2)->type == TOK_VAR);
+}

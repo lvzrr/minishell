@@ -17,11 +17,11 @@ SRC         := src/core/signals.c\
 			src/parser/ast_free.c\
 			src/preprocessor/redir_collapse_helpers.c\
 			src/preprocessor/varexp_helpers.c\
-			src/preprocessor/varexp_parser.c\
 			src/preprocessor/catch_forbidden.c\
 			src/preprocessor/expand_helpers.c\
 			src/preprocessor/redir_checker.c\
 			src/preprocessor/errors.c\
+			src/preprocessor/export.c\
 			src/preprocessor/isstringtoken.c\
 			src/preprocessor/unset.c\
 			src/preprocessor/pre_process.c\
@@ -76,11 +76,11 @@ OBJ         := build/core/signals.o\
 			build/parser/ast_free.o\
 			build/preprocessor/redir_collapse_helpers.o\
 			build/preprocessor/varexp_helpers.o\
-			build/preprocessor/varexp_parser.o\
 			build/preprocessor/catch_forbidden.o\
 			build/preprocessor/expand_helpers.o\
 			build/preprocessor/redir_checker.o\
 			build/preprocessor/errors.o\
+			build/preprocessor/export.o\
 			build/preprocessor/isstringtoken.o\
 			build/preprocessor/unset.o\
 			build/preprocessor/pre_process.o\

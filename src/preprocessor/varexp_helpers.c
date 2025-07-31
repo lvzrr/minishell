@@ -35,6 +35,17 @@ static bool	wildcard_condition(t_tok *t, t_vec *tokv, size_t i)
 		&& !expand_wildcard(t, tokv, i));
 }
 
+static bool	should_collapse(t_tok *t, t_vec *tokv, size_t i)
+{
+	if ((i + 1 < tokv->size && (t + 1)->type == TOK_EQ)
+		|| (i > 0 && (t - 1)->type == TOK_EQ))
+		return (false);
+	return (i + 1 < tokv->size && t && t->type == TOK_SPACE
+		&& (isoperator(t + 1) || (i > 0 && (isoperator(t - 1)
+					|| (t - 1)->type == TOK_LPAREN) && isstringtoken(t + 1))
+			|| (t + 1)->type == TOK_RPAREN));
+}
+
 bool	pre_clean(t_vec *tokv)
 {
 	size_t	i;
@@ -44,9 +55,7 @@ bool	pre_clean(t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = (t_tok *)ft_vec_get(tokv, i);
-		if (i + 1 < tokv->size && t && t->type == TOK_SPACE
-			&& (isoperator(t + 1) || (i > 0 && isoperator(t - 1)
-					&& isstringtoken(t + 1))))
+		if (should_collapse(t, tokv, i))
 		{
 			collapse_at(tokv, i);
 			continue ;
@@ -62,17 +71,4 @@ bool	pre_clean(t_vec *tokv)
 		i++;
 	}
 	return (clean_last_space(tokv), true);
-}
-
-bool	check_interpret(t_tok *t, size_t i)
-{
-	if (i > 3 && (t - 4)->type == TOK_LPAREN)
-		return (false);
-	else if (i > 0 && (t - 1)->type == TOK_SPACE && i > 5 && isoperator(t - 5))
-		return (false);
-	else if (i > 3 && isoperator(t - 4))
-		return (false);
-	else if (i > 3 && !isoperator(t - 4))
-		return (true);
-	return (false);
 }

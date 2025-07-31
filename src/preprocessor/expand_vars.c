@@ -133,18 +133,18 @@ bool	expand_vars(t_vec *tokv, t_data *data)
 		t = ft_vec_get_mut(tokv, i++);
 		if (t && (t->type == TOK_SUBS_START || t->type == TOK_SUBSTITUTION))
 			delete_subs(tokv, --i);
-		else if (t && t->type == TOK_EQ && !varexp_parser(&t, tokv, data, &i))
-			return (syntax_err("bad assignment\n"), false);
+		else if (t && t->type == TOK_IDENT && !ft_strncmp(t->s.data, "export",
+				5) && !builtin_export(&t, tokv, data, i - 1))
+			return (false);
 		else if (t && t->type == TOK_IDENT && !ft_strncmp(t->s.data, "unset", 5)
 			&& !unset_builtin(t, tokv, data, i))
 			return (false);
-		if (t->type == TOK_VAR)
+		if (t && t->type == TOK_VAR)
 			expand_var(t, data);
-		else if (t->type == TOK_STRING_TOEXPAND)
-		{
-			expand_string(t, data);
-			remove_scaping_singledollar(t);
-		}
+		else if (t && t->type == TOK_STRING_TOEXPAND)
+			(expand_string(t, data), remove_scaping_singledollar(t));
+		else if (t && t->type == TOK_EQ)
+			t->type = TOK_IDENT;
 	}
 	if (data->debug)
 		dump_tokenstream("POST EXPANSION", tokv);
