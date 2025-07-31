@@ -20,6 +20,7 @@ pid_t	fork_left(t_node *tree, t_data *data, t_node *head, t_pipes *p)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGPIPE, SIG_IGN);
 		if (p->stdin_fd != -1)
 			(dup2(p->stdin_fd, STDIN_FILENO), close(p->stdin_fd));
 		(dup2(p->pipefd[1], STDOUT_FILENO), close(p->pipefd[0]),
@@ -40,6 +41,7 @@ pid_t	fork_right(t_node *tree, t_data *data, t_node *head, t_pipes *p)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGPIPE, SIG_IGN);
 		(dup2(p->pipefd[0], STDIN_FILENO), close(p->pipefd[1]),
 			close(p->pipefd[0]));
 		run(tree->u.op->rhs, data, head, -1);
