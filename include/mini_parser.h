@@ -166,4 +166,5 @@ bool	check_redir(t_tok *t);
 bool	is_dir(const char *path);
 bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i);
 bool	isassignable(t_tok **t);
+void	collapse_extra(t_tok **t, t_vec *tokv, size_t i);
 #endif

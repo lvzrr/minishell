@@ -63,8 +63,8 @@ bool	check_and_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		(collapse_at(tokv, i), collapse_at(tokv, i), collapse_at(tokv, i));
 		if ((*t)->type == TOK_SPACE)
 			collapse_at(tokv, i);
-		if ((*t)->type == TOK_IDENT && i + 1 < tokv->size && isoperator(*t + 1))
-			collapse_at(tokv, i);
+		collapse_extra(t, tokv, i);
+		dump_tokenstream("aaa", tokv);
 		return (true);
 	}
 	else if (i + 1 < tokv->size && (*t + 1)->type == TOK_SPACE
@@ -83,10 +83,7 @@ bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		if (check_and_export(t, tokv, data, i))
 			++c;
 		else if (isoperator(*t))
-		{
-			dump_tokenstream("post", tokv);
 			return (true);
-		}
 		else
 			return (false);
 	}
