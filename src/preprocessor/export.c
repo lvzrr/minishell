@@ -28,6 +28,7 @@ void	expand_and_load(t_tok *name, t_tok *val, t_data *data)
 	else if (val->type == TOK_VAR)
 		expand_var(val, data);
 	load_var(&name->s, &val->s, data);
+	load_hot_vars(data);
 }
 
 /*
@@ -96,6 +97,5 @@ bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		else if ((*t)->type == TOK_IDENT && !check_and_export(t, tokv, data, i))
 			return (false);
 	}
-	return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i),
-		load_hot_vars(data), true);
+	return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i), true);
 }
