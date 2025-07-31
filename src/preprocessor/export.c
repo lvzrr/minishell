@@ -79,7 +79,6 @@ bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	c = 0;
 	while (tokv->size && i < tokv->size && (*t)->type == TOK_IDENT)
 	{
-		collapse_extra(t, tokv, i);
 		dump_tokenstream("hello", tokv);
 		if (check_and_export(t, tokv, data, i))
 			++c;
@@ -90,9 +89,7 @@ bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 	}
 	if (c)
 		return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i));
-	else
-		return (syntax_err("export should be followed by assignments\n"),
-			false);
+	return (true);
 }
 
 bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
@@ -101,7 +98,7 @@ bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		|| (i + 1 < tokv->size && isstringtoken(*t + 1)))
 		return (true);
 	collapse_at(tokv, i);
-	if (!tokv->size)
+	if (!tokv->size || i == tokv->size - 1)
 	{
 		(inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i));
 		return (true);
