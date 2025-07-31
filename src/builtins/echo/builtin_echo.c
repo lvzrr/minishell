@@ -14,24 +14,27 @@
 
 void	setflags(char *flag, bool *com_n, bool *com_e)
 {
+	size_t	i;
+
 	if (*flag != '-')
 		return ;
-	flag++;
-	while (*flag)
+	i = 1;
+	while (flag[i])
 	{
-		if (*flag == 'n')
+		if (flag[i] == 'n')
 			*com_n = true;
-		else if (*flag == 'e')
+		else if (flag[i] == 'e')
 			*com_e = true;
-		else if (*flag == 'E')
+		else if (flag[i] == 'E')
 			*com_e = false;
 		else
 		{
 			*com_e = false;
 			*com_n = false;
+			ft_printf("%s ", flag);
 			break ;
 		}
-		flag++;
+		i++;
 	}
 }
 
