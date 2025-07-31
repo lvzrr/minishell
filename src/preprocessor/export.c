@@ -63,7 +63,6 @@ bool	check_and_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		(collapse_at(tokv, i), collapse_at(tokv, i), collapse_at(tokv, i));
 		if ((*t)->type == TOK_SPACE)
 			collapse_at(tokv, i);
-		dump_tokenstream("bruh", tokv);
 		if ((*t)->type == TOK_IDENT && i + 1 < tokv->size && isoperator(*t + 1))
 			collapse_at(tokv, i);
 		return (true);
