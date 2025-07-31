@@ -58,38 +58,20 @@ bool	check_and_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 			empty = ft_tstr_from_cstr("");
 			(load_var(&(*t)->s, &empty, data), ft_tstr_free(&empty));
 		}
+		else if (i + 1 == tokv->size - 1 && (*t + 1)->type == TOK_EQ)
+		{
+			empty = ft_tstr_from_cstr("");
+			(load_var(&(*t)->s, &empty, data), ft_tstr_free(&empty));
+		}
 		else
 			return (syntax_err("assignments have to be strings\n"), false);
 		(collapse_at(tokv, i), collapse_at(tokv, i), collapse_at(tokv, i));
-		if ((*t)->type == TOK_SPACE)
-			collapse_at(tokv, i);
-		collapse_extra(t, tokv, i);
 		return (true);
 	}
-	else if (i + 1 < tokv->size && (*t + 1)->type == TOK_SPACE
-		&& i + 2 < tokv->size && (*t + 2)->type == TOK_EQ)
+	else if (i + 2 < tokv->size && (*t + 1)->type == TOK_SPACE
+		&& (*t + 2)->type == TOK_EQ)
 		return (syntax_err("bad assignment\n"), false);
-	return (syntax_err("nothing to assign\n"), false);
-}
-
-bool	check_and_export_loop(t_tok **t, t_vec *tokv, t_data *data, size_t i)
-{
-	size_t	c;
-
-	c = 0;
-	while (tokv->size && i < tokv->size && (*t)->type == TOK_IDENT)
-	{
-		dump_tokenstream("hello", tokv);
-		if (check_and_export(t, tokv, data, i))
-			++c;
-		else if (isoperator(*t))
-			return (true);
-		else
-			return (false);
-	}
-	if (c)
-		return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i));
-	return (true);
+	return (collapse_at(tokv, i), true);
 }
 
 bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
@@ -109,10 +91,8 @@ bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 			break ;
 		else if ((*t)->type == TOK_SPACE)
 			collapse_at(tokv, i);
-		else if ((*t)->type == TOK_IDENT)
-			return (check_and_export_loop(t, tokv, data, i));
-		else
-			return (syntax_err("export not valid in this context\n"), false);
+		else if ((*t)->type == TOK_IDENT && !check_and_export(t, tokv, data, i))
+			return (false);
 	}
-	return (true);
+	return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i), true);
 }
