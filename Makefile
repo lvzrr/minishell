@@ -22,7 +22,6 @@ SRC         := src/core/signals.c\
 			src/preprocessor/redir_checker.c\
 			src/preprocessor/errors.c\
 			src/preprocessor/export.c\
-			src/preprocessor/export_helpers.c\
 			src/preprocessor/isstringtoken.c\
 			src/preprocessor/unset.c\
 			src/preprocessor/pre_process.c\
@@ -82,7 +81,6 @@ OBJ         := build/core/signals.o\
 			build/preprocessor/redir_checker.o\
 			build/preprocessor/errors.o\
 			build/preprocessor/export.o\
-			build/preprocessor/export_helpers.o\
 			build/preprocessor/isstringtoken.o\
 			build/preprocessor/unset.o\
 			build/preprocessor/pre_process.o\
