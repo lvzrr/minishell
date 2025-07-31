@@ -75,7 +75,7 @@ static bool	flags_last_cond(size_t i, t_tok *t, size_t x, t_vec *tokv)
 *	esta funcion va al final del statement y comprueba estas normas.
 */
 
-bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
+bool	look4err(t_tok *t, t_vec *tokv, size_t idx, t_data *data)
 {
 	bool	hasident;
 	size_t	i;
@@ -87,8 +87,7 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 	{
 		if ((t + i)->type == TOK_IDENT)
 			hasident = true;
-		if (!check_forbidden_unset(t, i))
-			return (false);
+		check_forbidden_unset(t, i, data);
 		if (flags_last_cond(i, t, SIZE_MAX, tokv))
 			return (err("unset doesn't support flags\n"), false);
 		++i;
@@ -128,7 +127,7 @@ bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 {
 	if (i > 1 && !isoperator(t - 1) && (t - 1)->type != TOK_LPAREN)
 		return (true);
-	if (!look4err(t, tokv, i - 1))
+	if (!look4err(t, tokv, i - 1, data))
 		return (false);
 	while (i < tokv->size && ((t + 1)->type == TOK_IDENT
 			|| (t + 1)->type == TOK_SPACE))
@@ -143,5 +142,5 @@ bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i)
 		ft_tstr_clear(&t->s);
 		ft_tstr_pushslice(&t->s, "_sh__builtin_unset", 18);
 	}
-	return (true);
+	return (load_hot_vars(data), true);
 }

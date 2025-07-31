@@ -114,8 +114,8 @@ void	*load_env(t_data *data, char **envp, char *inv)
 			continue ;
 		var = (t_var){.name = ft_tstr_from_cstr(tmp[0]),
 			.value = ft_tstr_from_cstr(tmp[1])};
-		free_split(tmp);
-		ft_vec_push(&data->env, &var, 1);
+		(free_split(tmp), ft_vec_push(&data->env, &var, 1));
 	}
-	return (increase_shell_lvl(&data->env), load_hot_vars(data), NULL);
+	return (increase_shell_lvl(&data->env), load_hot_vars(data),
+		check_valgrind(data), NULL);
 }

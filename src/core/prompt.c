@@ -16,11 +16,31 @@ void	append_path_currdir(t_string *prompt, t_string *pwd)
 {
 	char	*lastslash;
 
+	if (!pwd)
+	{
+		ft_tstr_pushstr(prompt, "????");
+		return ;
+	}
 	lastslash = ft_strrchr(pwd->data, '/');
 	if (lastslash)
 		ft_tstr_pushstr(prompt, lastslash + 1);
 	else
 		ft_tstr_pushslice(prompt, pwd->data, pwd->len);
+}
+
+void	try_user(t_data *data)
+{
+	t_var	*user;
+
+	user = getvar("USER", &data->env, data);
+	if (!user || !user->value.data)
+	{
+		ft_tstr_pushslice(&data->prompt, "?????", 5);
+		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
+		return ;
+	}
+	ft_tstr_pushstr(&data->prompt, user->value.data);
+	ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
 }
 
 void	pushcolor(t_string *toput, t_data *data)
@@ -51,8 +71,7 @@ void	default_prompt(t_data *data)
 	else
 	{
 		pushcolor(&data->prompt, data);
-		ft_tstr_pushslice(&data->prompt, "?????", 5);
-		ft_tstr_pushstr(&data->prompt, "\001"ANSI_RESET"\002");
+		try_user(data);
 		(ft_tstr_push(&data->prompt, '@'), ft_tstr_pushslice(&data->prompt,
 				data->hostname.data, data->hostname.len));
 		ft_tstr_push(&data->prompt, ' ');

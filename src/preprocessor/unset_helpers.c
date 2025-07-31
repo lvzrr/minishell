@@ -12,13 +12,12 @@
 
 #include "mini_parser.h"
 
-bool	check_forbidden_unset(t_tok *t, size_t i)
+void	check_forbidden_unset(t_tok *t, size_t i, t_data *data)
 {
 	if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PATH"))
-		return (err("cannot unset $PATH, variable is protected\n"), false);
-	if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PWD"))
-		return (err("cannot unset $PWD, variable is protected\n"), false);
-	if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "USER"))
-		return (err("cannot unset $USER, variable is protected\n"), false);
-	return (true);
+		(warn("unsetting sensible variable\n"), data->path = NULL);
+	else if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PWD"))
+		(warn("unsetting sensible variable\n"), data->pwd = NULL);
+	else if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "USER"))
+		(warn("unsetting sensible variable\n"), data->username = NULL);
 }

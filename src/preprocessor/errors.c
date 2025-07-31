@@ -24,6 +24,12 @@ void	err(char *msg)
 		"%s", msg);
 }
 
+void	warn(char *msg)
+{
+	ft_fprintf(2, ANSI_YELLOW"warning: "ANSI_RESET
+		"%s", msg);
+}
+
 void	err_file(char *msg, char *fname)
 {
 	ft_fprintf(2, ANSI_RED"error: "ANSI_RESET

@@ -28,4 +28,5 @@ void	set_shell_var(t_data *data);
 void	load_var(t_string *name, t_string *value, t_data *data);
 void	free_var(t_var *var);
 char	**env2envp(t_vec *env);
+void	check_valgrind(t_data *data);
 #endif

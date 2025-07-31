@@ -148,7 +148,8 @@ void	look_and_insert(t_tok *t, size_t pos,
 bool	check_interpret(t_tok *t, size_t i);
 bool	pre_clean(t_vec *tokv);
 bool	unset_builtin(t_tok *t, t_vec *tokv, t_data *data, size_t i);
-bool	check_forbidden_unset(t_tok *t, size_t i);
+void	check_forbidden_unset(t_tok *t, size_t i, t_data *data);
+void	warn(char *msg);
 void	syntax_err(char *msg);
 bool	expand_wildcard(t_tok *t, t_vec *tokv, size_t i);
 void	err_file(char *msg, char *fname);

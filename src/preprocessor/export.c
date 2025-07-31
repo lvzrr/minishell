@@ -96,5 +96,6 @@ bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		else if ((*t)->type == TOK_IDENT && !check_and_export(t, tokv, data, i))
 			return (false);
 	}
-	return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i), true);
+	return (inject_builtin(tokv, i), *t = ft_vec_get_mut(tokv, i),
+		load_hot_vars(data), true);
 }

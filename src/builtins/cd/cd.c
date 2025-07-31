@@ -17,7 +17,7 @@ int	_sh__builtin_cd(int argc, char **argv, t_data *data)
 	char	*new;
 
 	if (!data || !data->pwd)
-		return (EXIT_FAILURE);
+		return (err_file("no pwd to follow\n", "cd"), EXIT_FAILURE);
 	if (argc > 1)
 		return (ft_fprintf(2, ANSI_RED"cd error: "ANSI_RESET
 				"too many arguments\n"), EXIT_FAILURE);

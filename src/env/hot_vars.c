@@ -12,7 +12,7 @@
 
 #include "env.h"
 
-static void	check_valgrind(t_data *data)
+void	check_valgrind(t_data *data)
 {
 	t_var	*tmp;
 
@@ -60,6 +60,5 @@ void	load_hot_vars(t_data *data)
 		data->username = &tmp->value;
 	else
 		data->username = NULL;
-	check_valgrind(data);
 	set_shell_var(data);
 }
