@@ -104,7 +104,8 @@ void	*load_env(t_data *data, char **envp, char *inv)
 	if (!envp || !*envp)
 	{
 		load_default_env(data);
-		return (load_hot_vars(data), NULL);
+		return (load_hot_vars(data), set_shell_var(data),
+			check_valgrind(data), NULL);
 	}
 	data->env = ft_vec(10, sizeof(t_var));
 	while (envp[i])
@@ -116,7 +117,6 @@ void	*load_env(t_data *data, char **envp, char *inv)
 			.value = ft_tstr_from_cstr(tmp[1])};
 		(free_split(tmp), ft_vec_push(&data->env, &var, 1));
 	}
-	set_shell_var(data);
-	return (increase_shell_lvl(&data->env), load_hot_vars(data),
-		check_valgrind(data), NULL);
+	return (set_shell_var(data), increase_shell_lvl(&data->env),
+		load_hot_vars(data), check_valgrind(data), NULL);
 }
