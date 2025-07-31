@@ -60,5 +60,4 @@ void	load_hot_vars(t_data *data)
 		data->username = &tmp->value;
 	else
 		data->username = NULL;
-	set_shell_var(data);
 }

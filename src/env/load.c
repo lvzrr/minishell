@@ -116,6 +116,7 @@ void	*load_env(t_data *data, char **envp, char *inv)
 			.value = ft_tstr_from_cstr(tmp[1])};
 		(free_split(tmp), ft_vec_push(&data->env, &var, 1));
 	}
+	set_shell_var(data);
 	return (increase_shell_lvl(&data->env), load_hot_vars(data),
 		check_valgrind(data), NULL);
 }
