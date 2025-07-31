@@ -92,7 +92,7 @@ bool	builtin_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 		else if ((*t)->type == TOK_SPACE)
 			collapse_at(tokv, i);
 		else if ((*t)->type != TOK_IDENT)
-			return (syntax_err("assignments have to be strings\n"), false);
+			return (syntax_err("assignments have to be identifiers\n"), false);
 		else if ((*t)->type == TOK_IDENT && !check_and_export(t, tokv, data, i))
 			return (false);
 	}
