@@ -18,25 +18,12 @@ void	expand_var(t_tok *t, t_data *data)
 	t_var	*v;
 
 	t->type = TOK_STRING_DQ;
-	if (!ft_strcmp(t->s.data, "PATH"))
-	{
-		ft_tstr_clear(&t->s);
-		ft_tstr_pushslice(&t->s, data->path->data, data->path->len);
-	}
-	else if (!ft_strcmp(t->s.data, "PWD"))
-	{
-		ft_tstr_clear(&t->s);
-		ft_tstr_pushslice(&t->s, data->pwd->data, data->pwd->len);
-	}
+	v = getvar(t->s.data, &data->env, data);
+	ft_tstr_clear(&t->s);
+	if (!v)
+		t->type = TOK_STRING_EMPTY;
 	else
-	{
-		v = getvar(t->s.data, &data->env, data);
-		ft_tstr_clear(&t->s);
-		if (!v)
-			t->type = TOK_STRING_EMPTY;
-		else
-			ft_tstr_pushslice(&t->s, v->value.data, v->value.len);
-	}
+		ft_tstr_pushslice(&t->s, v->value.data, v->value.len);
 }
 
 void	look_and_insert(t_tok *t, size_t pos,
