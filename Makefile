@@ -24,6 +24,7 @@ SRC         := src/core/signals.c\
 			src/preprocessor/export.c\
 			src/preprocessor/isstringtoken.c\
 			src/preprocessor/unset.c\
+			src/preprocessor/unset_helpers.c\
 			src/preprocessor/pre_process.c\
 			src/preprocessor/wilcard.c\
 			src/preprocessor/sanitize_input.c\
@@ -83,6 +84,7 @@ OBJ         := build/core/signals.o\
 			build/preprocessor/export.o\
 			build/preprocessor/isstringtoken.o\
 			build/preprocessor/unset.o\
+			build/preprocessor/unset_helpers.o\
 			build/preprocessor/pre_process.o\
 			build/preprocessor/wilcard.o\
 			build/preprocessor/sanitize_input.o\

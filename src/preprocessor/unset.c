@@ -87,8 +87,8 @@ bool	look4err(t_tok *t, t_vec *tokv, size_t idx)
 	{
 		if ((t + i)->type == TOK_IDENT)
 			hasident = true;
-		if ((t + i)->type == TOK_IDENT && !ft_strcmp((t + i)->s.data, "PATH"))
-			return (err("cannot unset $PATH, variable is protected\n"), false);
+		if (!check_forbidden_unset(t, i))
+			return (false);
 		if (flags_last_cond(i, t, SIZE_MAX, tokv))
 			return (err("unset doesn't support flags\n"), false);
 		++i;
