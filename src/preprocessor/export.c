@@ -63,6 +63,8 @@ bool	check_and_export(t_tok **t, t_vec *tokv, t_data *data, size_t i)
 			empty = ft_tstr_from_cstr("");
 			(load_var(&(*t)->s, &empty, data), ft_tstr_free(&empty));
 		}
+		else
+			return (syntax_err("assignments have to be strings\n"), false);
 		(collapse_at(tokv, i), collapse_at(tokv, i), collapse_at(tokv, i));
 		return (true);
 	}
