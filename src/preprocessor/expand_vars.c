@@ -72,7 +72,8 @@ ssize_t	get_dollar_notscaped(t_tok *t, size_t *offset)
 	while (i < t->s.len)
 	{
 		if (i + 1 < t->s.len && t->s.data[i] == '$'
-			&& (ft_isspace(t->s.data[i + 1]) || t->s.data[i + 1] == '\\'))
+			&& (ft_isspace(t->s.data[i + 1]) || t->s.data[i + 1] == '\\'
+				|| t->s.data[i + 1] == '\''))
 			*offset = i++;
 		else if (i > 0 && t->s.data[i] == '$' && t->s.data[i - 1] != '\\')
 			return (i);
