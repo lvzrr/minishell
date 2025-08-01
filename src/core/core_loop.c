@@ -23,19 +23,14 @@ void	handle_oneliner(t_data *data)
 		clean_tokenstream(&data->tokv);
 	if (data->debug)
 		dump_tokenstream("LEXER", &data->tokv);
-	pre_process(&data->tokv, data);
+	if (!pre_process(&data->tokv, data))
+		return ;
 	if (data->debug)
 		dump_tokenstream("PARSER", &data->tokv);
 	if (!heredoc(&data->tokv, data))
-	{
-		clean_tokenstream(&data->tokv);
 		return ;
-	}
 	if (!resolve_path(&data->tokv, data))
-	{
-		clean_tokenstream(&data->tokv);
 		return ;
-	}
 	(parse_and_run(data), clean_tokenstream(&data->tokv));
 }
 
