@@ -120,7 +120,7 @@ typedef struct s_opnode
 void	collapse_at(t_vec *tokv, size_t i);
 void	load_last_result(int result, t_data *data);
 t_data	*fetch_state(t_data *data);
-void	fix_redirs(t_vec *tokv);
+bool	fix_redirs(t_vec *tokv);
 void	collapse_to_delim(t_vec *tokv, t_tok *t);
 bool	pre_process(t_vec *tokv, t_data *data);
 bool	detect_vars(t_vec *tokv, t_data *data);

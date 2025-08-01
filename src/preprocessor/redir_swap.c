@@ -43,7 +43,7 @@ static void	put_redir_after_command(t_tok **t, t_vec *tokv, size_t i)
 	*t = ft_vec_get_mut(tokv, i2);
 }
 
-void	fix_redirs(t_vec *tokv)
+bool	fix_redirs(t_vec *tokv)
 {
 	size_t	i;
 	t_tok	*t;
@@ -52,6 +52,11 @@ void	fix_redirs(t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i);
+		if (t && isredirect(t->type) && i == 0 && tokv->size == 1)
+		{
+			err("cannot interpret redirect as a command\n");
+			return (false);
+		}
 		if (t && isredirect(t->type) && ((i > 0
 					&& (isoperator(t - 1)
 						|| (t - 1)->type == TOK_LPAREN)) || i == 0))
@@ -61,4 +66,5 @@ void	fix_redirs(t_vec *tokv)
 		}
 		++i;
 	}
+	return (true);
 }
