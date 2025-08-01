@@ -12,16 +12,17 @@
 
 #include "mini_parser.h"
 
-bool	exists_executable(t_tok *t)
+bool	exists_executable(t_tok *t, t_data *data)
 {
 	if (access(t->s.data, F_OK) == -1)
 		return (err_file("no such file or directory\n", t->s.data),
-			false);
+			load_last_result(127, data), false);
 	if (access(t->s.data, X_OK) == -1)
 		return (err_file("not an executable or not enough perms\n",
-				t->s.data), false);
+				t->s.data), load_last_result(126, data), false);
 	if (is_dir(t->s.data))
-		return (err_file("is a directory\n", t->s.data), false);
+		return (err_file("is a directory\n", t->s.data),
+			load_last_result(127, data), false);
 	return (true);
 }
 
@@ -58,7 +59,7 @@ static bool	resolve(t_tok *t, t_data *data)
 	if (!t->s.data || !*t->s.data)
 		return (err("'' not a command\n"), false);
 	if (!ft_strncmp(t->s.data, "./", 2) || *t->s.data == '/')
-		return (exists_executable(t));
+		return (exists_executable(t, data));
 	path_lookup = look4bin(t->s.data, data);
 	if (!path_lookup)
 		return (ft_free((void **)&path_lookup),
