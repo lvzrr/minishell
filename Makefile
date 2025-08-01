@@ -143,6 +143,8 @@ fclean: clean
 	$(MAKE) -C libft fclean
 	rm -f $(NAME)
 
+bonus: all
+
 re: fclean all
 
 all: $(NAME)
