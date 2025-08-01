@@ -20,6 +20,7 @@ SRC         := src/core/signals.c\
 			src/preprocessor/catch_forbidden.c\
 			src/preprocessor/expand_helpers.c\
 			src/preprocessor/redir_checker.c\
+			src/preprocessor/redir_swap.c\
 			src/preprocessor/errors.c\
 			src/preprocessor/export.c\
 			src/preprocessor/isstringtoken.c\
@@ -80,6 +81,7 @@ OBJ         := build/core/signals.o\
 			build/preprocessor/catch_forbidden.o\
 			build/preprocessor/expand_helpers.o\
 			build/preprocessor/redir_checker.o\
+			build/preprocessor/redir_swap.o\
 			build/preprocessor/errors.o\
 			build/preprocessor/export.o\
 			build/preprocessor/isstringtoken.o\

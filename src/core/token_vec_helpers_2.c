@@ -55,7 +55,7 @@ void	vec_push_indexed(t_vec *a, t_string *b, size_t *idx)
 	*a = c;
 }
 
-static void	copy_helper_nocollapse(t_vec *a, t_tok *b, t_vec *c, size_t idx)
+void	copy_helper_nocollapse(t_vec *a, t_tok *b, t_vec *c, size_t idx)
 {
 	size_t	i;
 	t_tok	t;

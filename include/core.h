@@ -66,4 +66,5 @@ void		signal_child_running(void);
 void		parse_and_run(t_data *data);
 t_string	get_hostname(void);
 t_data		*fetch_state(t_data *data);
+void		copy_helper_nocollapse(t_vec *a, t_tok *b, t_vec *c, size_t idx);
 #endif

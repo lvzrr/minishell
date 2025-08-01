@@ -31,9 +31,6 @@ bool	rr(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i - 1);
 		return (true);
 	}
-	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (syntax_err("'>' must be preceded by an identifier\n"),
-			false);
 	t->type = TOK_REDIR_TO;
 	return (true);
 }
@@ -48,8 +45,6 @@ bool	rl(t_tok *t, t_vec *tokv, size_t i)
 	}
 	else
 		return (syntax_err("'<' must be followed by an identifier\n"), false);
-	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (syntax_err("'<' must be preceded by an identifier\n"), false);
 	t->type = TOK_REDIR_IN;
 	return (true);
 }
@@ -73,8 +68,6 @@ bool	rapp(t_tok *t, t_vec *tokv, size_t i)
 		collapse_at(tokv, i - 1);
 		return (true);
 	}
-	if ((i > 0 && !is_preceded_by_ident(t)) || i == 0)
-		return (syntax_err("'>>' must be preceded by an identifier\n"), false);
 	t->type = TOK_APPEND_TO;
 	return (true);
 }
@@ -103,8 +96,6 @@ bool	rd_nn(t_tok *t, t_vec *tokv, size_t i)
 	else
 		return (syntax_err("'>&' should be wrapped in numbers, "
 				"like this: [spc]N>&N[spc]\n"), false);
-	if ((i > 0 && !is_preceded_by_ident(t - 1)) || i == 0)
-		return (syntax_err("'>&' must be preceded by an identifier\n"), false);
 	if (i + 1 < tokv->size && isstringtoken(t))
 		return (syntax_err("'>&' must be followed by a delimeter or a newline\n"
 			), false);
