@@ -12,6 +12,22 @@
 
 #include "mini_parser.h"
 
+/*
+*
+*	para casos como:
+*
+*	foo.txt < cat
+*
+*	y redirecciones que se anteponen al comando,
+*	lo que hacemos es literalmente cambiarlas
+*	de sitio a despues del comando, para
+*	que no haya problemas en el parser, se normalizan
+*	los comandos a:
+*
+*	cmd flag flag ... flag redir ... redir OP ...
+*/
+
+
 void	push_tok_indexed(t_vec *a, t_tok *b, size_t idx)
 {
 	t_vec			c;
