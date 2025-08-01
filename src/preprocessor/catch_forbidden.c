@@ -36,7 +36,7 @@ bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
 		&& isstringtoken(t + 1))
 		return (syntax_err("redirects must be followed by "
 				"redirects or operators\n"), false);
-	else if (t && i == 0  && isredirect(t->type))
+	else if (t && i == 0 && isredirect(t->type))
 		return (syntax_err("redirects are not commands\n"), false);
 	else if (t && ((i > 1 && t->type == TOK_HDOC && isoperator(t - 1))
 			|| (i == 0 && t->type == TOK_HDOC)))
