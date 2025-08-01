@@ -27,7 +27,7 @@ bool	wildcard_helper(t_vec *tokv, size_t i, DIR *directory,
 			continue ;
 		holder = ft_tstr_from_cstr(dir_entry->d_name);
 		(tok_push_indexed(tokv, &holder, i++), tok_push_space(tokv, i++));
-		(ft_tstr_free(&holder), dir_entry = readdir(directory));
+		ft_tstr_free(&holder);
 		++c;
 	}
 	closedir(directory);
