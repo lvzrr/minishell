@@ -148,5 +148,5 @@ bonus: all
 re: fclean all
 
 all: $(NAME)
-.PHONY: all re fclean clean
+.PHONY: all re fclean clean bonus
 MAKEFLAGS += --no-print-directory
