@@ -27,7 +27,6 @@
 *	cmd flag flag ... flag redir ... redir OP ...
 */
 
-
 void	push_tok_indexed(t_vec *a, t_tok *b, size_t idx)
 {
 	t_vec			c;
@@ -47,16 +46,22 @@ static void	put_redir_after_command(t_tok **t, t_vec *tokv, size_t i)
 
 	new_tok = **t;
 	new_tok.s = ft_tstr_clone(&(*t)->s);
-	i2 = i;
+	i2 = 0;
 	collapse_at(tokv, i);
-	while (i < tokv->size && isredirect((*t + i)->type))
-		++i;
-	while (i < tokv->size && isstringtoken(*t + i))
-		++i;
-	if (i2 != 0)
-		++i;
-	push_tok_indexed(tokv, &new_tok, i);
-	*t = ft_vec_get_mut(tokv, i2);
+	while (i + i2 < tokv->size)
+	{
+		if (!isredirect((*t + i2)->type))
+			break ;
+		++i2;
+	}
+	while (i + i2 < tokv->size)
+	{
+		if (!isstringtoken(*t + i2))
+			break ;
+		++i2;
+	}
+	push_tok_indexed(tokv, &new_tok, i + i2);
+	*t = ft_vec_get_mut(tokv, i);
 }
 
 bool	catch_redir_alone(t_tok *t, t_vec *tokv, size_t i)
