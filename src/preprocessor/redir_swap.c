@@ -87,6 +87,20 @@ bool	catch_redir_alone(t_tok *t, t_vec *tokv, size_t i)
 	return (i != tokv->size && !isoperator(t) && t->type != TOK_RPAREN);
 }
 
+bool	isbe4ident(t_tok *t, t_vec *tokv, size_t i)
+{
+	while (i < tokv->size)
+	{
+		if (isstringtoken(t))
+			return (true);
+		if (isoperator(t))
+			return (false);
+		++i;
+		++t;
+	}
+	return (false);
+}
+
 bool	fix_redirs(t_vec *tokv)
 {
 	size_t	i;
@@ -96,9 +110,9 @@ bool	fix_redirs(t_vec *tokv)
 	while (i < tokv->size)
 	{
 		t = ft_vec_get_mut(tokv, i);
-		if (t && isredirect(t->type) && ((i > 0
-					&& (isoperator(t - 1)
-						|| (t - 1)->type == TOK_LPAREN)) || i == 0))
+		if (t && isredirect(t->type) && (((i > 0
+						&& (isoperator(t - 1) || (t - 1)->type == TOK_LPAREN))
+					|| i == 0) || isbe4ident(t, tokv, i)))
 		{
 			if (t && !catch_redir_alone(t, tokv, i))
 			{
