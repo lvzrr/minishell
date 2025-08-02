@@ -84,9 +84,8 @@ void	expand_string(t_tok *t, t_data *data)
 	{
 		remove_char(&t->s, (size_t)pos);
 		l = 0;
-		while (pos + l < t->s.len && !ft_isspace(t->s.data[pos + l])
-			&& t->s.data[pos + l] != '\\' && t->s.data[pos + l] != '$'
-			&& t->s.data[pos + l] != '\'')
+		while (pos + l < t->s.len && (ft_isalnum(t->s.data[pos + l])
+				|| t->s.data[pos + l] == '_'))
 			++l;
 		vname = ft_tstr_from_slice(t->s.data + (size_t)pos, l);
 		while (l-- > 0)

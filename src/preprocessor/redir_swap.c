@@ -48,8 +48,6 @@ static void	put_redir_after_command(t_tok **t, t_vec *tokv, size_t i)
 	new_tok.s = ft_tstr_clone(&(*t)->s);
 	i2 = 0;
 	collapse_at(tokv, i);
-	if ((*t)->type == TOK_HDOC)
-		i += 2;
 	while (i + i2 < tokv->size)
 	{
 		if (!isredirect((*t + i2)->type))

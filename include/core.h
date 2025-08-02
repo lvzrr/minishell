@@ -51,7 +51,7 @@ void		tok_push_space(t_vec *a, size_t idx);
 void		vec_push_indexed(t_vec *a, t_string *b, size_t *idx);
 void		vec_deep_copy(t_vec *a, t_vec *b, size_t s);
 bool		copy_helper(t_vec *a, t_tok *b, t_vec *c, size_t idx);
-t_vec		check_heredoc(t_vec *tokv, size_t s);
+t_string	check_heredoc(t_vec *tokv, size_t s);
 bool		heredoc_routine(t_vec *tokv, t_data *data, size_t idx);
 bool		heredoc(t_vec *tokv, t_data *data);
 void		hdoc_prompt(t_data *data);

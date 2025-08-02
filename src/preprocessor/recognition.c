@@ -88,12 +88,6 @@ static void	var_recon_instr(t_tok *t)
 	warn_subs_behaviour(t);
 	while (t->s.len > 1 && pos < t->s.len)
 	{
-		if (pos == 0 && t->s.data[pos] == '$' && ft_s_isblob(t->s.data + 1))
-		{
-			t->type = TOK_VAR;
-			remove_char(&t->s, pos);
-			return ;
-		}
 		if (t->s.data[pos] == '$')
 		{
 			t->type = TOK_STRING_TOEXPAND;
@@ -123,9 +117,9 @@ bool	detect_vars(t_vec *tokv, t_data *data)
 			continue ;
 		}
 		if (i + 1 < tokv->size && t->type == TOK_DOLLAR
-			&& (t + 1)->type != TOK_SPACE)
+			&& (t + 1)->type != TOK_SPACE && i > 1 && (t - 2)->type != TOK_HDOC)
 			var_recon(tokv, t, i);
-		else if (t->type == TOK_STRING_DQ)
+		else if (t->type == TOK_STRING_DQ && i > 1 && (t - 2)->type != TOK_HDOC)
 			var_recon_instr(t);
 		if (t->type == TOK_DOLLAR)
 			t->type = TOK_IDENT;

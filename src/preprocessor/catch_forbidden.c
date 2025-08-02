@@ -38,10 +38,6 @@ bool	extra_checks(t_tok *t, t_vec *tokv, size_t i)
 				"redirects or operators\n"), false);
 	else if (t && i == 0 && isredirect(t->type))
 		return (syntax_err("redirects are not commands\n"), false);
-	else if (t && ((i > 1 && t->type == TOK_HDOC && isoperator(t - 1))
-			|| (i == 0 && t->type == TOK_HDOC)))
-		return (syntax_err("heredoc must be preceded by "
-				"a command or redirect\n"), false);
 	else if (t && !i && isoperator(t))
 		return (syntax_err("operators must be preceded by identifiers\n"),
 			false);

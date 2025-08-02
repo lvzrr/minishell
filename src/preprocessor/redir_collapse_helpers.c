@@ -16,7 +16,7 @@ bool	isredirect(t_toktype t)
 {
 	return (t == TOK_REDIR_NN || t == TOK_REDIR_IN
 		|| t == TOK_REDIR_TO || t == TOK_APPEND_TO || t == TOK_REDIR_FROM_FD
-		|| t == TOK_APPEND_FROM_FD || t == TOK_WRITE_IN);
+		|| t == TOK_APPEND_FROM_FD || t == TOK_WRITE_IN || t == TOK_HDOC);
 }
 
 bool	delete_redundant(t_vec *tokv, size_t i)
@@ -50,6 +50,19 @@ bool	is_preceded_by_ident(t_tok *t)
 		return (false);
 }
 
+bool	rhdoc(t_tok *t, t_vec *tokv, size_t i)
+{
+	if (i + 1 < tokv->size && isstringtoken(t + 1))
+	{
+		ft_tstr_clear(&t->s);
+		ft_tstr_pushslice(&t->s, (t + 1)->s.data, (t + 1)->s.len);
+		collapse_at(tokv, i + 1);
+	}
+	else
+		return (syntax_err("'<<' must be followed by an identifier\n"), false);
+	return (true);
+}
+
 bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i)
 {
 	bool	r;
@@ -63,6 +76,8 @@ bool	try_collapse_redir(t_tok *t, t_vec *tokv, size_t i)
 		r = rd_nn(t, tokv, i);
 	else if (t->type == TOK_RAPPEND)
 		r = rapp(t, tokv, i);
+	else if (t->type == TOK_HDOC)
+		r = rhdoc(t, tokv, i);
 	if (!r)
 		return (false);
 	return (true);
